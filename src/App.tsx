@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import React from 'react'
+import { Routes, Route, Outlet } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
-import { TrendingUp, Award, Target, Zap, Rocket, Heart, Clock, BookOpen, Users, ArrowRight } from 'lucide-react'
+import { TrendingUp, Award, Target, Zap, Rocket, Heart } from 'lucide-react'
 import { AuthProvider, useAuth } from '@/context'
 import { ProtectedRoute } from '@/components/auth'
+import { PublicLayout } from '@/components/layout'
 
 // Public Pages
 import { LandingPage } from '@/pages/public'
@@ -17,33 +18,10 @@ import { EmployerDashboard } from '@/pages/employer'
 import { MentorDashboard } from '@/pages/mentor'
 import { AdminDashboard } from '@/pages/admin'
 
-// Auth-aware Navbar component
-const AuthNavbar = () => {
-    const { user, isAuthenticated } = useAuth()
-    return (
-        <nav className="bg-white border-b border-neutral-100 sticky top-0 z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <div className="flex items-center gap-4">
-                    {isAuthenticated ? (
-                        <>
-                            <span className="text-neutral-600">Hi, {user?.profile?.firstName || 'there'}</span>
-                            <a href="/dashboard" className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">Dashboard</a>
-                        </>
-                    ) : (
-                        <>
-                            <a href="/login" className="text-neutral-600 hover:text-primary-600 transition-colors">Login</a>
-                            <a href="/register" className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">Sign Up</a>
-                        </>
-                    )}
-                </div>
-            </div>
-        </nav>
-    )
-}
+
 
 const NotFound = () => (
-    <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+    <div className="flex items-center justify-center py-20">
         <div className="text-center">
             <h1 className="text-6xl font-display font-bold text-primary-600 mb-4">
                 404
@@ -61,102 +39,86 @@ const NotFound = () => (
 
 // About Page
 const AboutPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
-            </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16">
-            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-6">About WorkGrad</h1>
-            <div className="prose prose-lg text-neutral-600">
-                <p className="text-xl">
-                    WorkGrad is a comprehensive career development platform designed to bridge the gap between
-                    talented learners and top employers, facilitated by expert mentors.
-                </p>
-                <h2 className="text-2xl font-bold text-neutral-900 mt-8">Our Mission</h2>
-                <p>
-                    To empower individuals with the skills, tools, and connections they need to launch
-                    and accelerate their careers in the modern workforce.
-                </p>
-                <h2 className="text-2xl font-bold text-neutral-900 mt-8">What We Offer</h2>
-                <ul className="space-y-2">
-                    <li><strong>For Learners:</strong> ATS-optimized resume builder, portfolio showcase, job portal, and industry-relevant courses.</li>
-                    <li><strong>For Employers:</strong> Talent discovery, campus hiring, virtual recruitment campaigns, and candidate assessment tools.</li>
-                    <li><strong>For Mentors:</strong> Course creation platform, curriculum builder, and earnings through teaching.</li>
-                </ul>
-                <h2 className="text-2xl font-bold text-neutral-900 mt-8">Our Values</h2>
-                <ul className="space-y-2">
-                    <li><strong>Accessibility:</strong> Making career development tools available to everyone.</li>
-                    <li><strong>Quality:</strong> Providing industry-standard resources and expert-led courses.</li>
-                    <li><strong>Community:</strong> Building connections between learners, mentors, and employers.</li>
-                    <li><strong>Innovation:</strong> Continuously improving our platform with modern technologies.</li>
-                </ul>
-            </div>
+    <div className="max-w-4xl mx-auto px-4 py-16">
+        <h1 className="text-4xl font-display font-bold text-neutral-900 mb-6">About WorkGrad</h1>
+        <div className="prose prose-lg text-neutral-600">
+            <p className="text-xl">
+                WorkGrad is a comprehensive career development platform designed to bridge the gap between
+                talented learners and top employers, facilitated by expert mentors.
+            </p>
+            <h2 className="text-2xl font-bold text-neutral-900 mt-8">Our Mission</h2>
+            <p>
+                To empower individuals with the skills, tools, and connections they need to launch
+                and accelerate their careers in the modern workforce.
+            </p>
+            <h2 className="text-2xl font-bold text-neutral-900 mt-8">What We Offer</h2>
+            <ul className="space-y-2">
+                <li><strong>For Learners:</strong> ATS-optimized resume builder, portfolio showcase, job portal, and industry-relevant courses.</li>
+                <li><strong>For Employers:</strong> Talent discovery, campus hiring, virtual recruitment campaigns, and candidate assessment tools.</li>
+                <li><strong>For Mentors:</strong> Course creation platform, curriculum builder, and earnings through teaching.</li>
+            </ul>
+            <h2 className="text-2xl font-bold text-neutral-900 mt-8">Our Values</h2>
+            <ul className="space-y-2">
+                <li><strong>Accessibility:</strong> Making career development tools available to everyone.</li>
+                <li><strong>Quality:</strong> Providing industry-standard resources and expert-led courses.</li>
+                <li><strong>Community:</strong> Building connections between learners, mentors, and employers.</li>
+                <li><strong>Innovation:</strong> Continuously improving our platform with modern technologies.</li>
+            </ul>
         </div>
     </div>
 )
 
 // Pricing Page  
 const PricingPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
+    <div className="max-w-6xl mx-auto px-4 py-16">
+        <div className="text-center mb-12">
+            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Simple, Transparent Pricing</h1>
+            <p className="text-xl text-neutral-600">Choose the plan that's right for you</p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8">
+            {/* Free Plan */}
+            <div className="bg-white rounded-2xl p-8 border border-neutral-200 hover:shadow-lg transition-shadow">
+                <h3 className="text-xl font-bold text-neutral-900">Free</h3>
+                <p className="text-neutral-500 mt-2">Perfect for getting started</p>
+                <p className="text-4xl font-bold mt-6">$0<span className="text-lg font-normal text-neutral-500">/month</span></p>
+                <ul className="mt-8 space-y-4">
+                    <li className="flex items-center gap-2"><span className="text-success-500">✓</span> Basic resume builder</li>
+                    <li className="flex items-center gap-2"><span className="text-success-500">✓</span> Job search access</li>
+                    <li className="flex items-center gap-2"><span className="text-success-500">✓</span> 5 job applications/month</li>
+                    <li className="flex items-center gap-2"><span className="text-success-500">✓</span> Community access</li>
+                </ul>
+                <a href="/register" className="mt-8 block w-full text-center py-3 border border-primary-600 text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-colors">Get Started</a>
             </div>
-        </nav>
-        <div className="max-w-6xl mx-auto px-4 py-16">
-            <div className="text-center mb-12">
-                <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Simple, Transparent Pricing</h1>
-                <p className="text-xl text-neutral-600">Choose the plan that's right for you</p>
+            {/* Pro Plan */}
+            <div className="bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl p-8 text-white transform scale-105 shadow-xl">
+                <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-bold">Pro</h3>
+                    <span className="px-3 py-1 bg-white/20 rounded-full text-sm">Most Popular</span>
+                </div>
+                <p className="text-white/80 mt-2">For serious job seekers</p>
+                <p className="text-4xl font-bold mt-6">$19<span className="text-lg font-normal text-white/70">/month</span></p>
+                <ul className="mt-8 space-y-4">
+                    <li className="flex items-center gap-2"><span>✓</span> Advanced ATS resume builder</li>
+                    <li className="flex items-center gap-2"><span>✓</span> Portfolio builder</li>
+                    <li className="flex items-center gap-2"><span>✓</span> Unlimited job applications</li>
+                    <li className="flex items-center gap-2"><span>✓</span> All courses included</li>
+                    <li className="flex items-center gap-2"><span>✓</span> Priority support</li>
+                </ul>
+                <a href="/register" className="mt-8 block w-full text-center py-3 bg-white text-primary-600 font-semibold rounded-xl hover:bg-neutral-50 transition-colors">Start Free Trial</a>
             </div>
-            <div className="grid md:grid-cols-3 gap-8">
-                {/* Free Plan */}
-                <div className="bg-white rounded-2xl p-8 border border-neutral-200 hover:shadow-lg transition-shadow">
-                    <h3 className="text-xl font-bold text-neutral-900">Free</h3>
-                    <p className="text-neutral-500 mt-2">Perfect for getting started</p>
-                    <p className="text-4xl font-bold mt-6">$0<span className="text-lg font-normal text-neutral-500">/month</span></p>
-                    <ul className="mt-8 space-y-4">
-                        <li className="flex items-center gap-2"><span className="text-success-500">✓</span> Basic resume builder</li>
-                        <li className="flex items-center gap-2"><span className="text-success-500">✓</span> Job search access</li>
-                        <li className="flex items-center gap-2"><span className="text-success-500">✓</span> 5 job applications/month</li>
-                        <li className="flex items-center gap-2"><span className="text-success-500">✓</span> Community access</li>
-                    </ul>
-                    <a href="/register" className="mt-8 block w-full text-center py-3 border border-primary-600 text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-colors">Get Started</a>
-                </div>
-                {/* Pro Plan */}
-                <div className="bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl p-8 text-white transform scale-105 shadow-xl">
-                    <div className="flex items-center justify-between">
-                        <h3 className="text-xl font-bold">Pro</h3>
-                        <span className="px-3 py-1 bg-white/20 rounded-full text-sm">Most Popular</span>
-                    </div>
-                    <p className="text-white/80 mt-2">For serious job seekers</p>
-                    <p className="text-4xl font-bold mt-6">$19<span className="text-lg font-normal text-white/70">/month</span></p>
-                    <ul className="mt-8 space-y-4">
-                        <li className="flex items-center gap-2"><span>✓</span> Advanced ATS resume builder</li>
-                        <li className="flex items-center gap-2"><span>✓</span> Portfolio builder</li>
-                        <li className="flex items-center gap-2"><span>✓</span> Unlimited job applications</li>
-                        <li className="flex items-center gap-2"><span>✓</span> All courses included</li>
-                        <li className="flex items-center gap-2"><span>✓</span> Priority support</li>
-                    </ul>
-                    <a href="/register" className="mt-8 block w-full text-center py-3 bg-white text-primary-600 font-semibold rounded-xl hover:bg-neutral-50 transition-colors">Start Free Trial</a>
-                </div>
-                {/* Enterprise Plan */}
-                <div className="bg-white rounded-2xl p-8 border border-neutral-200 hover:shadow-lg transition-shadow">
-                    <h3 className="text-xl font-bold text-neutral-900">Enterprise</h3>
-                    <p className="text-neutral-500 mt-2">For organizations</p>
-                    <p className="text-4xl font-bold mt-6">Custom</p>
-                    <ul className="mt-8 space-y-4">
-                        <li className="flex items-center gap-2"><span className="text-success-500">✓</span> Everything in Pro</li>
-                        <li className="flex items-center gap-2"><span className="text-success-500">✓</span> Campus hiring tools</li>
-                        <li className="flex items-center gap-2"><span className="text-success-500">✓</span> Custom branding</li>
-                        <li className="flex items-center gap-2"><span className="text-success-500">✓</span> API access</li>
-                        <li className="flex items-center gap-2"><span className="text-success-500">✓</span> Dedicated support</li>
-                    </ul>
-                    <a href="/register" className="mt-8 block w-full text-center py-3 border border-primary-600 text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-colors">Contact Sales</a>
-                </div>
+            {/* Enterprise Plan */}
+            <div className="bg-white rounded-2xl p-8 border border-neutral-200 hover:shadow-lg transition-shadow">
+                <h3 className="text-xl font-bold text-neutral-900">Enterprise</h3>
+                <p className="text-neutral-500 mt-2">For organizations</p>
+                <p className="text-4xl font-bold mt-6">Custom</p>
+                <ul className="mt-8 space-y-4">
+                    <li className="flex items-center gap-2"><span className="text-success-500">✓</span> Everything in Pro</li>
+                    <li className="flex items-center gap-2"><span className="text-success-500">✓</span> Campus hiring tools</li>
+                    <li className="flex items-center gap-2"><span className="text-success-500">✓</span> Custom branding</li>
+                    <li className="flex items-center gap-2"><span className="text-success-500">✓</span> API access</li>
+                    <li className="flex items-center gap-2"><span className="text-success-500">✓</span> Dedicated support</li>
+                </ul>
+                <a href="/register" className="mt-8 block w-full text-center py-3 border border-primary-600 text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-colors">Contact Sales</a>
             </div>
         </div>
     </div>
@@ -164,109 +126,93 @@ const PricingPage = () => (
 
 // Features Page
 const FeaturesPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
-            </div>
-        </nav>
-        <div className="max-w-6xl mx-auto px-4 py-16">
-            <div className="text-center mb-16">
-                <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Platform Features</h1>
-                <p className="text-xl text-neutral-600">Everything you need to succeed in your career</p>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[
-                    { title: 'ATS Resume Builder', desc: 'Create resumes that pass applicant tracking systems with our AI-powered builder.' },
-                    { title: 'Portfolio Showcase', desc: 'Display your best work with beautiful, customizable portfolio templates.' },
-                    { title: 'Job Portal', desc: 'Access thousands of job listings from top companies worldwide.' },
-                    { title: 'Course Marketplace', desc: 'Learn from industry experts with our curated course library.' },
-                    { title: 'Campus Hiring', desc: 'Connect with universities for efficient campus recruitment.' },
-                    { title: 'Analytics Dashboard', desc: 'Track your progress with detailed insights and metrics.' },
-                ].map((feature) => (
-                    <div key={feature.title} className="bg-white p-6 rounded-2xl border border-neutral-200 hover:shadow-lg transition-shadow">
-                        <h3 className="text-lg font-bold text-neutral-900 mb-2">{feature.title}</h3>
-                        <p className="text-neutral-600">{feature.desc}</p>
-                    </div>
-                ))}
-            </div>
+    <div className="max-w-6xl mx-auto px-4 py-16">
+        <div className="text-center mb-16">
+            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Platform Features</h1>
+            <p className="text-xl text-neutral-600">Everything you need to succeed in your career</p>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+                { title: 'ATS Resume Builder', desc: 'Create resumes that pass applicant tracking systems with our AI-powered builder.' },
+                { title: 'Portfolio Showcase', desc: 'Display your best work with beautiful, customizable portfolio templates.' },
+                { title: 'Job Portal', desc: 'Access thousands of job listings from top companies worldwide.' },
+                { title: 'Course Marketplace', desc: 'Learn from industry experts with our curated course library.' },
+                { title: 'Campus Hiring', desc: 'Connect with universities for efficient campus recruitment.' },
+                { title: 'Analytics Dashboard', desc: 'Track your progress with detailed insights and metrics.' },
+            ].map((feature) => (
+                <div key={feature.title} className="bg-white p-6 rounded-2xl border border-neutral-200 hover:shadow-lg transition-shadow">
+                    <h3 className="text-lg font-bold text-neutral-900 mb-2">{feature.title}</h3>
+                    <p className="text-neutral-600">{feature.desc}</p>
+                </div>
+            ))}
         </div>
     </div>
 )
 
 // Settings Page
 const SettingsPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
+    <div className="max-w-4xl mx-auto px-4 py-16">
+        <h1 className="text-4xl font-display font-bold text-neutral-900 mb-6">Settings</h1>
+        <div className="space-y-6">
+            <div className="bg-white p-6 rounded-2xl border border-neutral-200">
+                <h2 className="text-xl font-bold text-neutral-900 mb-4">Account Settings</h2>
+                <div className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-1">Email Notifications</label>
+                        <div className="flex items-center gap-4">
+                            <label className="flex items-center gap-2">
+                                <input type="checkbox" className="rounded text-primary-600" defaultChecked />
+                                <span className="text-sm">Job alerts</span>
+                            </label>
+                            <label className="flex items-center gap-2">
+                                <input type="checkbox" className="rounded text-primary-600" defaultChecked />
+                                <span className="text-sm">Course updates</span>
+                            </label>
+                            <label className="flex items-center gap-2">
+                                <input type="checkbox" className="rounded text-primary-600" />
+                                <span className="text-sm">Newsletter</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-1">Language</label>
+                        <select className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none">
+                            <option>English</option>
+                            <option>Spanish</option>
+                            <option>French</option>
+                            <option>German</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16">
-            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-6">Settings</h1>
-            <div className="space-y-6">
-                <div className="bg-white p-6 rounded-2xl border border-neutral-200">
-                    <h2 className="text-xl font-bold text-neutral-900 mb-4">Account Settings</h2>
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-sm font-medium text-neutral-700 mb-1">Email Notifications</label>
-                            <div className="flex items-center gap-4">
-                                <label className="flex items-center gap-2">
-                                    <input type="checkbox" className="rounded text-primary-600" defaultChecked />
-                                    <span className="text-sm">Job alerts</span>
-                                </label>
-                                <label className="flex items-center gap-2">
-                                    <input type="checkbox" className="rounded text-primary-600" defaultChecked />
-                                    <span className="text-sm">Course updates</span>
-                                </label>
-                                <label className="flex items-center gap-2">
-                                    <input type="checkbox" className="rounded text-primary-600" />
-                                    <span className="text-sm">Newsletter</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-neutral-700 mb-1">Language</label>
-                            <select className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none">
-                                <option>English</option>
-                                <option>Spanish</option>
-                                <option>French</option>
-                                <option>German</option>
-                            </select>
-                        </div>
-                    </div>
+            <div className="bg-white p-6 rounded-2xl border border-neutral-200">
+                <h2 className="text-xl font-bold text-neutral-900 mb-4">Privacy</h2>
+                <div className="space-y-3">
+                    <label className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
+                        <span className="font-medium">Profile visibility</span>
+                        <select className="px-3 py-1 border border-neutral-200 rounded-lg text-sm">
+                            <option>Public</option>
+                            <option>Private</option>
+                            <option>Connections only</option>
+                        </select>
+                    </label>
+                    <label className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
+                        <span className="font-medium">Show activity status</span>
+                        <input type="checkbox" className="rounded text-primary-600" defaultChecked />
+                    </label>
                 </div>
-                <div className="bg-white p-6 rounded-2xl border border-neutral-200">
-                    <h2 className="text-xl font-bold text-neutral-900 mb-4">Privacy</h2>
-                    <div className="space-y-3">
-                        <label className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
-                            <span className="font-medium">Profile visibility</span>
-                            <select className="px-3 py-1 border border-neutral-200 rounded-lg text-sm">
-                                <option>Public</option>
-                                <option>Private</option>
-                                <option>Connections only</option>
-                            </select>
-                        </label>
-                        <label className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
-                            <span className="font-medium">Show activity status</span>
-                            <input type="checkbox" className="rounded text-primary-600" defaultChecked />
-                        </label>
-                    </div>
-                </div>
-                <div className="bg-white p-6 rounded-2xl border border-neutral-200">
-                    <h2 className="text-xl font-bold text-neutral-900 mb-4">Security</h2>
-                    <div className="space-y-3">
-                        <button className="w-full text-left p-3 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors">
-                            <p className="font-medium">Change Password</p>
-                            <p className="text-sm text-neutral-500">Update your password regularly for security</p>
-                        </button>
-                        <button className="w-full text-left p-3 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors">
-                            <p className="font-medium">Two-Factor Authentication</p>
-                            <p className="text-sm text-neutral-500">Add an extra layer of security</p>
-                        </button>
-                    </div>
+            </div>
+            <div className="bg-white p-6 rounded-2xl border border-neutral-200">
+                <h2 className="text-xl font-bold text-neutral-900 mb-4">Security</h2>
+                <div className="space-y-3">
+                    <button className="w-full text-left p-3 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors">
+                        <p className="font-medium">Change Password</p>
+                        <p className="text-sm text-neutral-500">Update your password regularly for security</p>
+                    </button>
+                    <button className="w-full text-left p-3 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors">
+                        <p className="font-medium">Two-Factor Authentication</p>
+                        <p className="text-sm text-neutral-500">Add an extra layer of security</p>
+                    </button>
                 </div>
             </div>
         </div>
@@ -275,58 +221,50 @@ const SettingsPage = () => (
 
 // Support Page
 const SupportPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
+    <div className="max-w-4xl mx-auto px-4 py-16">
+        <div className="text-center mb-12">
+            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Help & Support</h1>
+            <p className="text-xl text-neutral-600">We're here to help you succeed</p>
+        </div>
+        <div className="grid md:grid-cols-2 gap-6 mb-12">
+            {[
+                { title: 'Getting Started', desc: 'Learn the basics of using WorkGrad', icon: '🚀' },
+                { title: 'Account & Billing', desc: 'Manage your subscription and payments', icon: '💳' },
+                { title: 'Resume Builder', desc: 'Tips for creating ATS-friendly resumes', icon: '📄' },
+                { title: 'Job Applications', desc: 'Applying and tracking your applications', icon: '✉️' },
+            ].map((item) => (
+                <div key={item.title} className="bg-white p-6 rounded-2xl border border-neutral-200 hover:shadow-lg transition-shadow cursor-pointer">
+                    <div className="text-3xl mb-3">{item.icon}</div>
+                    <h3 className="text-lg font-bold text-neutral-900 mb-1">{item.title}</h3>
+                    <p className="text-neutral-600">{item.desc}</p>
+                </div>
+            ))}
+        </div>
+        <div className="bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl p-8 text-white text-center">
+            <h2 className="text-2xl font-bold mb-4">Still need help?</h2>
+            <p className="text-white/80 mb-6">Our support team is available 24/7 to assist you.</p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="mailto:support@workgrad.com" className="px-6 py-3 bg-white text-primary-600 font-semibold rounded-xl hover:bg-neutral-50 transition-colors">
+                    Email Support
+                </a>
+                <button className="px-6 py-3 border border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-colors">
+                    Live Chat
+                </button>
             </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16">
-            <div className="text-center mb-12">
-                <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Help & Support</h1>
-                <p className="text-xl text-neutral-600">We're here to help you succeed</p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-6 mb-12">
+        </div>
+        <div className="mt-12 bg-white p-6 rounded-2xl border border-neutral-200">
+            <h2 className="text-xl font-bold text-neutral-900 mb-4">Frequently Asked Questions</h2>
+            <div className="space-y-4">
                 {[
-                    { title: 'Getting Started', desc: 'Learn the basics of using WorkGrad', icon: '🚀' },
-                    { title: 'Account & Billing', desc: 'Manage your subscription and payments', icon: '💳' },
-                    { title: 'Resume Builder', desc: 'Tips for creating ATS-friendly resumes', icon: '📄' },
-                    { title: 'Job Applications', desc: 'Applying and tracking your applications', icon: '✉️' },
-                ].map((item) => (
-                    <div key={item.title} className="bg-white p-6 rounded-2xl border border-neutral-200 hover:shadow-lg transition-shadow cursor-pointer">
-                        <div className="text-3xl mb-3">{item.icon}</div>
-                        <h3 className="text-lg font-bold text-neutral-900 mb-1">{item.title}</h3>
-                        <p className="text-neutral-600">{item.desc}</p>
-                    </div>
+                    { q: 'How do I create a resume?', a: 'Navigate to Dashboard → Resume Builder and follow the step-by-step guide.' },
+                    { q: 'How do I apply for jobs?', a: 'Browse the Jobs section, click on a job listing, and click the Apply button.' },
+                    { q: 'How do I change my subscription?', a: 'Go to Settings → Account & Billing to manage your subscription.' },
+                ].map((faq) => (
+                    <details key={faq.q} className="p-4 bg-neutral-50 rounded-lg">
+                        <summary className="font-medium cursor-pointer">{faq.q}</summary>
+                        <p className="mt-2 text-neutral-600">{faq.a}</p>
+                    </details>
                 ))}
-            </div>
-            <div className="bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl p-8 text-white text-center">
-                <h2 className="text-2xl font-bold mb-4">Still need help?</h2>
-                <p className="text-white/80 mb-6">Our support team is available 24/7 to assist you.</p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="mailto:support@workgrad.com" className="px-6 py-3 bg-white text-primary-600 font-semibold rounded-xl hover:bg-neutral-50 transition-colors">
-                        Email Support
-                    </a>
-                    <button className="px-6 py-3 border border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-colors">
-                        Live Chat
-                    </button>
-                </div>
-            </div>
-            <div className="mt-12 bg-white p-6 rounded-2xl border border-neutral-200">
-                <h2 className="text-xl font-bold text-neutral-900 mb-4">Frequently Asked Questions</h2>
-                <div className="space-y-4">
-                    {[
-                        { q: 'How do I create a resume?', a: 'Navigate to Dashboard → Resume Builder and follow the step-by-step guide.' },
-                        { q: 'How do I apply for jobs?', a: 'Browse the Jobs section, click on a job listing, and click the Apply button.' },
-                        { q: 'How do I change my subscription?', a: 'Go to Settings → Account & Billing to manage your subscription.' },
-                    ].map((faq) => (
-                        <details key={faq.q} className="p-4 bg-neutral-50 rounded-lg">
-                            <summary className="font-medium cursor-pointer">{faq.q}</summary>
-                            <p className="mt-2 text-neutral-600">{faq.a}</p>
-                        </details>
-                    ))}
-                </div>
             </div>
         </div>
     </div>
@@ -334,31 +272,28 @@ const SupportPage = () => (
 
 // Jobs Page
 const JobsPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <AuthNavbar />
-        <div className="max-w-6xl mx-auto px-4 py-16">
-            <div className="text-center mb-12">
-                <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Browse Jobs</h1>
-                <p className="text-xl text-neutral-600">Find your dream job from thousands of opportunities</p>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[
-                    { title: 'Senior React Developer', company: 'TechCorp', location: 'Remote', salary: '$120K-150K' },
-                    { title: 'Product Designer', company: 'DesignHub', location: 'New York', salary: '$90K-120K' },
-                    { title: 'Backend Engineer', company: 'StartupXYZ', location: 'San Francisco', salary: '$130K-160K' },
-                    { title: 'Data Scientist', company: 'AI Labs', location: 'Boston', salary: '$140K-180K' },
-                    { title: 'DevOps Engineer', company: 'CloudTech', location: 'Remote', salary: '$125K-155K' },
-                    { title: 'Mobile Developer', company: 'AppWorks', location: 'Austin', salary: '$110K-140K' },
-                ].map((job) => (
-                    <div key={job.title} className="bg-white p-6 rounded-2xl border border-neutral-200 hover:shadow-lg transition-all">
-                        <h3 className="font-bold text-neutral-900 mb-2">{job.title}</h3>
-                        <p className="text-neutral-600 mb-1">{job.company}</p>
-                        <p className="text-sm text-neutral-500 mb-3">{job.location}</p>
-                        <p className="text-primary-600 font-semibold">{job.salary}</p>
-                        <a href="/login" className="mt-4 block w-full text-center py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">Apply Now</a>
-                    </div>
-                ))}
-            </div>
+    <div className="max-w-6xl mx-auto px-4 py-16">
+        <div className="text-center mb-12">
+            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Browse Jobs</h1>
+            <p className="text-xl text-neutral-600">Find your dream job from thousands of opportunities</p>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+                { title: 'Senior React Developer', company: 'TechCorp', location: 'Remote', salary: '$120K-150K' },
+                { title: 'Product Designer', company: 'DesignHub', location: 'New York', salary: '$90K-120K' },
+                { title: 'Backend Engineer', company: 'StartupXYZ', location: 'San Francisco', salary: '$130K-160K' },
+                { title: 'Data Scientist', company: 'AI Labs', location: 'Boston', salary: '$140K-180K' },
+                { title: 'DevOps Engineer', company: 'CloudTech', location: 'Remote', salary: '$125K-155K' },
+                { title: 'Mobile Developer', company: 'AppWorks', location: 'Austin', salary: '$110K-140K' },
+            ].map((job) => (
+                <div key={job.title} className="bg-white p-6 rounded-2xl border border-neutral-200 hover:shadow-lg transition-all">
+                    <h3 className="font-bold text-neutral-900 mb-2">{job.title}</h3>
+                    <p className="text-neutral-600 mb-1">{job.company}</p>
+                    <p className="text-sm text-neutral-500 mb-3">{job.location}</p>
+                    <p className="text-primary-600 font-semibold">{job.salary}</p>
+                    <a href="/login" className="mt-4 block w-full text-center py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">Apply Now</a>
+                </div>
+            ))}
         </div>
     </div>
 )
@@ -436,13 +371,12 @@ const fullStackDomains = [
 
 // Full Stack Domain Detail Page
 const FullStackDomainPage = () => {
-    const { isAuthenticated, user } = useAuth()
     const domainSlug = window.location.pathname.split('/').pop()
     const domain = fullStackDomains.find(d => d.slug === domainSlug) || fullStackDomains[0]
 
     return (
-        <div className="min-h-screen bg-white">
-            <AuthNavbar />
+        <div>
+
 
             {/* Premium Hero Section */}
             <div className="bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 py-16 lg:py-20 relative overflow-hidden">
@@ -757,11 +691,9 @@ const FullStackDomainPage = () => {
 
 // All Full Stack Domains Page
 const FullStackDomainsPage = () => {
-    const { isAuthenticated, user } = useAuth()
-
     return (
-        <div className="min-h-screen bg-white">
-            <AuthNavbar />
+        <div>
+
 
             {/* Premium Hero Section */}
             <div className="bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50 py-16 lg:py-20 relative overflow-hidden">
@@ -964,12 +896,11 @@ const FullStackDomainsPage = () => {
 
 // Premium Categories Page
 const CategoriesPage = () => {
-    const { isAuthenticated, user } = useAuth()
     const totalCourses = categoryData.reduce((acc, cat) => acc + cat.courses.length, 0)
 
     return (
-        <div className="min-h-screen bg-white">
-            <AuthNavbar />
+        <div>
+
 
             {/* Premium Hero Section */}
             <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-16 lg:py-20 relative overflow-hidden">
@@ -1188,14 +1119,13 @@ const CategoriesPage = () => {
 
 // Single Category Page
 const CategoryPage = () => {
-    const { isAuthenticated, user } = useAuth()
     const categorySlug = window.location.pathname.split('/').pop()
     const category = categoryData.find(c => c.slug === categorySlug) || categoryData[0]
     const categoryCourses = coursesData.filter(c => category.courses.includes(c.id))
 
     return (
-        <div className="min-h-screen bg-neutral-50">
-            <AuthNavbar />
+        <div>
+
 
             {/* Premium Hero Section */}
             <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-16 lg:py-20 relative overflow-hidden">
@@ -1458,18 +1388,9 @@ const CategoryPage = () => {
 
 // Courses Page with clickable cards
 const CoursesPage = () => {
-    const colors = [
-        'from-blue-500 to-indigo-600',
-        'from-emerald-500 to-teal-600',
-        'from-orange-500 to-rose-600',
-        'from-purple-500 to-violet-600',
-        'from-pink-500 to-rose-600',
-        'from-cyan-500 to-blue-600',
-    ]
-
     return (
-        <div className="min-h-screen bg-white">
-            <AuthNavbar />
+        <div>
+
 
             {/* Premium Hero Section */}
             <div className="bg-gradient-to-br from-cyan-50 via-blue-50 to-indigo-50 py-16 lg:py-20 relative overflow-hidden">
@@ -1722,32 +1643,8 @@ const CourseDetailPage = () => {
     ]
 
     return (
-        <div className="min-h-screen bg-neutral-50">
-            {/* Navigation */}
-            <nav className="bg-white/80 backdrop-blur-md border-b border-neutral-100 sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                        <span className="text-neutral-300">|</span>
-                        <a href="/courses" className="text-neutral-500 hover:text-primary-600 transition-colors flex items-center gap-1">
-                            ← Back to Courses
-                        </a>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        {isAuthenticated ? (
-                            <>
-                                <span className="text-neutral-600">Hi, {user?.profile?.firstName || 'there'}</span>
-                                <a href="/dashboard" className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">Dashboard</a>
-                            </>
-                        ) : (
-                            <>
-                                <a href="/login" className="text-neutral-600 hover:text-primary-600 transition-colors">Login</a>
-                                <a href="/register" className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">Sign Up</a>
-                            </>
-                        )}
-                    </div>
-                </div>
-            </nav>
+        <div>
+
 
             {/* Hero Section */}
             <div className="bg-gradient-to-br from-orange-50 via-rose-50 to-amber-50 relative overflow-hidden">
@@ -2011,218 +1908,122 @@ const CourseDetailPage = () => {
 
 // Resume Builder Page
 const ResumeBuilderPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
-            </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">ATS-Friendly Resume Builder</h1>
-            <p className="text-xl text-neutral-600 mb-8">Create professional resumes that pass Applicant Tracking Systems</p>
-            <a href="/register" className="inline-block px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700">Get Started Free</a>
-        </div>
+    <div className="max-w-4xl mx-auto px-4 py-16 text-center">
+        <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">ATS-Friendly Resume Builder</h1>
+        <p className="text-xl text-neutral-600 mb-8">Create professional resumes that pass Applicant Tracking Systems</p>
+        <a href="/register" className="inline-block px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700">Get Started Free</a>
     </div>
 )
 
 // Resources Page
 const ResourcesPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
-            </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16">
-            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Career Resources</h1>
-            <p className="text-xl text-neutral-600 mb-8">Tips, guides, and resources to accelerate your career</p>
-            <div className="space-y-4">
-                {['Interview Preparation Guide', 'Salary Negotiation Tips', 'Career Path Planning', 'Networking Strategies'].map((item) => (
-                    <div key={item} className="bg-white p-6 rounded-xl border border-neutral-200 hover:shadow-md transition-all cursor-pointer">
-                        <h3 className="font-bold text-neutral-900">{item}</h3>
-                    </div>
-                ))}
-            </div>
+    <div className="max-w-4xl mx-auto px-4 py-16">
+        <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Career Resources</h1>
+        <p className="text-xl text-neutral-600 mb-8">Tips, guides, and resources to accelerate your career</p>
+        <div className="space-y-4">
+            {['Interview Preparation Guide', 'Salary Negotiation Tips', 'Career Path Planning', 'Networking Strategies'].map((item) => (
+                <div key={item} className="bg-white p-6 rounded-xl border border-neutral-200 hover:shadow-md transition-all cursor-pointer">
+                    <h3 className="font-bold text-neutral-900">{item}</h3>
+                </div>
+            ))}
         </div>
     </div>
 )
 
 // Enterprise Page
 const EnterprisePage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
-            </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Enterprise Solutions</h1>
-            <p className="text-xl text-neutral-600 mb-8">Custom hiring solutions for large organizations</p>
-            <a href="/contact" className="inline-block px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700">Contact Sales</a>
-        </div>
+    <div className="max-w-4xl mx-auto px-4 py-16 text-center">
+        <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Enterprise Solutions</h1>
+        <p className="text-xl text-neutral-600 mb-8">Custom hiring solutions for large organizations</p>
+        <a href="/contact" className="inline-block px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700">Contact Sales</a>
     </div>
 )
 
 // Become Mentor Page
 const BecomeMentorPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
-            </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Become a Mentor</h1>
-            <p className="text-xl text-neutral-600 mb-8">Share your knowledge and earn up to 97% on course sales</p>
-            <a href="/register" className="inline-block px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700">Start Teaching</a>
-        </div>
+    <div className="max-w-4xl mx-auto px-4 py-16 text-center">
+        <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Become a Mentor</h1>
+        <p className="text-xl text-neutral-600 mb-8">Share your knowledge and earn up to 97% on course sales</p>
+        <a href="/register" className="inline-block px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700">Start Teaching</a>
     </div>
 )
 
 // Careers Page
 const CareersPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
-            </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16">
-            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Careers at WorkGrad</h1>
-            <p className="text-xl text-neutral-600 mb-8">Join our mission to transform career development</p>
-            <p className="text-neutral-600">Check back soon for open positions!</p>
-        </div>
+    <div className="max-w-4xl mx-auto px-4 py-16">
+        <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Careers at WorkGrad</h1>
+        <p className="text-xl text-neutral-600 mb-8">Join our mission to transform career development</p>
+        <p className="text-neutral-600">Check back soon for open positions!</p>
     </div>
 )
 
 // Blog Page
 const BlogPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
-            </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16">
-            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-8">Blog</h1>
-            <p className="text-neutral-600">Coming soon - Career tips, industry insights, and more!</p>
-        </div>
+    <div className="max-w-4xl mx-auto px-4 py-16">
+        <h1 className="text-4xl font-display font-bold text-neutral-900 mb-8">Blog</h1>
+        <p className="text-neutral-600">Coming soon - Career tips, industry insights, and more!</p>
     </div>
 )
 
 // Press Page
 const PressPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
-            </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16">
-            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Press</h1>
-            <p className="text-neutral-600">For media inquiries, contact press@workgrad.com</p>
-        </div>
+    <div className="max-w-4xl mx-auto px-4 py-16">
+        <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Press</h1>
+        <p className="text-neutral-600">For media inquiries, contact press@workgrad.com</p>
     </div>
 )
 
 // Contact Page
 const ContactPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
-            </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16">
-            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Contact Us</h1>
-            <div className="bg-white p-6 rounded-xl border border-neutral-200">
-                <p className="mb-4"><strong>Email:</strong> hello@workgrad.com</p>
-                <p className="mb-4"><strong>Phone:</strong> +91 98765 43210</p>
-                <p><strong>Address:</strong> Bangalore, Karnataka, India</p>
-            </div>
+    <div className="max-w-4xl mx-auto px-4 py-16">
+        <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Contact Us</h1>
+        <div className="bg-white p-6 rounded-xl border border-neutral-200">
+            <p className="mb-4"><strong>Email:</strong> hello@workgrad.com</p>
+            <p className="mb-4"><strong>Phone:</strong> +91 98765 43210</p>
+            <p><strong>Address:</strong> Bangalore, Karnataka, India</p>
         </div>
     </div>
 )
 
 // Terms Page
 const TermsPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
-            </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16">
-            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-6">Terms of Service</h1>
-            <div className="prose prose-neutral max-w-none">
-                <p>Last updated: December 2024</p>
-                <p className="mt-4">By using WorkGrad, you agree to these terms of service...</p>
-            </div>
+    <div className="max-w-4xl mx-auto px-4 py-16">
+        <h1 className="text-4xl font-display font-bold text-neutral-900 mb-6">Terms of Service</h1>
+        <div className="prose prose-neutral max-w-none">
+            <p>Last updated: December 2024</p>
+            <p className="mt-4">By using WorkGrad, you agree to these terms of service...</p>
         </div>
     </div>
 )
 
 // Privacy Page
 const PrivacyPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
-            </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16">
-            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-6">Privacy Policy</h1>
-            <div className="prose prose-neutral max-w-none">
-                <p>Last updated: December 2024</p>
-                <p className="mt-4">Your privacy is important to us. This policy explains how we collect and use your data...</p>
-            </div>
+    <div className="max-w-4xl mx-auto px-4 py-16">
+        <h1 className="text-4xl font-display font-bold text-neutral-900 mb-6">Privacy Policy</h1>
+        <div className="prose prose-neutral max-w-none">
+            <p>Last updated: December 2024</p>
+            <p className="mt-4">Your privacy is important to us. This policy explains how we collect and use your data...</p>
         </div>
     </div>
 )
 
 // Cookies Page
 const CookiesPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
-            </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16">
-            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-6">Cookie Policy</h1>
-            <div className="prose prose-neutral max-w-none">
-                <p>Last updated: December 2024</p>
-                <p className="mt-4">We use cookies to improve your experience on our platform...</p>
-            </div>
+    <div className="max-w-4xl mx-auto px-4 py-16">
+        <h1 className="text-4xl font-display font-bold text-neutral-900 mb-6">Cookie Policy</h1>
+        <div className="prose prose-neutral max-w-none">
+            <p>Last updated: December 2024</p>
+            <p className="mt-4">We use cookies to improve your experience on our platform...</p>
         </div>
     </div>
 )
 
 // Community Page
 const CommunityPage = () => (
-    <div className="min-h-screen bg-neutral-50">
-        <nav className="bg-white border-b border-neutral-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="/" className="text-2xl font-display font-bold text-primary-600">WorkGrad</a>
-                <a href="/" className="text-neutral-600 hover:text-primary-600">← Back to Home</a>
-            </div>
-        </nav>
-        <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-            <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Community</h1>
-            <p className="text-xl text-neutral-600 mb-8">Join our community of learners, mentors, and employers</p>
-            <a href="/register" className="inline-block px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700">Join Now</a>
-        </div>
+    <div className="max-w-4xl mx-auto px-4 py-16 text-center">
+        <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">Community</h1>
+        <p className="text-xl text-neutral-600 mb-8">Join our community of learners, mentors, and employers</p>
+        <a href="/register" className="inline-block px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700">Join Now</a>
     </div>
 )
 
@@ -2258,36 +2059,40 @@ function App() {
 
             {/* Routes */}
             <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/pricing" element={<PricingPage />} />
-                <Route path="/features" element={<FeaturesPage />} />
-                <Route path="/settings" element={<SettingsPage />} />
-                <Route path="/support" element={<SupportPage />} />
-                <Route path="/jobs" element={<JobsPage />} />
-                <Route path="/courses" element={<CoursesPage />} />
-                <Route path="/courses/categories" element={<CategoriesPage />} />
-                <Route path="/courses/category/:slug" element={<CategoryPage />} />
-                <Route path="/courses/:id" element={<CourseDetailPage />} />
-                <Route path="/fullstack" element={<FullStackDomainsPage />} />
-                <Route path="/fullstack/:domain" element={<FullStackDomainPage />} />
-                <Route path="/resume-builder" element={<ResumeBuilderPage />} />
-                <Route path="/resources" element={<ResourcesPage />} />
-                <Route path="/enterprise" element={<EnterprisePage />} />
-                <Route path="/become-mentor" element={<BecomeMentorPage />} />
-                <Route path="/careers" element={<CareersPage />} />
-                <Route path="/blog" element={<BlogPage />} />
-                <Route path="/press" element={<PressPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-                <Route path="/terms" element={<TermsPage />} />
-                <Route path="/privacy" element={<PrivacyPage />} />
-                <Route path="/cookies" element={<CookiesPage />} />
-                <Route path="/community" element={<CommunityPage />} />
+                {/* Public Routes wrapped in PublicLayout */}
+                <Route element={<PublicLayout><Outlet /></PublicLayout>}>
+                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/pricing" element={<PricingPage />} />
+                    <Route path="/features" element={<FeaturesPage />} />
+                    <Route path="/settings" element={<SettingsPage />} />
+                    <Route path="/support" element={<SupportPage />} />
+                    <Route path="/jobs" element={<JobsPage />} />
+                    <Route path="/courses" element={<CoursesPage />} />
+                    <Route path="/courses/categories" element={<CategoriesPage />} />
+                    <Route path="/courses/category/:slug" element={<CategoryPage />} />
+                    <Route path="/courses/:id" element={<CourseDetailPage />} />
+                    <Route path="/fullstack" element={<FullStackDomainsPage />} />
+                    <Route path="/fullstack/:domain" element={<FullStackDomainPage />} />
+                    <Route path="/resume-builder" element={<ResumeBuilderPage />} />
+                    <Route path="/resources" element={<ResourcesPage />} />
+                    <Route path="/enterprise" element={<EnterprisePage />} />
+                    <Route path="/become-mentor" element={<BecomeMentorPage />} />
+                    <Route path="/careers" element={<CareersPage />} />
+                    <Route path="/blog" element={<BlogPage />} />
+                    <Route path="/press" element={<PressPage />} />
+                    <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/terms" element={<TermsPage />} />
+                    <Route path="/privacy" element={<PrivacyPage />} />
+                    <Route path="/cookies" element={<CookiesPage />} />
+                    <Route path="/community" element={<CommunityPage />} />
+                    <Route path="*" element={<NotFound />} />
+                </Route>
 
-                {/* Auth Routes */}
+
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+
 
                 {/* Protected Learner Routes */}
                 <Route element={<ProtectedRoute allowedRoles={['learner']} />}>
@@ -2312,9 +2117,6 @@ function App() {
                     <Route path="/admin" element={<AdminDashboard />} />
                     <Route path="/admin/*" element={<AdminDashboard />} />
                 </Route>
-
-                {/* 404 */}
-                <Route path="*" element={<NotFound />} />
             </Routes>
         </AuthProvider>
     )

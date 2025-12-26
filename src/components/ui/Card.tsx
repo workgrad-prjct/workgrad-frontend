@@ -2,7 +2,7 @@ import { forwardRef, HTMLAttributes } from 'react'
 import { motion, HTMLMotionProps } from 'framer-motion'
 import { cn } from '@/utils'
 
-interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onAnimationStart' | 'onDragStart' | 'onDragEnd' | 'onDrag'> {
+interface CardProps extends HTMLMotionProps<"div"> {
     variant?: 'default' | 'glass' | 'elevated' | 'bordered' | 'gradient'
     hover?: boolean
     padding?: 'none' | 'sm' | 'md' | 'lg'
@@ -37,16 +37,15 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
         },
         ref
     ) => {
-        const Wrapper = animate ? motion.div : 'div'
         const animationProps = animate ? {
             initial: { opacity: 0, y: 20 },
             animate: { opacity: 1, y: 0 },
             transition: { duration: 0.4, ease: 'easeOut' },
-            whileHover: hover ? { y: -4, shadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' } : undefined,
-        } as HTMLMotionProps<"div"> : {}
+            whileHover: hover ? { y: -4, boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' } : undefined,
+        } : {}
 
         return (
-            <Wrapper
+            <motion.div
                 ref={ref}
                 className={cn(
                     'rounded-2xl transition-all duration-300',
@@ -59,7 +58,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
                 {...props}
             >
                 {children}
-            </Wrapper>
+            </motion.div>
         )
     }
 )

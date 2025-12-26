@@ -2,7 +2,8 @@ import { ReactNode, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Menu, Bell, Search, ChevronDown } from 'lucide-react'
 import { Sidebar } from './Sidebar'
-import { Avatar, Badge, Button } from '@/components/ui'
+import { Footer } from './Footer'
+import { Avatar } from '@/components/ui'
 import { cn } from '@/utils'
 
 type UserRole = 'learner' | 'employer' | 'mentor' | 'admin'
@@ -135,6 +136,8 @@ export function DashboardLayout({
                         {children}
                     </motion.div>
                 </main>
+
+                <Footer />
             </div>
         </div>
     )

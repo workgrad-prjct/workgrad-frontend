@@ -6,7 +6,7 @@ import { Card, Button, Badge, Input } from '@/components/ui'
 import { useAuth } from '@/context'
 import {
     BookOpen, Users, DollarSign, Star, TrendingUp, Plus, Edit2, Trash2,
-    Play, Clock, GraduationCap, BarChart3, Eye, Video, ChevronRight,
+    Play, GraduationCap, Eye, Video, ChevronRight,
     Upload, FileText, Layers, CheckCircle, Settings, Search
 } from 'lucide-react'
 import { cn } from '@/utils'
@@ -939,7 +939,7 @@ function CreateQuiz() {
 // Manage Resources Component  
 function ManageResources() {
     const [selectedCourse, setSelectedCourse] = useState('')
-    const [resources, setResources] = useState([
+    const [resources] = useState([
         { id: 1, name: 'React Cheat Sheet.pdf', size: '2.4 MB', type: 'pdf', downloads: 234, course: 'React Masterclass 2024' },
         { id: 2, name: 'Node.js Best Practices.pdf', size: '1.8 MB', type: 'pdf', downloads: 189, course: 'Node.js Backend Development' },
         { id: 3, name: 'Project Starter Files.zip', size: '15.2 MB', type: 'zip', downloads: 445, course: 'React Masterclass 2024' },

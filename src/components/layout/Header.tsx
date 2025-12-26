@@ -11,7 +11,8 @@ import {
     LogIn,
     UserPlus,
 } from 'lucide-react'
-import { Button } from '@/components/ui'
+import { Button, Avatar } from '@/components/ui'
+import { useAuth } from '@/context'
 import { cn } from '@/utils'
 
 const navigation = [
@@ -47,6 +48,7 @@ export function Header() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [isRegisterDropdownOpen, setIsRegisterDropdownOpen] = useState(false)
+    const { user, isAuthenticated } = useAuth()
     const location = useLocation()
     const navigate = useNavigate()
 
@@ -105,75 +107,104 @@ export function Header() {
 
                     {/* Desktop Actions */}
                     <div className="hidden lg:flex items-center gap-3">
-                        <Button
-                            variant="ghost"
-                            onClick={() => navigate('/login')}
-                            leftIcon={<LogIn className="w-4 h-4" />}
-                        >
-                            Sign In
-                        </Button>
-
-                        {/* Register Dropdown */}
-                        <div className="relative">
-                            <Button
-                                variant="primary"
-                                onClick={() => setIsRegisterDropdownOpen(!isRegisterDropdownOpen)}
-                                rightIcon={
-                                    <ChevronDown
-                                        className={cn(
-                                            'w-4 h-4 transition-transform',
-                                            isRegisterDropdownOpen && 'rotate-180'
-                                        )}
+                        {isAuthenticated ? (
+                            <div className="flex items-center gap-4">
+                                <div className="text-right hidden sm:block">
+                                    <p className="text-sm font-medium text-neutral-900 group-hover:text-primary-600 transition-colors">
+                                        {user?.profile?.firstName} {user?.profile?.lastName}
+                                    </p>
+                                    <p className="text-xs text-neutral-500 capitalize">{user?.role}</p>
+                                </div>
+                                <Button
+                                    variant="primary"
+                                    size="sm"
+                                    onClick={() => navigate('/dashboard')}
+                                    className="shadow-glow-sm"
+                                >
+                                    Dashboard
+                                </Button>
+                                <Link to="/dashboard/settings">
+                                    <Avatar
+                                        src={user?.profile?.avatar}
+                                        name={`${user?.profile?.firstName} ${user?.profile?.lastName}`}
+                                        size="md"
+                                        className="border-2 border-primary-100"
                                     />
-                                }
-                            >
-                                Get Started
-                            </Button>
+                                </Link>
+                            </div>
+                        ) : (
+                            <>
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => navigate('/login')}
+                                    leftIcon={<LogIn className="w-4 h-4" />}
+                                >
+                                    Sign In
+                                </Button>
 
-                            <AnimatePresence>
-                                {isRegisterDropdownOpen && (
-                                    <>
-                                        {/* Overlay */}
-                                        <div
-                                            className="fixed inset-0 z-10"
-                                            onClick={() => setIsRegisterDropdownOpen(false)}
-                                        />
+                                {/* Register Dropdown */}
+                                <div className="relative">
+                                    <Button
+                                        variant="primary"
+                                        onClick={() => setIsRegisterDropdownOpen(!isRegisterDropdownOpen)}
+                                        rightIcon={
+                                            <ChevronDown
+                                                className={cn(
+                                                    'w-4 h-4 transition-transform',
+                                                    isRegisterDropdownOpen && 'rotate-180'
+                                                )}
+                                            />
+                                        }
+                                    >
+                                        Get Started
+                                    </Button>
 
-                                        {/* Dropdown */}
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                            transition={{ duration: 0.2 }}
-                                            className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-premium border border-neutral-100 overflow-hidden z-20"
-                                        >
-                                            <div className="p-2">
-                                                {registerOptions.map((option) => (
-                                                    <Link
-                                                        key={option.name}
-                                                        to={option.href}
-                                                        onClick={() => setIsRegisterDropdownOpen(false)}
-                                                        className="flex items-start gap-3 p-3 rounded-xl hover:bg-neutral-50 transition-colors group"
-                                                    >
-                                                        <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-600 flex items-center justify-center group-hover:bg-primary-500 group-hover:text-white transition-colors">
-                                                            <option.icon className="w-5 h-5" />
-                                                        </div>
-                                                        <div>
-                                                            <div className="font-medium text-neutral-900">
-                                                                {option.name}
-                                                            </div>
-                                                            <div className="text-sm text-neutral-500">
-                                                                {option.description}
-                                                            </div>
-                                                        </div>
-                                                    </Link>
-                                                ))}
-                                            </div>
-                                        </motion.div>
-                                    </>
-                                )}
-                            </AnimatePresence>
-                        </div>
+                                    <AnimatePresence>
+                                        {isRegisterDropdownOpen && (
+                                            <>
+                                                {/* Overlay */}
+                                                <div
+                                                    className="fixed inset-0 z-10"
+                                                    onClick={() => setIsRegisterDropdownOpen(false)}
+                                                />
+
+                                                {/* Dropdown */}
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                    transition={{ duration: 0.2 }}
+                                                    className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-premium border border-neutral-100 overflow-hidden z-20"
+                                                >
+                                                    <div className="p-2">
+                                                        {registerOptions.map((option) => (
+                                                            <Link
+                                                                key={option.name}
+                                                                to={option.href}
+                                                                onClick={() => setIsRegisterDropdownOpen(false)}
+                                                                className="flex items-start gap-3 p-3 rounded-xl hover:bg-neutral-50 transition-colors group"
+                                                            >
+                                                                <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-600 flex items-center justify-center group-hover:bg-primary-500 group-hover:text-white transition-colors">
+                                                                    <option.icon className="w-5 h-5" />
+                                                                </div>
+                                                                <div>
+                                                                    <div className="font-medium text-neutral-900">
+                                                                        {option.name}
+                                                                    </div>
+                                                                    <div className="text-sm text-neutral-500">
+                                                                        {option.description}
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        ))}
+                                                    </div>
+                                                </motion.div>
+                                            </>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -217,22 +248,50 @@ export function Header() {
                             ))}
 
                             <div className="pt-4 border-t border-neutral-100 space-y-2">
-                                <Button
-                                    variant="secondary"
-                                    fullWidth
-                                    onClick={() => navigate('/login')}
-                                    leftIcon={<LogIn className="w-4 h-4" />}
-                                >
-                                    Sign In
-                                </Button>
-                                <Button
-                                    variant="primary"
-                                    fullWidth
-                                    onClick={() => navigate('/register')}
-                                    leftIcon={<UserPlus className="w-4 h-4" />}
-                                >
-                                    Get Started
-                                </Button>
+                                {isAuthenticated ? (
+                                    <div className="space-y-3">
+                                        <div className="flex items-center gap-3 px-4 py-2 bg-neutral-50 rounded-xl">
+                                            <Avatar
+                                                src={user?.profile?.avatar}
+                                                name={`${user?.profile?.firstName} ${user?.profile?.lastName}`}
+                                                size="md"
+                                            />
+                                            <div>
+                                                <p className="text-sm font-bold text-neutral-900">
+                                                    {user?.profile?.firstName} {user?.profile?.lastName}
+                                                </p>
+                                                <p className="text-xs text-neutral-500 capitalize">{user?.role}</p>
+                                            </div>
+                                        </div>
+                                        <Button
+                                            variant="primary"
+                                            fullWidth
+                                            onClick={() => navigate('/dashboard')}
+                                            leftIcon={<LogIn className="w-4 h-4" />}
+                                        >
+                                            Go to Dashboard
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <Button
+                                            variant="secondary"
+                                            fullWidth
+                                            onClick={() => navigate('/login')}
+                                            leftIcon={<LogIn className="w-4 h-4" />}
+                                        >
+                                            Sign In
+                                        </Button>
+                                        <Button
+                                            variant="primary"
+                                            fullWidth
+                                            onClick={() => navigate('/register')}
+                                            leftIcon={<UserPlus className="w-4 h-4" />}
+                                        >
+                                            Get Started
+                                        </Button>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </motion.div>

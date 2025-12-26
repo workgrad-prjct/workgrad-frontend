@@ -15,7 +15,6 @@ import {
     LogOut,
     ChevronLeft,
     ChevronRight,
-    Bell,
     Search,
     FileQuestion,
     FolderOpen,
@@ -32,8 +31,15 @@ interface SidebarProps {
     userAvatar?: string
 }
 
+interface NavigationItem {
+    name: string
+    href: string
+    icon: any
+    badge?: string
+}
+
 // Navigation items per role
-const navigationByRole = {
+const navigationByRole: Record<UserRole, NavigationItem[]> = {
     learner: [
         { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
         { name: 'Resume Builder', href: '/dashboard/resume', icon: FileText },

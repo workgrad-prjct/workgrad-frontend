@@ -4,7 +4,7 @@ import {
     CheckCircle, ChevronRight, ChevronLeft, Upload, FileText,
     Plus, Trash2, GraduationCap, Briefcase, Code, Folder
 } from 'lucide-react'
-import { Card, Button, Input, Select, Badge } from '@/components/ui'
+import { Card, Button, Input, Badge } from '@/components/ui'
 import { cn } from '@/utils'
 
 // Steps configuration

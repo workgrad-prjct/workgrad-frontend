@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import {
-    Plus, Trash2, ExternalLink, Github, Globe, Image,
+    Plus, Trash2, ExternalLink, Github, Globe,
     Edit2, Eye, Save, X, Upload, Link as LinkIcon,
     Code, Palette, Layers, Zap
 } from 'lucide-react'

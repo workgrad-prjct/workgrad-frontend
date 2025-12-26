@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Search, MapPin, Briefcase, DollarSign, Clock, Filter, SlidersHorizontal } from 'lucide-react'
-import { Card, Button, Input, Badge, Select } from '@/components/ui'
+import { Search, MapPin, DollarSign, Clock, Filter } from 'lucide-react'
+import { Card, Button, Input, Badge } from '@/components/ui'
 
 // Mock Job Data
 const jobs = [
@@ -63,7 +63,7 @@ const jobs = [
 
 export function JobPortal() {
     const [searchQuery, setSearchQuery] = useState('')
-    const [selectedType, setSelectedType] = useState('All')
+
 
     return (
         <div className="space-y-6">

@@ -3,13 +3,12 @@ import { Routes, Route, Navigate, Link, useParams } from 'react-router-dom'
 import { DashboardLayout } from '@/components/layout'
 import { DashboardStats } from './components'
 import { ResumeBuilder, JobPortal, PortfolioBuilder } from './'
-import { Card, Button, Badge, Input } from '@/components/ui'
+import { Card, Button, Badge } from '@/components/ui'
 import { useAuth } from '@/context'
 import {
-    Briefcase, ArrowRight, BookOpen, Clock, Star, Users, Play,
-    Download, FileText, CheckCircle, ChevronLeft, ChevronRight,
-    MessageSquare, ThumbsUp, Volume2, Maximize, Settings, Pause,
-    X, Send
+    Download, FileText, MessageSquare, Play, Star,
+    ChevronLeft, ChevronRight, CheckCircle, Pause, Volume2,
+    Settings, Maximize, X, Send, ArrowRight, Briefcase
 } from 'lucide-react'
 
 // Course data for learner
@@ -57,7 +56,6 @@ function CoursePlayer() {
     const currentLesson = course.lessons[currentLessonIndex] || course.lessons[0]
 
     const [isPlaying, setIsPlaying] = useState(false)
-    const [showNotes, setShowNotes] = useState(true)
     const [showReviewModal, setShowReviewModal] = useState(false)
     const [reviewRating, setReviewRating] = useState(0)
     const [reviewText, setReviewText] = useState('')
@@ -462,8 +460,8 @@ function Courses() {
 
                                 {/* Status Badge */}
                                 <span className={`inline-block px-2.5 py-1 rounded-md text-xs font-medium ${course.progress === 100 ? 'bg-emerald-100 text-emerald-700' :
-                                        course.progress > 0 ? 'bg-amber-100 text-amber-700' :
-                                            'bg-blue-100 text-blue-700'
+                                    course.progress > 0 ? 'bg-amber-100 text-amber-700' :
+                                        'bg-blue-100 text-blue-700'
                                     }`}>
                                     {course.progress === 100 ? 'Completed' : course.progress > 0 ? 'In Progress' : 'Not Started'}
                                 </span>

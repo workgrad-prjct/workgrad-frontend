@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion'
-import { ArrowUpRight, TrendingUp, Briefcase, CheckCircle, Clock } from 'lucide-react'
+
+import { TrendingUp, Briefcase, CheckCircle, Clock } from 'lucide-react'
 import { Card } from '@/components/ui'
 
 interface StatCardProps {

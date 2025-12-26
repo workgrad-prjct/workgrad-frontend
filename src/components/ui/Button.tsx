@@ -1,4 +1,4 @@
-import { forwardRef, ButtonHTMLAttributes } from 'react'
+import { forwardRef } from 'react'
 import { motion, HTMLMotionProps } from 'framer-motion'
 import { Loader2 } from 'lucide-react'
 import { cn } from '@/utils'
@@ -6,7 +6,7 @@ import { cn } from '@/utils'
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'success' | 'outline'
 type ButtonSize = 'sm' | 'md' | 'lg' | 'xl'
 
-interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onAnimationStart' | 'onDragStart' | 'onDragEnd' | 'onDrag'> {
+interface ButtonProps extends HTMLMotionProps<"button"> {
     variant?: ButtonVariant
     size?: ButtonSize
     isLoading?: boolean
@@ -74,10 +74,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         },
         ref
     ) => {
-        const MotionButton = motion.button as React.ComponentType<HTMLMotionProps<"button"> & ButtonHTMLAttributes<HTMLButtonElement>>
-
         return (
-            <MotionButton
+            <motion.button
                 ref={ref}
                 disabled={disabled || isLoading}
                 className={cn(
@@ -106,12 +104,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                     {isLoading ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
-                        leftIcon
+                        leftIcon as any
                     )}
-                    {children}
-                    {!isLoading && rightIcon}
+                    {children as any}
+                    {!isLoading && (rightIcon as any)}
                 </span>
-            </MotionButton>
+            </motion.button>
         )
     }
 )

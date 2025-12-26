@@ -7,6 +7,7 @@ axios.defaults.baseURL = 'http://localhost:5000/api'
 axios.defaults.withCredentials = true
 
 interface AuthContextType extends AuthState {
+    error: string | null
     login: (credentials: LoginCredentials) => Promise<void>
     register: (data: RegisterData) => Promise<void>
     logout: () => void
@@ -20,6 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+    const [token, setToken] = useState<string | null>(localStorage.getItem('token'))
 
     // Initialize auth state from local storage
     useEffect(() => {
@@ -32,6 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     if (data.success) {
                         setUser(data.data.user)
                         setIsAuthenticated(true)
+                        setToken(localStorage.getItem('token'))
                     }
                 } catch (err) {
                     console.error('Failed to restore session:', err)
@@ -56,6 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
                 setUser(user)
                 setIsAuthenticated(true)
+                setToken(token)
             }
         } catch (err: any) {
             const message = err.response?.data?.message || 'Login failed'
@@ -77,6 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
                 setUser(user)
                 setIsAuthenticated(true)
+                setToken(token)
             }
         } catch (err: any) {
             const message = err.response?.data?.message || 'Registration failed'
@@ -92,6 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         delete axios.defaults.headers.common['Authorization']
         setUser(null)
         setIsAuthenticated(false)
+        setToken(null)
         // Optional: Call logout endpoint if needed
         // axios.post('/auth/logout').catch(console.error)
     }
@@ -104,6 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         <AuthContext.Provider
             value={{
                 user,
+                token,
                 isAuthenticated,
                 isLoading,
                 error,

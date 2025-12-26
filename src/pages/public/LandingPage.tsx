@@ -39,15 +39,7 @@ const fadeInUp = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 }
 
-const fadeInLeft = {
-    hidden: { opacity: 0, x: -30 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.6 } },
-}
 
-const fadeInRight = {
-    hidden: { opacity: 0, x: 30 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.6 } },
-}
 
 const staggerContainer = {
     hidden: { opacity: 0 },
@@ -276,16 +268,7 @@ const testimonials = [
 ]
 
 // Companies with brand colors
-const companies = [
-    { name: 'Google', initial: 'G', color: 'bg-gradient-to-br from-blue-500 via-red-500 to-yellow-500' },
-    { name: 'Microsoft', initial: 'M', color: 'bg-gradient-to-br from-blue-600 to-cyan-500' },
-    { name: 'Amazon', initial: 'A', color: 'bg-gradient-to-br from-orange-500 to-yellow-500' },
-    { name: 'Meta', initial: 'M', color: 'bg-gradient-to-br from-blue-500 to-indigo-600' },
-    { name: 'Apple', initial: '', color: 'bg-gradient-to-br from-neutral-800 to-neutral-600' },
-    { name: 'Flipkart', initial: 'F', color: 'bg-gradient-to-br from-yellow-400 to-blue-600' },
-    { name: 'Infosys', initial: 'i', color: 'bg-gradient-to-br from-blue-600 to-blue-800' },
-    { name: 'TCS', initial: 'T', color: 'bg-gradient-to-br from-red-600 to-rose-700' },
-]
+
 
 export function LandingPage() {
     // Carousel state and auto-scroll
@@ -301,8 +284,6 @@ export function LandingPage() {
 
     return (
         <div className="min-h-screen bg-white">
-            <Header />
-
             {/* Hero Section */}
             <section className="relative min-h-screen flex items-center overflow-hidden">
                 {/* Animated Background */}
@@ -491,7 +472,7 @@ export function LandingPage() {
                         variants={staggerContainer}
                         className="grid grid-cols-2 lg:grid-cols-4 gap-8"
                     >
-                        {stats.map((stat, index) => (
+                        {stats.map((stat) => (
                             <motion.div
                                 key={stat.label}
                                 variants={fadeInUp}
@@ -673,7 +654,7 @@ export function LandingPage() {
                         variants={staggerContainer}
                         className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
                     >
-                        {learnerFeatures.map((feature, index) => (
+                        {learnerFeatures.map((feature) => (
                             <motion.div key={feature.title} variants={fadeInUp}>
                                 <Card hover variant="bordered" className="h-full">
                                     <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center mb-4">
@@ -749,7 +730,7 @@ export function LandingPage() {
                         variants={staggerContainer}
                         className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
                     >
-                        {employerFeatures.map((feature, index) => (
+                        {employerFeatures.map((feature) => (
                             <motion.div key={feature.title} variants={fadeInUp}>
                                 <Card variant="bordered" hover className="h-full">
                                     <div className="w-12 h-12 bg-secondary-100 rounded-xl flex items-center justify-center mb-4">
@@ -821,7 +802,7 @@ export function LandingPage() {
                         variants={staggerContainer}
                         className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
                     >
-                        {popularTracks.map((track, index) => (
+                        {popularTracks.map((track) => (
                             <motion.div key={track.title} variants={fadeInUp}>
                                 <Link to={`/courses/category/${track.slug}`}>
                                     <Card hover variant="elevated" className="h-full p-6 cursor-pointer group">
@@ -929,7 +910,7 @@ export function LandingPage() {
                         variants={staggerContainer}
                         className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
                     >
-                        {fullStackPaths.map((path, index) => (
+                        {fullStackPaths.map((path) => (
                             <motion.div key={path.slug} variants={fadeInUp}>
                                 <Link to={`/fullstack/${path.slug}`}>
                                     <Card hover variant="elevated" className="h-full p-6 cursor-pointer group">
@@ -1031,7 +1012,7 @@ export function LandingPage() {
                         variants={staggerContainer}
                         className="grid md:grid-cols-3 gap-8"
                     >
-                        {testimonials.map((testimonial, index) => (
+                        {testimonials.map((testimonial) => (
                             <motion.div key={testimonial.name} variants={fadeInUp}>
                                 <Card variant="elevated" className="h-full">
                                     <div className="flex items-center gap-1 mb-4">
@@ -1122,8 +1103,6 @@ export function LandingPage() {
                     </motion.div>
                 </div>
             </section >
-
-            <Footer />
         </div >
     )
 }

@@ -6,8 +6,8 @@ import { Card, Button, Badge, Input } from '@/components/ui'
 import { useAuth } from '@/context'
 import {
     Briefcase, Users, TrendingUp, Eye, Plus, Search, Filter,
-    MapPin, Clock, DollarSign, Building2, ChevronRight, ArrowUpRight,
-    BarChart3, PieChart, Calendar, CheckCircle2, XCircle, MessageSquare
+    MapPin, Clock, DollarSign, Building2, ChevronRight,
+    BarChart3, PieChart, Calendar, CheckCircle2, MessageSquare
 } from 'lucide-react'
 import { cn } from '@/utils'
 
@@ -133,7 +133,7 @@ function EmployerHome() {
                                         <Badge
                                             variant={app.status === 'shortlisted' ? 'success' :
                                                 app.status === 'interview' ? 'warning' :
-                                                    app.status === 'rejected' ? 'danger' : 'secondary'}
+                                                    app.status === 'rejected' ? 'error' : 'secondary'}
                                             size="sm"
                                         >
                                             {app.status}

@@ -5,9 +5,9 @@ import { DashboardLayout } from '@/components/layout'
 import { Card, Button, Badge, Input } from '@/components/ui'
 import { useAuth } from '@/context'
 import {
-    Users, DollarSign, BookOpen, Briefcase, TrendingUp, Search, Filter,
-    CheckCircle, XCircle, Eye, Edit2, Trash2, MoreVertical, BarChart3,
-    PieChart, Calendar, Shield, AlertTriangle, Settings, FileText
+    Users, DollarSign, BookOpen, Briefcase, TrendingUp, Search,
+    CheckCircle, XCircle, Eye, Edit2, Trash2, BarChart3,
+    PieChart, Shield, AlertTriangle, Settings, FileText
 } from 'lucide-react'
 import { cn } from '@/utils'
 
@@ -88,7 +88,7 @@ function AdminHome() {
                                 <div className="flex items-center gap-2">
                                     <Badge variant="outline" size="sm">{user.role}</Badge>
                                     <Badge
-                                        variant={user.status === 'active' ? 'success' : user.status === 'pending' ? 'warning' : 'danger'}
+                                        variant={user.status === 'active' ? 'success' : user.status === 'pending' ? 'warning' : 'error'}
                                         size="sm"
                                     >
                                         {user.status}
@@ -225,7 +225,7 @@ function UserManagement() {
                                     </td>
                                     <td className="px-4 py-3">
                                         <Badge
-                                            variant={user.status === 'active' ? 'success' : user.status === 'pending' ? 'warning' : 'danger'}
+                                            variant={user.status === 'active' ? 'success' : user.status === 'pending' ? 'warning' : 'error'}
                                         >
                                             {user.status}
                                         </Badge>
@@ -283,7 +283,7 @@ function CourseApproval() {
                                         <p className="text-sm text-neutral-500">by {course.author}</p>
                                     </div>
                                     <Badge
-                                        variant={course.status === 'approved' ? 'success' : course.status === 'rejected' ? 'danger' : 'warning'}
+                                        variant={course.status === 'approved' ? 'success' : course.status === 'rejected' ? 'error' : 'warning'}
                                     >
                                         {course.status}
                                     </Badge>
@@ -462,7 +462,7 @@ function JobManagement() {
                                     </td>
                                     <td className="px-4 py-3 text-neutral-600">{job.company}</td>
                                     <td className="px-4 py-3">
-                                        <Badge variant={job.status === 'active' ? 'success' : job.status === 'pending' ? 'warning' : 'danger'}>
+                                        <Badge variant={job.status === 'active' ? 'success' : job.status === 'pending' ? 'warning' : 'error'}>
                                             {job.status}
                                         </Badge>
                                     </td>
