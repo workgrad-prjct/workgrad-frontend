@@ -8,10 +8,10 @@ import {
 } from 'lucide-react'
 import { Card, Avatar } from '@/components/ui'
 
-// Asset imports (using relative paths for Vite to process, or absolute if in public)
-// Assuming they are in src/assets/images and we can import or refer by path
-// For this environment, we refer by path string assuming Vite handles /src alias or similar, 
-// otherwise standard import if supported. The user copied to src/assets/images.
+// Asset imports
+import avatarFemale from '@/assets/images/avatar_3d_female.png'
+import avatarMale from '@/assets/images/avatar_3d_male.png'
+import iconTrophy from '@/assets/images/icon_3d_trophy.png'
 
 export function Hero3DElement() {
     const ref = useRef<HTMLDivElement>(null)
@@ -101,7 +101,7 @@ export function Hero3DElement() {
                     <div className="relative group">
                         {/* Avatar Image Container */}
                         <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-card bg-gradient-to-b from-blue-50 to-white">
-                            <img src="/src/assets/images/avatar_3d_female.png" alt="Student" className="w-full h-full object-cover scale-110 mt-2" />
+                            <img src={avatarFemale} alt="Student" className="w-full h-full object-cover scale-110 mt-2" />
                         </div>
                         {/* Badge Popout */}
                         <div className="absolute -bottom-4 right-0 bg-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-2 border border-blue-100">
@@ -121,7 +121,7 @@ export function Hero3DElement() {
                 >
                     <div className="relative group">
                         <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-card bg-gradient-to-b from-orange-50 to-white">
-                            <img src="/src/assets/images/avatar_3d_male.png" alt="Student" className="w-full h-full object-cover scale-110 mt-2" />
+                            <img src={avatarMale} alt="Student" className="w-full h-full object-cover scale-110 mt-2" />
                         </div>
                         <div className="absolute -top-4 -left-4 bg-white p-2 rounded-xl shadow-lg border border-orange-100">
                             <Zap className="w-5 h-5 text-orange-500 fill-orange-500" />
@@ -138,7 +138,7 @@ export function Hero3DElement() {
                     className="absolute top-20 right-10 z-30"
                 >
                     <div className="w-24 h-24 drop-shadow-2xl filter hover:scale-110 transition-transform cursor-pointer">
-                        <img src="/src/assets/images/icon_3d_trophy.png" alt="Winner" className="w-full h-full object-contain" />
+                        <img src={iconTrophy} alt="Winner" className="w-full h-full object-contain" />
                     </div>
                     {/* Floating Label */}
                     <div className="absolute top-full left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-950 text-[10px] font-bold px-2 py-0.5 rounded-md mt-1 shadow-sm">
