@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route, Outlet } from 'react-router-dom'
+import { Routes, Route, Outlet, Link, useParams } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { TrendingUp, Award, Target, Zap, Rocket, Heart } from 'lucide-react'
 import { AuthProvider } from '@/context'
@@ -371,7 +371,7 @@ const fullStackDomains = [
 
 // Full Stack Domain Detail Page
 const FullStackDomainPage = () => {
-    const domainSlug = window.location.pathname.split('/').pop()
+    const { domain: domainSlug } = useParams()
     const domain = fullStackDomains.find(d => d.slug === domainSlug) || fullStackDomains[0]
 
     return (
@@ -390,9 +390,9 @@ const FullStackDomainPage = () => {
                         {/* Left Content */}
                         <div className="flex-1">
                             {/* Back Link */}
-                            <a href="/fullstack" className="inline-flex items-center gap-1 text-xs font-medium text-neutral-500 hover:text-neutral-700 mb-4 transition-colors">
+                            <Link to="/fullstack" className="inline-flex items-center gap-1 text-xs font-medium text-neutral-500 hover:text-neutral-700 mb-4 transition-colors">
                                 ← All Stacks
-                            </a>
+                            </Link>
 
                             {/* Icon + Label */}
                             <div className="inline-flex items-center gap-3 bg-white rounded-xl px-4 py-3 shadow-sm border border-neutral-100 mb-6">
@@ -447,13 +447,13 @@ const FullStackDomainPage = () => {
 
                             {/* CTA Buttons */}
                             <div className="flex flex-col sm:flex-row items-start gap-4">
-                                <a
-                                    href={`/courses/${domain.topics[0].courseId}`}
+                                <Link
+                                    to={`/courses/${domain.topics[0].courseId}`}
                                     className={`inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r ${domain.color} text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg`}
                                 >
                                     <Zap className="w-4 h-4" />
                                     Start Learning
-                                </a>
+                                </Link>
                                 <a
                                     href="#courses"
                                     className="inline-flex items-center gap-2 px-6 py-3 bg-white text-neutral-700 font-semibold rounded-xl border border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 transition-all"
@@ -589,13 +589,13 @@ const FullStackDomainPage = () => {
 
                                 {/* Start Course Button */}
                                 <div className="px-5 pb-5">
-                                    <a
-                                        href={`/courses/${topic.courseId}`}
+                                    <Link
+                                        to={`/courses/${topic.courseId}`}
                                         className={`w-full py-2.5 bg-gradient-to-r ${colors.bg} text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity text-center flex items-center justify-center gap-2`}
                                     >
                                         Start Course
                                         <span>→</span>
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         )
@@ -1509,13 +1509,13 @@ const CoursesPage = () => {
 
                                 {/* View Course Button */}
                                 <div className="px-5 pb-5">
-                                    <a
-                                        href={`/courses/${course.id}`}
+                                    <Link
+                                        to={`/courses/${course.id}`}
                                         className={`w-full py-2.5 bg-gradient-to-r ${colors.bg} text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity text-center flex items-center justify-center gap-2`}
                                     >
                                         View Course
                                         <span>→</span>
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         )
@@ -1596,7 +1596,7 @@ const CoursesPage = () => {
 
 // Premium Course Detail Page
 const CourseDetailPage = () => {
-    const courseId = window.location.pathname.split('/').pop()
+    const { id: courseId } = useParams()
     const course = coursesData.find(c => c.id === courseId) || coursesData[0]
 
 
@@ -1658,9 +1658,9 @@ const CourseDetailPage = () => {
                         {/* Left Content */}
                         <div className="flex-1 space-y-6">
                             {/* Back Link */}
-                            <a href="/courses" className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-700 transition-colors">
+                            <Link to="/courses" className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-700 transition-colors">
                                 ← Back to Courses
-                            </a>
+                            </Link>
 
                             {/* Icon Card + Badges */}
                             <div className="flex items-center gap-4">
