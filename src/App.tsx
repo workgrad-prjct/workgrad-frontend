@@ -809,13 +809,13 @@ const FullStackDomainsPage = () => {
 
                                 {/* View Path Button */}
                                 <div className="px-5 pb-5">
-                                    <a
-                                        href={`/fullstack/${domain.slug}`}
+                                    <Link
+                                        to={`/fullstack/${domain.slug}`}
                                         className={`w-full py-2.5 bg-gradient-to-r ${colors.bg} text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity text-center flex items-center justify-center gap-2`}
                                     >
                                         View Path
                                         <span>→</span>
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         )
@@ -979,9 +979,9 @@ const CategoriesPage = () => {
                         const colors = colorSchemes[index % colorSchemes.length]
 
                         return (
-                            <a
+                            <Link
                                 key={cat.slug}
-                                href={`/courses/category/${cat.slug}`}
+                                to={`/courses/category/${cat.slug}`}
                                 className={`group bg-white rounded-2xl border border-neutral-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border-l-4 ${colors.border}`}
                             >
                                 {/* Header with Icon and Title */}
@@ -1040,7 +1040,7 @@ const CategoriesPage = () => {
                                         <span>→</span>
                                     </div>
                                 </div>
-                            </a>
+                            </Link>
                         )
                     })}
                 </div>
@@ -1119,7 +1119,7 @@ const CategoriesPage = () => {
 
 // Single Category Page
 const CategoryPage = () => {
-    const categorySlug = window.location.pathname.split('/').pop()
+    const { slug: categorySlug } = useParams()
     const category = categoryData.find(c => c.slug === categorySlug) || categoryData[0]
     const categoryCourses = coursesData.filter(c => category.courses.includes(c.id))
 
@@ -1169,12 +1169,12 @@ const CategoryPage = () => {
 
                             {/* CTA Buttons */}
                             <div className="flex flex-col sm:flex-row items-center lg:items-start gap-4 mb-8">
-                                <a
-                                    href="/register"
+                                <Link
+                                    to="/register"
                                     className={`inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r ${category.color} text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg`}
                                 >
                                     Start Learning
-                                </a>
+                                </Link>
                                 <a
                                     href="#courses"
                                     className="inline-flex items-center gap-2 px-6 py-3 bg-white text-neutral-700 font-semibold rounded-xl border border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 transition-all"
@@ -1222,7 +1222,7 @@ const CategoryPage = () => {
             <div id="courses" className="max-w-6xl mx-auto px-4 py-12">
                 <div className="flex items-center justify-between mb-8">
                     <p className="text-neutral-600">{categoryCourses.length} courses found</p>
-                    <a href="/courses/categories" className="text-primary-600 hover:text-primary-700 font-medium">← All Categories</a>
+                    <Link to="/courses/categories" className="text-primary-600 hover:text-primary-700 font-medium">← All Categories</Link>
                 </div>
 
                 {categoryCourses.length > 0 ? (
@@ -1284,13 +1284,13 @@ const CategoryPage = () => {
 
                                     {/* View Course Button */}
                                     <div className="px-5 pb-5">
-                                        <a
-                                            href={`/courses/${course.id}`}
+                                        <Link
+                                            to={`/courses/${course.id}`}
                                             className={`w-full py-2.5 bg-gradient-to-r ${colors.bg} text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity text-center flex items-center justify-center gap-2`}
                                         >
                                             View Course
                                             <span>→</span>
-                                        </a>
+                                        </Link>
                                     </div>
                                 </div>
                             )
@@ -1364,19 +1364,19 @@ const CategoryPage = () => {
                                 Join thousands of learners who have transformed their careers with our {category.title} courses.
                             </p>
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                                <a
-                                    href="/register"
+                                <Link
+                                    to="/register"
                                     className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/30"
                                 >
                                     <Zap className="w-4 h-4" />
                                     Get Started Free
-                                </a>
-                                <a
-                                    href="/courses"
+                                </Link>
+                                <Link
+                                    to="/courses"
                                     className="inline-flex items-center gap-2 px-6 py-3 bg-white text-neutral-700 font-semibold rounded-xl border border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 transition-all"
                                 >
                                     View All Courses
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>
