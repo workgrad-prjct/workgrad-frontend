@@ -11,9 +11,7 @@ import {
     BookOpen,
     Target,
     TrendingUp,
-    Award,
     Trophy,
-    CheckCircle,
     Star,
     Play,
     Sparkles,
@@ -29,9 +27,10 @@ import {
     Database,
     Server,
 } from 'lucide-react'
-import { Header, Footer } from '@/components/layout'
+
 import { Button, Card, Badge, Avatar, AvatarGroup } from '@/components/ui'
 import { cn } from '@/utils'
+import { Hero3DElement } from '@/components/public/Hero3DElement'
 
 // Animation variants
 const fadeInUp = {
@@ -285,7 +284,7 @@ export function LandingPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
-            <section className="relative min-h-screen flex items-center overflow-hidden">
+            <section className="relative flex overflow-hidden pb-8 lg:pb-0">
                 {/* Animated Background */}
                 <div className="absolute inset-0 bg-white">
                     {/* Animated blobs */}
@@ -294,8 +293,8 @@ export function LandingPage() {
                     <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-accent-500/10 rounded-full blur-[100px] animate-blob animate-blob-delay-4000" />
                 </div>
 
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
-                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 lg:pt-28 pb-6 lg:pb-8">
+                    <div className="grid lg:grid-cols-2 gap-4 lg:gap-8 items-center">
                         {/* Left Content */}
                         <motion.div
                             initial="hidden"
@@ -314,7 +313,7 @@ export function LandingPage() {
                             {/* Heading */}
                             <motion.h1
                                 variants={fadeInUp}
-                                className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-neutral-900 leading-tight"
+                                className="mt-3 text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-neutral-900 leading-tight"
                             >
                                 Launch Your Career with <span className="bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text text-transparent">
                                     WorkGrad
@@ -375,77 +374,14 @@ export function LandingPage() {
                             </motion.div>
                         </motion.div>
 
-                        {/* Right Content - Hero Image/Illustration */}
+                        {/* Right Content - 3D Dashboard Element */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="hidden lg:block relative"
+                            className="hidden lg:block relative z-10"
                         >
-                            {/* Floating Cards */}
-                            <div className="relative w-full h-[500px]">
-                                <motion.div
-                                    animate={{ y: [0, -10, 0] }}
-                                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72"
-                                >
-                                    <Card variant="elevated" className="p-6 bg-white border-neutral-200 shadow-lg">
-                                        <div className="flex items-center gap-3 mb-4">
-                                            <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center">
-                                                <Briefcase className="w-6 h-6 text-white" />
-                                            </div>
-                                            <div>
-                                                <p className="text-neutral-900 font-semibold">New Job Match!</p>
-                                                <p className="text-sm text-neutral-500">Software Engineer at Google</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Badge variant="success">95% Match</Badge>
-                                            <Badge variant="secondary">Remote</Badge>
-                                        </div>
-                                    </Card>
-                                </motion.div>
-
-                                {/* Top Right Card */}
-                                <motion.div
-                                    animate={{ y: [0, 10, 0] }}
-                                    transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-                                    className="absolute top-10 right-0 w-56"
-                                >
-                                    <Card variant="elevated" className="p-4 bg-white border-neutral-200 shadow-lg">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-success-100 rounded-lg flex items-center justify-center">
-                                                <CheckCircle className="w-5 h-5 text-success-600" />
-                                            </div>
-                                            <div>
-                                                <p className="text-neutral-900 font-medium text-sm">Resume Score</p>
-                                                <p className="text-2xl font-bold text-success-600">92/100</p>
-                                            </div>
-                                        </div>
-                                    </Card>
-                                </motion.div>
-
-                                {/* Bottom Left Card */}
-                                <motion.div
-                                    animate={{ y: [0, -8, 0] }}
-                                    transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                                    className="absolute bottom-10 left-0 w-60"
-                                >
-                                    <Card variant="elevated" className="p-4 bg-white border-neutral-200 shadow-lg">
-                                        <div className="flex items-center gap-3">
-                                            <Avatar src="https://randomuser.me/api/portraits/men/32.jpg" name="Mentor" size="lg" />
-                                            <div>
-                                                <p className="text-neutral-900 font-medium">Course Completed!</p>
-                                                <p className="text-sm text-neutral-500">React Masterclass</p>
-                                                <div className="flex items-center gap-1 mt-1">
-                                                    <Award className="w-4 h-4 text-accent-500" />
-                                                    <span className="text-xs text-accent-600">Certificate Earned</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Card>
-                                </motion.div>
-                            </div>
+                            <Hero3DElement />
                         </motion.div>
                     </div>
                 </div>
@@ -463,7 +399,7 @@ export function LandingPage() {
             </section >
 
             {/* Stats Section */}
-            < section className="py-16 bg-white border-b border-neutral-100" >
+            <section className="py-6 lg:py-10 bg-white border-b border-neutral-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div
                         initial="hidden"
@@ -531,7 +467,7 @@ export function LandingPage() {
             </section> */}
 
             {/* Featured Competitions Carousel */}
-            <section className="py-16 bg-neutral-50">
+            <section className="py-6 lg:py-10 bg-neutral-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -616,7 +552,7 @@ export function LandingPage() {
             </section>
 
             {/* Features for Learners */}
-            < section className="py-24 bg-white" >
+            <section className="py-6 lg:py-10 bg-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div
                         initial="hidden"

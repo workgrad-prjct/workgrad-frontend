@@ -3,7 +3,7 @@ import axios from 'axios'
 import { User, LoginCredentials, RegisterData, AuthState } from '@/types'
 
 // Configure axios defaults
-axios.defaults.baseURL = 'http://localhost:5000/api'
+axios.defaults.baseURL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5000/api'
 axios.defaults.withCredentials = true
 
 interface AuthContextType extends AuthState {

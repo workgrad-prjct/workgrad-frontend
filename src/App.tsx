@@ -2,7 +2,7 @@ import React from 'react'
 import { Routes, Route, Outlet } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { TrendingUp, Award, Target, Zap, Rocket, Heart } from 'lucide-react'
-import { AuthProvider, useAuth } from '@/context'
+import { AuthProvider } from '@/context'
 import { ProtectedRoute } from '@/components/auth'
 import { PublicLayout } from '@/components/layout'
 
@@ -1598,7 +1598,7 @@ const CoursesPage = () => {
 const CourseDetailPage = () => {
     const courseId = window.location.pathname.split('/').pop()
     const course = coursesData.find(c => c.id === courseId) || coursesData[0]
-    const { user, isAuthenticated } = useAuth()
+
 
     const [expandedSections, setExpandedSections] = React.useState<number[]>([0])
 
