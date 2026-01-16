@@ -147,12 +147,18 @@ export default function MentorsPage() {
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
                             >
-                                <Card className="p-8 h-full border-none shadow-sm hover:shadow-xl transition-all duration-300">
-                                    <div className={`w-14 h-14 bg-gradient-to-br ${benefit.gradient} rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/10`}>
-                                        <benefit.icon className="w-7 h-7 text-white" />
+                                <Card className="p-8 h-full border-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                                    <div className="flex items-start gap-4 mb-4">
+                                        <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/10">
+                                            <benefit.icon className="w-6 h-6 text-blue-500" />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-neutral-900 pt-2">
+                                            {benefit.title}
+                                        </h3>
                                     </div>
-                                    <h3 className="text-xl font-bold text-neutral-900 mb-3">{benefit.title}</h3>
-                                    <p className="text-neutral-600 leading-relaxed">{benefit.description}</p>
+                                    <p className="text-neutral-600 leading-relaxed">
+                                        {benefit.description}
+                                    </p>
                                 </Card>
                             </motion.div>
                         ))}
@@ -161,10 +167,11 @@ export default function MentorsPage() {
             </section>
 
             {/* How it Works */}
-            <section className="py-12 bg-white overflow-hidden">
+            <section className="py-8 bg-white overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="relative">
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[70%] h-[2px] bg-neutral-200 hidden lg:block" style={{ top: '40px' }} />
+                        {/* Connecting Line */}
+                        <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[60%] h-[1px] bg-blue-100 hidden lg:block" />
 
                         <div className="grid lg:grid-cols-3 gap-12 relative z-10">
                             {steps.map((step, index) => (
@@ -174,13 +181,13 @@ export default function MentorsPage() {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: index * 0.2 }}
-                                    className="text-center group"
+                                    className="text-center group cursor-default"
                                 >
-                                    <div className="w-20 h-20 bg-white border-4 border-neutral-100 rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl">
-                                        <step.icon className="w-8 h-8 text-primary-600" />
+                                    <div className="w-20 h-20 bg-blue-50 border border-blue-100 rounded-full flex items-center justify-center mx-auto mb-8 relative z-20 transition-all duration-300 shadow-xl shadow-blue-500/10">
+                                        <step.icon className="w-8 h-8 text-blue-500" />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-neutral-900 mb-4">{step.title}</h3>
-                                    <p className="text-lg text-neutral-600">{step.description}</p>
+                                    <h3 className="text-xl font-bold text-neutral-900 mb-3">{step.title}</h3>
+                                    <p className="text-neutral-500 leading-relaxed max-w-xs mx-auto">{step.description}</p>
                                 </motion.div>
                             ))}
                         </div>

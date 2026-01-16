@@ -1,11 +1,9 @@
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import {
     ArrowRight,
     FileText,
     Briefcase,
-    Trophy,
     Code2,
     Palette,
     BarChart3,
@@ -16,7 +14,7 @@ import {
     Server,
 } from 'lucide-react'
 
-import { Button, Card, Badge } from '@/components/ui'
+import { Button, Card } from '@/components/ui'
 import { cn } from '@/utils'
 
 // Animation variants
@@ -34,6 +32,53 @@ const staggerContainer = {
         transition: { staggerChildren: 0.1 },
     },
 }
+
+// Reusable Preview Card Component
+const FeaturePreview = ({ icon: Icon, title, badgeText, type }: {
+    icon: any;
+    title: string;
+    badgeText: string;
+    type: 'resume' | 'portfolio';
+}) => (
+    <div className="bg-white rounded-2xl border border-blue-100 p-6 lg:p-8">
+        <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+                    <Icon className="w-5 h-5 text-blue-500" />
+                </div>
+                <span className="font-semibold text-neutral-900">{title}</span>
+            </div>
+            <span className="px-3 py-1 bg-blue-50 text-blue-500 rounded-full text-[10px] font-medium tracking-wide uppercase">{badgeText}</span>
+        </div>
+
+        <div className="space-y-4">
+            <div className="h-4 bg-neutral-200 rounded w-3/4 animate-pulse opacity-60" />
+            <div className="h-3 bg-neutral-100 rounded w-full animate-pulse opacity-60" />
+            <div className="h-3 bg-neutral-100 rounded w-5/6 animate-pulse opacity-60" />
+            <div className="h-3 bg-neutral-100 rounded w-4/5 animate-pulse opacity-60" />
+            <div className="border-t border-neutral-100 pt-4 mt-4">
+                <div className="h-3 bg-neutral-200 rounded w-1/3 mb-2 animate-pulse opacity-60" />
+                <div className="h-2 bg-neutral-100 rounded w-full animate-pulse opacity-60" />
+                <div className="h-2 bg-neutral-100 rounded w-5/6 mt-1 animate-pulse opacity-60" />
+            </div>
+            <div className="flex gap-2 pt-2">
+                {type === 'resume' ? (
+                    <>
+                        <div className="px-2 py-1 bg-blue-50 text-blue-500 rounded text-[10px] font-medium opacity-80">Skills</div>
+                        <div className="px-2 py-1 bg-blue-50 text-blue-500 rounded text-[10px] font-medium opacity-80">Experience</div>
+                        <div className="px-2 py-1 bg-blue-50 text-blue-500 rounded text-[10px] font-medium opacity-80">Education</div>
+                    </>
+                ) : (
+                    <>
+                        <div className="px-2 py-1 bg-blue-50 text-blue-500 rounded text-[10px] font-medium opacity-80">Projects</div>
+                        <div className="px-2 py-1 bg-blue-50 text-blue-500 rounded text-[10px] font-medium opacity-80">Skills</div>
+                        <div className="px-2 py-1 bg-blue-50 text-blue-500 rounded text-[10px] font-medium opacity-80">Reviews</div>
+                    </>
+                )}
+            </div>
+        </div>
+    </div>
+);
 
 // Stats data
 
@@ -153,37 +198,58 @@ const fullStackPaths = [
 ]
 
 // Featured Competitions data
-const featuredCompetitions = [
+const featuredBanners = [
     {
-        id: 'nest-2024',
-        title: 'NEST 2.0',
-        subtitle: 'National Engineering Skills Tournament',
-        description: 'Register now and compete with the best engineering minds across India',
-        gradient: 'from-blue-100 via-indigo-50 to-purple-100',
-        accentColor: 'bg-primary-600',
-        logo: 'NEST',
-        logoColor: 'text-primary-400',
+        id: 'coding-sprint',
+        title: '100 DAYS CODING SPRINT',
+        description: 'Level up your skills daily with our 100-Day Coding Sprint',
+        gradient: 'from-blue-50 to-blue-100',
+        accentColor: 'border-neutral-900',
+        textColor: 'text-neutral-900',
+        buttonVariant: 'secondary',
+        icon: (
+            <div className="relative w-full h-full flex items-center justify-center p-4">
+                <div className="bg-white rounded-xl shadow-lg p-3 rotate-[-5deg] absolute transform -translate-x-8 -translate-y-4">
+                    <div className="text-[10px] font-bold text-blue-500 mb-1">DAY 01</div>
+                    <div className="h-1 w-12 bg-neutral-100 rounded" />
+                </div>
+                <div className="bg-blue-500 rounded-xl shadow-xl p-4 rotate-[5deg] z-10 scale-110">
+                    <div className="text-[10px] font-bold text-white mb-1">DAY 02</div>
+                    <div className="h-1 w-16 bg-white/30 rounded" />
+                </div>
+                <div className="bg-white rounded-xl shadow-lg p-3 rotate-[-3deg] absolute transform translate-x-12 translate-y-6">
+                    <div className="text-[10px] font-bold text-neutral-400 mb-1">DAY 03</div>
+                    <div className="h-1 w-10 bg-neutral-100 rounded" />
+                </div>
+            </div>
+        )
     },
     {
-        id: 'code-fest-2024',
-        title: 'CodeFest 2024',
-        subtitle: 'Annual Coding Championship',
-        description: 'Showcase your coding skills and win exciting prizes worth ₹10 Lakhs',
-        gradient: 'from-emerald-100 via-teal-50 to-cyan-100',
-        accentColor: 'bg-emerald-600',
-        logo: 'CODE',
-        logoColor: 'text-emerald-400',
-    },
-    {
-        id: 'design-sprint',
-        title: 'Design Sprint',
-        subtitle: 'UI/UX Design Challenge',
-        description: 'Create innovative designs and get featured on our platform',
-        gradient: 'from-pink-100 via-rose-50 to-orange-100',
-        accentColor: 'bg-pink-600',
-        logo: 'DESIGN',
-        logoColor: 'text-pink-400',
-    },
+        id: 'code-conquest',
+        title: 'CODE CONQUEST',
+        description: 'Pick your topics, set your difficulty, and master key concepts with ease!',
+        gradient: 'from-amber-50 to-amber-100',
+        accentColor: 'border-neutral-900',
+        textColor: 'text-neutral-900',
+        buttonVariant: 'secondary',
+        icon: (
+            <div className="relative w-full h-full flex items-center justify-center p-4">
+                <div className="relative">
+                    <div className="text-6xl text-neutral-800 font-mono flex items-center gap-2">
+                        <div className="relative">
+                            <Database className="w-24 h-24 text-neutral-700" />
+                            <div className="absolute -top-6 -right-4 text-4xl">👑</div>
+                        </div>
+                        <div className="space-y-1">
+                            <div className="w-12 h-1 bg-neutral-800" />
+                            <div className="w-8 h-1 bg-neutral-800" />
+                            <div className="w-10 h-1 bg-neutral-800" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 ]
 
 // Testimonials
@@ -192,16 +258,6 @@ const featuredCompetitions = [
 
 
 export function LandingPage() {
-    // Carousel state and auto-scroll
-    const [activeSlide, setActiveSlide] = useState(0)
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setActiveSlide((prev) => (prev + 1) % featuredCompetitions.length)
-        }, 3000) // Change slide every 3 seconds
-
-        return () => clearInterval(interval)
-    }, [])
 
     return (
         <div className="min-h-screen bg-white">
@@ -243,7 +299,7 @@ export function LandingPage() {
                             <Link to="/register">
                                 <Button
                                     size="lg"
-                                    className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
+                                    className="w-72 whitespace-nowrap bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
                                     rightIcon={<ArrowRight className="w-5 h-5" />}
                                 >
                                     Start Learning Today
@@ -254,7 +310,7 @@ export function LandingPage() {
                                 <Button
                                     variant="secondary"
                                     size="lg"
-                                    className="bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50 px-8"
+                                    className="w-72 whitespace-nowrap bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50"
                                 >
                                     Explore Tracks
                                 </Button>
@@ -305,12 +361,12 @@ export function LandingPage() {
                                     <div className="h-full bg-white rounded-2xl p-6 border border-neutral-100 group-hover:border-neutral-200 transition-all duration-300 group-hover:shadow-lg">
                                         <div className="flex items-center gap-4 mb-4">
                                             {/* Icon */}
-                                            <div className="w-12 h-12 rounded-xl bg-neutral-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0 border border-neutral-100/50">
-                                                <Code2 className="w-6 h-6 text-neutral-500" />
+                                            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0 border border-blue-100/50">
+                                                <Code2 className="w-6 h-6 text-blue-500" />
                                             </div>
 
                                             {/* Content */}
-                                            <h3 className="text-lg font-bold text-neutral-900 group-hover:text-neutral-900 transition-colors">
+                                            <h3 className="text-lg font-bold text-neutral-900 transition-colors">
                                                 Tool Tracks
                                             </h3>
                                         </div>
@@ -319,7 +375,7 @@ export function LandingPage() {
                                         </p>
 
                                         {/* Arrow indicator */}
-                                        <div className="flex items-center text-neutral-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
+                                        <div className="flex items-center text-blue-500 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
                                             <span>Explore</span>
                                             <ArrowRight className="w-4 h-4 ml-1" />
                                         </div>
@@ -335,12 +391,12 @@ export function LandingPage() {
                                     <div className="h-full bg-white rounded-2xl p-6 border border-neutral-100 group-hover:border-neutral-200 transition-all duration-300 group-hover:shadow-lg">
                                         <div className="flex items-center gap-4 mb-4">
                                             {/* Icon */}
-                                            <div className="w-12 h-12 rounded-xl bg-neutral-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0 border border-neutral-100/50">
-                                                <Layers className="w-6 h-6 text-neutral-500" />
+                                            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0 border border-blue-100/50">
+                                                <Layers className="w-6 h-6 text-blue-500" />
                                             </div>
 
                                             {/* Content */}
-                                            <h3 className="text-lg font-bold text-neutral-900 group-hover:text-neutral-900 transition-colors">
+                                            <h3 className="text-lg font-bold text-neutral-900 transition-colors">
                                                 Domain Tracks
                                             </h3>
                                         </div>
@@ -349,7 +405,7 @@ export function LandingPage() {
                                         </p>
 
                                         {/* Arrow indicator */}
-                                        <div className="flex items-center text-neutral-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
+                                        <div className="flex items-center text-blue-500 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
                                             <span>Explore</span>
                                             <ArrowRight className="w-4 h-4 ml-1" />
                                         </div>
@@ -365,12 +421,12 @@ export function LandingPage() {
                                     <div className="h-full bg-white rounded-2xl p-6 border border-neutral-100 group-hover:border-neutral-200 transition-all duration-300 group-hover:shadow-lg">
                                         <div className="flex items-center gap-4 mb-4">
                                             {/* Icon */}
-                                            <div className="w-12 h-12 rounded-xl bg-neutral-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0 border border-neutral-100/50">
-                                                <FileText className="w-6 h-6 text-neutral-500" />
+                                            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0 border border-blue-100/50">
+                                                <FileText className="w-6 h-6 text-blue-500" />
                                             </div>
 
                                             {/* Content */}
-                                            <h3 className="text-lg font-bold text-neutral-900 group-hover:text-neutral-900 transition-colors">
+                                            <h3 className="text-lg font-bold text-neutral-900 transition-colors">
                                                 Resume Builder
                                             </h3>
                                         </div>
@@ -379,7 +435,7 @@ export function LandingPage() {
                                         </p>
 
                                         {/* Arrow indicator */}
-                                        <div className="flex items-center text-neutral-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
+                                        <div className="flex items-center text-blue-500 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
                                             <span>Create</span>
                                             <ArrowRight className="w-4 h-4 ml-1" />
                                         </div>
@@ -395,12 +451,12 @@ export function LandingPage() {
                                     <div className="h-full bg-white rounded-2xl p-6 border border-neutral-100 group-hover:border-neutral-200 transition-all duration-300 group-hover:shadow-lg">
                                         <div className="flex items-center gap-4 mb-4">
                                             {/* Icon */}
-                                            <div className="w-12 h-12 rounded-xl bg-neutral-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0 border border-neutral-100/50">
-                                                <Briefcase className="w-6 h-6 text-neutral-500" />
+                                            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0 border border-blue-100/50">
+                                                <Briefcase className="w-6 h-6 text-blue-500" />
                                             </div>
 
                                             {/* Content */}
-                                            <h3 className="text-lg font-bold text-neutral-900 group-hover:text-neutral-900 transition-colors">
+                                            <h3 className="text-lg font-bold text-neutral-900 transition-colors">
                                                 Portfolio
                                             </h3>
                                         </div>
@@ -409,7 +465,7 @@ export function LandingPage() {
                                         </p>
 
                                         {/* Arrow indicator */}
-                                        <div className="flex items-center text-neutral-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
+                                        <div className="flex items-center text-blue-500 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
                                             <span>Build</span>
                                             <ArrowRight className="w-4 h-4 ml-1" />
                                         </div>
@@ -460,88 +516,51 @@ export function LandingPage() {
                 </div>
             </section> */}
 
-            {/* Featured Competitions Carousel */}
-            <section className="py-6 lg:py-10 bg-neutral-50">
+            {/* Featured Banners Section */}
+            <section className="py-12 bg-neutral-50/50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="text-center mb-8"
-                    >
-                        <Badge variant="secondary" size="lg">
-                            <Trophy className="w-4 h-4 mr-1" />
-                            Featured
-                        </Badge>
-                    </motion.div>
-
-                    {/* Carousel Container */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="relative"
-                    >
-                        <div className="overflow-hidden rounded-2xl">
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={activeSlide}
-                                    initial={{ opacity: 0, x: 100 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -100 }}
-                                    transition={{ duration: 0.5, ease: 'easeInOut' }}
-                                >
-                                    <Card className={cn(
-                                        'p-8 md:p-12 bg-gradient-to-r overflow-hidden relative',
-                                        featuredCompetitions[activeSlide].gradient
-                                    )}>
-                                        <div className="flex flex-col md:flex-row items-center gap-8">
-                                            {/* Content */}
-                                            <div className="flex-1 text-center md:text-left">
-                                                <h3 className="text-2xl md:text-3xl font-display font-bold text-neutral-900 mb-2">
-                                                    {featuredCompetitions[activeSlide].title}
-                                                </h3>
-                                                <p className="text-primary-600 font-medium mb-3">
-                                                    {featuredCompetitions[activeSlide].subtitle}
-                                                </p>
-                                                <p className="text-neutral-600 mb-6 max-w-md">
-                                                    {featuredCompetitions[activeSlide].description}
-                                                </p>
-                                                <Button
-                                                    className={cn(featuredCompetitions[activeSlide].accentColor, 'hover:opacity-90')}
-                                                >
-                                                    Register Now
-                                                </Button>
-                                            </div>
-
-                                            {/* Logo Card */}
-                                            <div className="flex-shrink-0">
-                                                <div className="w-48 h-32 md:w-64 md:h-40 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg flex items-center justify-center border border-white/50">
-                                                    <span className={cn('text-4xl md:text-5xl font-display font-bold', featuredCompetitions[activeSlide].logoColor)}>
-                                                        {featuredCompetitions[activeSlide].logo}
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {featuredBanners.map((banner) => (
+                            <motion.div
+                                key={banner.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                <div className={cn(
+                                    "relative h-full rounded-[2.5rem] p-8 md:p-12 overflow-hidden bg-gradient-to-br flex flex-col md:flex-row items-center gap-8",
+                                    banner.gradient
+                                )}>
+                                    <div className="flex-1 space-y-6 text-center md:text-left">
+                                        <div className="space-y-2">
+                                            <h3 className="text-3xl md:text-4xl font-black text-neutral-900 tracking-tight leading-none uppercase">
+                                                {banner.title.split(' ').map((word, i) => (
+                                                    <span key={i} className={i === 0 && banner.id === 'coding-sprint' ? 'text-blue-600 mr-2' : i === 0 && banner.id === 'code-conquest' ? 'text-amber-500 mr-2' : 'mr-2'}>
+                                                        {word}
                                                     </span>
-                                                </div>
-                                            </div>
+                                                ))}
+                                            </h3>
+                                            <p className="text-neutral-600 text-lg font-medium max-w-xs mx-auto md:mx-0">
+                                                {banner.description}
+                                            </p>
                                         </div>
-                                    </Card>
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-
-                        {/* Carousel Indicators */}
-                        <div className="flex justify-center gap-2 mt-6">
-                            {featuredCompetitions.map((_, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setActiveSlide(index)}
-                                    className={cn(
-                                        'h-2 rounded-full transition-all duration-300',
-                                        index === activeSlide ? 'w-8 bg-primary-600' : 'w-2 bg-neutral-300 hover:bg-neutral-400'
-                                    )}
-                                />
-                            ))}
-                        </div>
-                    </motion.div>
+                                        <Button
+                                            variant="outline"
+                                            size="lg"
+                                            className="w-72 whitespace-nowrap rounded-full bg-transparent border-neutral-300 text-neutral-700 hover:bg-blue-500 hover:text-white hover:border-blue-500 group"
+                                            rightIcon={<ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
+                                        >
+                                            Start Now
+                                        </Button>
+                                    </div>
+                                    <div className="w-full md:w-1/2 aspect-square md:aspect-auto h-48 flex items-center justify-center">
+                                        {banner.icon}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </section>
 
@@ -573,7 +592,7 @@ export function LandingPage() {
                         {popularTracks.map((track) => (
                             <motion.div key={track.title} variants={fadeInUp}>
                                 <Link to={`/courses/category/${track.slug}`}>
-                                    <Card hover variant="elevated" className="h-full p-6 cursor-pointer group">
+                                    <Card hover variant="elevated" className="h-full flex flex-col p-6 cursor-pointer group">
                                         <div className="flex items-start gap-4">
                                             {/* Icon */}
                                             <div className={cn(
@@ -586,7 +605,7 @@ export function LandingPage() {
 
                                             {/* Content */}
                                             <div className="flex-1 min-w-0">
-                                                <h3 className="text-lg font-semibold text-neutral-900 mb-1 group-hover:text-primary-600 transition-colors">
+                                                <h3 className="text-lg font-semibold text-neutral-900 mb-1 transition-colors">
                                                     {track.title}
                                                 </h3>
                                                 <p className="text-sm text-neutral-500 mb-3 line-clamp-2">
@@ -611,9 +630,9 @@ export function LandingPage() {
                                         </div>
 
                                         {/* Explore Link */}
-                                        <div className="flex items-center text-primary-600 font-medium text-sm group-hover:text-primary-700">
+                                        <div className="flex items-center text-blue-600 font-medium text-sm mt-auto opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
                                             <span>Explore Courses</span>
-                                            <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                                            <ArrowRight className="w-4 h-4 ml-1" />
                                         </div>
                                     </Card>
                                 </Link>
@@ -632,6 +651,7 @@ export function LandingPage() {
                             <Button
                                 variant="secondary"
                                 size="lg"
+                                className="w-72 whitespace-nowrap bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50"
                                 rightIcon={<ArrowRight className="w-4 h-4" />}
                             >
                                 Browse All Courses
@@ -669,7 +689,7 @@ export function LandingPage() {
                         {fullStackPaths.map((path) => (
                             <motion.div key={path.slug} variants={fadeInUp}>
                                 <Link to={`/fullstack/${path.slug}`}>
-                                    <Card hover variant="elevated" className="h-full p-6 cursor-pointer group">
+                                    <Card hover variant="elevated" className="h-full flex flex-col p-6 cursor-pointer group">
                                         <div className="flex items-start gap-4">
                                             {/* Icon */}
                                             <div className={cn(
@@ -682,7 +702,7 @@ export function LandingPage() {
 
                                             {/* Content */}
                                             <div className="flex-1 min-w-0">
-                                                <h3 className="text-lg font-semibold text-neutral-900 mb-1 group-hover:text-primary-600 transition-colors">
+                                                <h3 className="text-lg font-semibold text-neutral-900 mb-1 transition-colors">
                                                     {path.title}
                                                 </h3>
                                                 <p className="text-sm text-neutral-500 mb-3 line-clamp-2">
@@ -707,9 +727,9 @@ export function LandingPage() {
                                         </div>
 
                                         {/* Explore Link */}
-                                        <div className="flex items-center text-primary-600 font-medium text-sm group-hover:text-primary-700">
+                                        <div className="flex items-center text-blue-600 font-medium text-sm mt-auto opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
                                             <span>Explore Courses</span>
-                                            <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                                            <ArrowRight className="w-4 h-4 ml-1" />
                                         </div>
                                     </Card>
                                 </Link>
@@ -728,6 +748,7 @@ export function LandingPage() {
                             <Button
                                 variant="secondary"
                                 size="lg"
+                                className="w-72 whitespace-nowrap bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50"
                                 rightIcon={<ArrowRight className="w-4 h-4" />}
                             >
                                 View All Learning Paths
@@ -738,7 +759,7 @@ export function LandingPage() {
             </section>
 
             {/* Portfolio Builder Section */}
-            <section className="py-8 lg:py-12 bg-gradient-to-br from-violet-50/50 via-purple-50/30 to-fuchsia-50/20">
+            <section className="py-8 lg:py-12 bg-gradient-to-br from-blue-50/50 via-cyan-50/30 to-sky-50/20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         {/* Left Content */}
@@ -785,7 +806,7 @@ export function LandingPage() {
                                 <Link to="/login?redirect=/learner/portfolio">
                                     <Button
                                         size="lg"
-                                        className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
+                                        className="w-72 whitespace-nowrap bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
                                         rightIcon={<ArrowRight className="w-5 h-5" />}
                                     >
                                         Build Your Portfolio
@@ -802,43 +823,13 @@ export function LandingPage() {
                             transition={{ duration: 0.6 }}
                             className="relative"
                         >
-                            <div className="bg-white rounded-2xl shadow-2xl shadow-blue-500/10 border border-blue-100 p-6 lg:p-8">
-                                <div className="flex items-center gap-3 mb-6">
-                                    <div className="w-12 h-12 rounded-xl bg-blue-50 animate-pulse" />
-                                    <div className="space-y-2">
-                                        <div className="h-4 w-24 bg-neutral-100 rounded animate-pulse" />
-                                        <div className="h-3 w-32 bg-neutral-100 rounded animate-pulse" />
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4 mb-6">
-                                    <div className="bg-blue-50 rounded-xl p-4 text-center">
-                                        <div className="h-8 w-12 bg-blue-100/50 rounded mx-auto mb-2 animate-pulse" />
-                                        <div className="h-3 w-16 bg-blue-50 rounded mx-auto animate-pulse" />
-                                    </div>
-                                    <div className="bg-cyan-50 rounded-xl p-4 text-center">
-                                        <div className="h-8 w-16 bg-cyan-100/50 rounded mx-auto mb-2 animate-pulse" />
-                                        <div className="h-3 w-12 bg-cyan-50 rounded mx-auto animate-pulse" />
-                                    </div>
-                                </div>
-                                <div className="space-y-4">
-                                    <div className="h-32 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg border border-blue-100/50 flex flex-col p-4">
-                                        <div className="h-4 w-1/3 bg-white rounded-md shadow-sm mb-3 animate-pulse" />
-                                        <div className="space-y-2">
-                                            <div className="h-2 w-full bg-white/60 rounded animate-pulse" />
-                                            <div className="h-2 w-5/6 bg-white/60 rounded animate-pulse" />
-                                            <div className="h-2 w-4/5 bg-white/60 rounded animate-pulse" />
-                                        </div>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <div className="h-6 w-16 bg-blue-50 rounded-full animate-pulse" />
-                                        <div className="h-6 w-20 bg-cyan-50 rounded-full animate-pulse" />
-                                        <div className="h-6 w-18 bg-sky-50 rounded-full animate-pulse" />
-                                    </div>
-                                </div>
-                            </div>
+                            <FeaturePreview
+                                icon={Briefcase}
+                                title="Portfolio.web"
+                                badgeText="Live Projects"
+                                type="portfolio"
+                            />
                             {/* Decorative elements */}
-                            <div className="absolute -top-4 -right-4 w-24 h-24 bg-blue-200/50 rounded-full blur-2xl" />
-                            <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-cyan-200/50 rounded-full blur-2xl" />
                         </motion.div>
                     </div>
                 </div>
@@ -846,55 +837,31 @@ export function LandingPage() {
 
             {/* Resume Builder Section */}
             <section className="py-8 lg:py-12 bg-gradient-to-br from-blue-50/50 via-cyan-50/30 to-sky-50/20">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        {/* Left Preview Card */}
+                        {/* Resume Preview Card (Left) */}
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6 }}
-                            className="relative order-2 lg:order-1"
+                            className="relative lg:order-1 order-2"
                         >
-                            <div className="bg-white rounded-2xl shadow-2xl shadow-blue-500/10 border border-blue-100 p-6 lg:p-8">
-                                <div className="flex items-center justify-between mb-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
-                                            <FileText className="w-5 h-5 text-white" />
-                                        </div>
-                                        <span className="font-semibold text-neutral-900">Resume.pdf</span>
-                                    </div>
-                                    <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">ATS Ready</span>
-                                </div>
-                                <div className="space-y-4">
-                                    <div className="h-4 bg-blue-100 rounded w-3/4" />
-                                    <div className="h-3 bg-neutral-100 rounded w-full" />
-                                    <div className="h-3 bg-neutral-100 rounded w-5/6" />
-                                    <div className="h-3 bg-neutral-100 rounded w-4/5" />
-                                    <div className="border-t border-neutral-100 pt-4 mt-4">
-                                        <div className="h-3 bg-cyan-100 rounded w-1/3 mb-2" />
-                                        <div className="h-2 bg-neutral-100 rounded w-full" />
-                                        <div className="h-2 bg-neutral-100 rounded w-5/6 mt-1" />
-                                    </div>
-                                    <div className="flex gap-2 pt-2">
-                                        <span className="px-2 py-1 bg-blue-50 text-blue-600 rounded text-xs">Skills</span>
-                                        <span className="px-2 py-1 bg-cyan-50 text-cyan-600 rounded text-xs">Experience</span>
-                                        <span className="px-2 py-1 bg-sky-50 text-sky-600 rounded text-xs">Education</span>
-                                    </div>
-                                </div>
-                            </div>
-                            {/* Decorative elements */}
-                            <div className="absolute -top-4 -left-4 w-24 h-24 bg-blue-200/50 rounded-full blur-2xl" />
-                            <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-cyan-200/50 rounded-full blur-2xl" />
+                            <FeaturePreview
+                                icon={FileText}
+                                title="Resume.pdf"
+                                badgeText="ATS Ready"
+                                type="resume"
+                            />
                         </motion.div>
 
-                        {/* Right Content */}
+                        {/* Text Content (Right) */}
                         <motion.div
                             initial="hidden"
                             whileInView="visible"
-                            viewport={{ once: true, margin: '-100px' }}
+                            viewport={{ once: true, margin: '-50px' }}
                             variants={staggerContainer}
-                            className="order-1 lg:order-2"
+                            className="lg:order-2 order-1"
                         >
 
                             <motion.h2
@@ -933,7 +900,7 @@ export function LandingPage() {
                                 <Link to="/login?redirect=/learner/resume">
                                     <Button
                                         size="lg"
-                                        className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
+                                        className="w-72 whitespace-nowrap bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
                                         rightIcon={<ArrowRight className="w-5 h-5" />}
                                     >
                                         Create Your Resume
@@ -1049,13 +1016,15 @@ export function LandingPage() {
                             variants={fadeInUp}
                             className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
                         >
-                            <Button
-                                size="lg"
-                                className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-glow-lg px-12"
-                                rightIcon={<ArrowRight className="w-5 h-5" />}
-                            >
-                                Create Free Account
-                            </Button>
+                            <Link to="/register">
+                                <Button
+                                    size="lg"
+                                    className="w-72 whitespace-nowrap bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
+                                    rightIcon={<ArrowRight className="w-5 h-5" />}
+                                >
+                                    Start Your Journey
+                                </Button>
+                            </Link>
 
                         </motion.div>
                     </motion.div>
