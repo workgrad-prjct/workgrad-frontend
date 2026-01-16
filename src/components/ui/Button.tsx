@@ -17,9 +17,9 @@ interface ButtonProps extends HTMLMotionProps<"button"> {
 
 const variantStyles: Record<ButtonVariant, string> = {
     primary: `
-    bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700
+    bg-gradient-to-r from-blue-500 to-indigo-500
     text-white shadow-glow-sm
-    hover:shadow-glow hover:from-primary-600 hover:via-primary-700 hover:to-primary-800
+    hover:opacity-90
     active:shadow-none
   `,
     secondary: `

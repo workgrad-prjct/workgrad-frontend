@@ -4,12 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
     Menu,
     X,
-    ChevronDown,
-    GraduationCap,
-    Building2,
-    Users,
     LogIn,
-    UserPlus,
 } from 'lucide-react'
 import { Button, Avatar } from '@/components/ui'
 import { useAuth } from '@/context'
@@ -21,31 +16,10 @@ const navigation = [
     { name: 'For Mentors', href: '/mentors' },
 ]
 
-const registerOptions = [
-    {
-        name: 'As a Learner',
-        description: 'Find jobs, build resume, learn skills',
-        href: '/register?role=learner',
-        icon: GraduationCap,
-    },
-    {
-        name: 'As an Employer',
-        description: 'Hire top talent, campus recruitment',
-        href: '/register?role=employer',
-        icon: Building2,
-    },
-    {
-        name: 'As a Mentor',
-        description: 'Create courses, earn revenue',
-        href: '/register?role=mentor',
-        icon: Users,
-    },
-]
 
 export function Header() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-    const [isRegisterDropdownOpen, setIsRegisterDropdownOpen] = useState(false)
     const { user, isAuthenticated } = useAuth()
     const location = useLocation()
     const navigate = useNavigate()
@@ -131,69 +105,13 @@ export function Header() {
                                 </Link>
                             </div>
                         ) : (
-                            <>
-                                {/* Register Dropdown */}
-                                <div className="relative">
-                                    <Button
-                                        variant="primary"
-                                        onClick={() => setIsRegisterDropdownOpen(!isRegisterDropdownOpen)}
-                                        rightIcon={
-                                            <ChevronDown
-                                                className={cn(
-                                                    'w-4 h-4 transition-transform',
-                                                    isRegisterDropdownOpen && 'rotate-180'
-                                                )}
-                                            />
-                                        }
-                                    >
-                                        Get Started
-                                    </Button>
-
-                                    <AnimatePresence>
-                                        {isRegisterDropdownOpen && (
-                                            <>
-                                                {/* Overlay */}
-                                                <div
-                                                    className="fixed inset-0 z-10"
-                                                    onClick={() => setIsRegisterDropdownOpen(false)}
-                                                />
-
-                                                {/* Dropdown */}
-                                                <motion.div
-                                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                    transition={{ duration: 0.2 }}
-                                                    className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-premium border border-neutral-100 overflow-hidden z-20"
-                                                >
-                                                    <div className="p-2">
-                                                        {registerOptions.map((option) => (
-                                                            <Link
-                                                                key={option.name}
-                                                                to={option.href}
-                                                                onClick={() => setIsRegisterDropdownOpen(false)}
-                                                                className="flex items-start gap-3 p-3 rounded-xl hover:bg-neutral-50 transition-colors group"
-                                                            >
-                                                                <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-600 flex items-center justify-center group-hover:bg-primary-500 group-hover:text-white transition-colors">
-                                                                    <option.icon className="w-5 h-5" />
-                                                                </div>
-                                                                <div>
-                                                                    <div className="font-medium text-neutral-900">
-                                                                        {option.name}
-                                                                    </div>
-                                                                    <div className="text-sm text-neutral-500">
-                                                                        {option.description}
-                                                                    </div>
-                                                                </div>
-                                                            </Link>
-                                                        ))}
-                                                    </div>
-                                                </motion.div>
-                                            </>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-                            </>
+                            <Button
+                                variant="primary"
+                                onClick={() => navigate('/login')}
+                                className="bg-gradient-to-r from-blue-500 to-indigo-500 border-none hover:opacity-90 px-6"
+                            >
+                                Get Started
+                            </Button>
                         )}
                     </div>
 
@@ -263,17 +181,15 @@ export function Header() {
                                         </Button>
                                     </div>
                                 ) : (
-                                    <>
-
-                                        <Button
-                                            variant="primary"
-                                            fullWidth
-                                            onClick={() => navigate('/register')}
-                                            leftIcon={<UserPlus className="w-4 h-4" />}
-                                        >
-                                            Get Started
-                                        </Button>
-                                    </>
+                                    <Button
+                                        variant="primary"
+                                        fullWidth
+                                        onClick={() => navigate('/login')}
+                                        className="bg-gradient-to-r from-blue-500 to-indigo-500 border-none hover:opacity-90"
+                                        leftIcon={<LogIn className="w-4 h-4" />}
+                                    >
+                                        Get Started
+                                    </Button>
                                 )}
                             </div>
                         </div>

@@ -6,6 +6,7 @@ import {
   Link,
   useParams,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { TrendingUp, Award, Target, Zap, Rocket, Heart, Share2, Clock, Download, BookOpen, ArrowLeft } from "lucide-react";
@@ -16,7 +17,7 @@ import { getCategoryColor } from "@/utils/categoryColors";
 import { CourseCard } from "@/components/CourseCard";
 
 // Public Pages
-import { LandingPage } from "@/pages/public";
+import { LandingPage, MentorsPage } from "@/pages/public";
 
 // Auth Pages
 import { LoginPage, RegisterPage } from "@/pages/auth";
@@ -36,7 +37,7 @@ const NotFound = () => (
       <p className="text-xl text-neutral-700 mb-8">Page not found</p>
       <a
         href="/"
-        className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-700 text-white font-semibold rounded-xl shadow-glow-sm hover:shadow-glow transition-all"
+        className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold rounded-xl shadow-glow-sm hover:opacity-90 transition-all"
       >
         Go Home
       </a>
@@ -2282,6 +2283,7 @@ const CoursesPage = () => {
           {coursesData.map((course) => (
             <CourseCard
               key={course.id}
+              id={course.id}
               image={course.image}
               modules={course.lessons}
               description={`Learn ${course.title} from industry experts. Master real-world skills with hands-on projects and get certified.`}
@@ -2393,6 +2395,8 @@ const CoursesPage = () => {
 // Premium Course Detail Page
 const CourseDetailPage = () => {
   const { id: courseId } = useParams();
+  const location = useLocation();
+  const state = location.state as { from?: string; fromLabel?: string } | null;
   const course = coursesData.find((c) => c.id === courseId) || coursesData[0];
 
   // Resolve domain for theming
@@ -2484,14 +2488,14 @@ const CourseDetailPage = () => {
           {/* Back Button + Breadcrumb */}
           <nav className="flex items-center gap-3 text-xs mb-6">
             <Link
-              to={location.state?.from || "/courses"}
+              to={state?.from || "/courses"}
               className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-700 transition-all"
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
             <span className="text-slate-400">/</span>
-            <Link to={location.state?.from || "/courses"} className="text-slate-500 hover:text-slate-700 font-medium">
-              {location.state?.fromLabel || "Courses"}
+            <Link to={state?.from || "/courses"} className="text-slate-500 hover:text-slate-700 font-medium">
+              {state?.fromLabel || "Courses"}
             </Link>
             <span className="text-slate-400">/</span>
             <span className="text-slate-700 font-medium">{course.tags?.[0] || 'Programming'}</span>
@@ -2879,23 +2883,6 @@ const EnterprisePage = () => (
   </div>
 );
 
-// Become Mentor Page
-const BecomeMentorPage = () => (
-  <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-    <h1 className="text-4xl font-display font-bold text-neutral-900 mb-4">
-      Become a Mentor
-    </h1>
-    <p className="text-xl text-neutral-600 mb-8">
-      Share your knowledge and earn up to 97% on course sales
-    </p>
-    <a
-      href="/register"
-      className="inline-block px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700"
-    >
-      Start Teaching
-    </a>
-  </div>
-);
 
 // Careers Page
 const CareersPage = () => (
@@ -3087,7 +3074,8 @@ function App() {
           <Route path="/resume-builder" element={<ResumeBuilderPage />} />
           <Route path="/resources" element={<ResourcesPage />} />
           <Route path="/enterprise" element={<EnterprisePage />} />
-          <Route path="/become-mentor" element={<BecomeMentorPage />} />
+          <Route path="/become-mentor" element={<Navigate to="/mentors" replace />} />
+          <Route path="/mentors" element={<MentorsPage />} />
           <Route path="/careers" element={<CareersPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/press" element={<PressPage />} />

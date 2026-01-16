@@ -3,21 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import {
     ArrowRight,
-    GraduationCap,
-    Building2,
-    Users,
     FileText,
     Briefcase,
     BookOpen,
     Target,
-    TrendingUp,
     Trophy,
-    Star,
-    Play,
-    Sparkles,
     Zap,
-    Globe,
-    Shield,
     Code2,
     Palette,
     BarChart3,
@@ -28,9 +19,8 @@ import {
     Server,
 } from 'lucide-react'
 
-import { Button, Card, Badge, Avatar, AvatarGroup } from '@/components/ui'
+import { Button, Card, Badge } from '@/components/ui'
 import { cn } from '@/utils'
-import { Hero3DElement } from '@/components/public/Hero3DElement'
 
 // Animation variants
 const fadeInUp = {
@@ -49,59 +39,8 @@ const staggerContainer = {
 }
 
 // Stats data
-const stats = [
-    { value: '50K+', label: 'Active Learners', icon: GraduationCap },
-    { value: '2K+', label: 'Partner Companies', icon: Building2 },
-    { value: '500+', label: 'Expert Mentors', icon: Users },
-    { value: '10K+', label: 'Jobs Posted', icon: Briefcase },
-]
 
 // Features data
-const learnerFeatures = [
-    {
-        icon: FileText,
-        title: 'ATS-Friendly Resume Builder',
-        description: 'Create professional resumes with optimized keywords that pass Applicant Tracking Systems.',
-    },
-    {
-        icon: Briefcase,
-        title: 'Job & Internship Listings',
-        description: 'Access thousands of curated opportunities from top companies matched to your skills.',
-    },
-    {
-        icon: BookOpen,
-        title: 'Skill Development Courses',
-        description: 'Learn industry-relevant tools and technologies from expert mentors.',
-    },
-    {
-        icon: Target,
-        title: 'Personalized Matching',
-        description: 'AI-powered recommendations based on your profile, preferences, and career goals.',
-    },
-]
-
-const employerFeatures = [
-    {
-        icon: Building2,
-        title: 'Campus Hiring',
-        description: 'Streamline your campus recruitment with AI-powered candidate assessment.',
-    },
-    {
-        icon: Globe,
-        title: 'Virtual Hiring Drives',
-        description: 'Conduct seamless virtual hiring campaigns with integrated video interviews.',
-    },
-    {
-        icon: TrendingUp,
-        title: 'Analytics Dashboard',
-        description: 'Get real-time insights on hiring funnel, candidate quality, and engagement.',
-    },
-    {
-        icon: Shield,
-        title: 'Verified Talent Pool',
-        description: 'Access pre-screened candidates with verified skills and credentials.',
-    },
-]
 
 // Courses/Tracks data with icons and descriptions
 const popularTracks = [
@@ -251,29 +190,6 @@ const featuredCompetitions = [
 ]
 
 // Testimonials
-const testimonials = [
-    {
-        name: 'Priya Sharma',
-        role: 'Software Engineer at Google',
-        avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-        content: 'WorkGrad helped me land my dream job at Google. The resume builder and personalized job matching were game-changers!',
-        rating: 5,
-    },
-    {
-        name: 'Rahul Verma',
-        role: 'Product Manager at Microsoft',
-        avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-        content: 'The skill courses on WorkGrad gave me the edge I needed. Highly recommend for any aspiring tech professional.',
-        rating: 5,
-    },
-    {
-        name: 'Anita Desai',
-        role: 'HR Director at Infosys',
-        avatar: 'https://randomuser.me/api/portraits/women/68.jpg',
-        content: 'As an employer, WorkGrad has transformed our campus hiring. The quality of candidates is exceptional.',
-        rating: 5,
-    },
-]
 
 // Companies with brand colors
 
@@ -293,13 +209,8 @@ export function LandingPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
-            <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
-                {/* Gradient orbs - lighter colors */}
-                <div className="absolute top-0 left-0 w-[700px] h-[700px] bg-violet-200 rounded-full blur-[150px] opacity-50 -translate-x-1/4 -translate-y-1/4" />
-                <div className="absolute bottom-0 right-0 w-[700px] h-[700px] bg-blue-200 rounded-full blur-[150px] opacity-50 translate-x-1/4 translate-y-1/4" />
+            <section className="relative min-h-screen flex items-center overflow-hidden bg-white">
 
-
-                {/* Content */}
                 <div className="relative z-10 w-full max-w-4xl mx-auto px-6 py-20 text-center">
                     <motion.div
                         initial="hidden"
@@ -307,21 +218,14 @@ export function LandingPage() {
                         variants={staggerContainer}
                         className="space-y-8"
                     >
-                        {/* Badge */}
-                        <motion.div variants={fadeInUp}>
-                            <span className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-neutral-200 shadow-sm text-sm font-medium text-neutral-600">
-                                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                Platform for Learners
-                            </span>
-                        </motion.div>
 
                         {/* Headline */}
                         <motion.div variants={fadeInUp}>
-                            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-display font-black text-neutral-900 tracking-tight leading-[0.95]">
-                                Your Career
+                            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-display font-black text-neutral-700 tracking-tight leading-[0.95]">
+                                Learn skills that move
                                 <br />
-                                <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
-                                    Starts Here
+                                <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">
+                                    you forward
                                 </span>
                             </h1>
                         </motion.div>
@@ -329,11 +233,9 @@ export function LandingPage() {
                         {/* Description */}
                         <motion.p
                             variants={fadeInUp}
-                            className="text-lg sm:text-xl text-neutral-500 max-w-xl mx-auto"
+                            className="text-lg sm:text-xl text-neutral-600 max-w-2xl mx-auto leading-relaxed"
                         >
-                            Master in-demand skills, build your portfolio,
-                            <br className="hidden sm:block" />
-                            and land your dream job.
+                            Practical, industry-focused courses designed to help you gain real skills, build confidence, and grow professionally at your own pace.
                         </motion.p>
 
                         {/* CTA Buttons */}
@@ -342,13 +244,13 @@ export function LandingPage() {
                             className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4"
                         >
                             <Link to="/register">
-                                <button className="group flex items-center gap-2 px-8 py-4 bg-neutral-900 hover:bg-neutral-800 text-white text-lg font-semibold rounded-xl shadow-lg shadow-neutral-900/20 hover:shadow-neutral-900/30 transition-all">
-                                    Get Started Free
+                                <button className="group flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white text-lg font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all">
+                                    Start Learning Today
                                     <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
                                 </button>
                             </Link>
                             <Link to="/courses/categories">
-                                <button className="flex items-center gap-2 px-8 py-4 bg-white hover:bg-neutral-50 text-neutral-700 text-lg font-semibold rounded-xl border border-neutral-200 shadow-sm transition-all">
+                                <button className="flex items-center gap-2 px-8 py-4 bg-white hover:bg-neutral-50 text-neutral-700 text-lg font-semibold rounded-xl border border-neutral-200 shadow-sm transition-all focus:ring-2 focus:ring-blue-500/20">
                                     Explore Courses
                                 </button>
                             </Link>
@@ -381,7 +283,7 @@ export function LandingPage() {
                             Explore Platform
                         </p>
                         <h2 className="text-2xl lg:text-3xl font-display font-bold text-neutral-900">
-                            Everything you need to succeed
+                            The Architecture of Success
                         </h2>
                     </motion.div>
 
@@ -451,11 +353,11 @@ export function LandingPage() {
 
                         {/* Resume Builder Card */}
                         <motion.div variants={fadeInUp}>
-                            <Link to="/learner/resume">
+                            <Link to="/login?redirect=/learner/resume">
                                 <div className="group h-full">
                                     <div className="h-full bg-white rounded-2xl p-6 border border-neutral-100 group-hover:border-neutral-200 transition-all duration-300 group-hover:shadow-lg">
                                         {/* Icon */}
-                                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-50 to-purple-50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                                             <FileText className="w-7 h-7 text-violet-600" />
                                         </div>
 
@@ -479,11 +381,11 @@ export function LandingPage() {
 
                         {/* Portfolio Card */}
                         <motion.div variants={fadeInUp}>
-                            <Link to="/learner/portfolio">
+                            <Link to="/login?redirect=/learner/portfolio">
                                 <div className="group h-full">
                                     <div className="h-full bg-white rounded-2xl p-6 border border-neutral-100 group-hover:border-neutral-200 transition-all duration-300 group-hover:shadow-lg">
                                         {/* Icon */}
-                                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                                             <Briefcase className="w-7 h-7 text-orange-600" />
                                         </div>
 
@@ -632,78 +534,6 @@ export function LandingPage() {
                 </div>
             </section>
 
-            {/* Features for Learners */}
-            <section className="py-8 bg-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: '-100px' }}
-                        variants={staggerContainer}
-                        className="text-center mb-10"
-                    >
-                        <motion.div variants={fadeInUp}>
-                            <Badge variant="primary" size="lg">
-                                <GraduationCap className="w-4 h-4 mr-1" />
-                                For Learners
-                            </Badge>
-                        </motion.div>
-                        <motion.h2
-                            variants={fadeInUp}
-                            className="mt-4 text-3xl lg:text-4xl font-display font-bold text-neutral-900"
-                        >
-                            Everything You Need to
-                            <span className="text-gradient"> Launch Your Career</span>
-                        </motion.h2>
-                        <motion.p
-                            variants={fadeInUp}
-                            className="mt-4 text-lg text-neutral-500 max-w-2xl mx-auto"
-                        >
-                            From building your resume to landing your dream job, we've got you covered
-                            with powerful tools and resources.
-                        </motion.p>
-                    </motion.div>
-
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: '-100px' }}
-                        variants={staggerContainer}
-                        className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-                    >
-                        {learnerFeatures.map((feature) => (
-                            <motion.div key={feature.title} variants={fadeInUp}>
-                                <Card hover variant="bordered" className="h-full">
-                                    <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center mb-4">
-                                        <feature.icon className="w-6 h-6 text-white" />
-                                    </div>
-                                    <h3 className="text-lg font-semibold text-neutral-900 mb-2">
-                                        {feature.title}
-                                    </h3>
-                                    <p className="text-neutral-500 text-sm">{feature.description}</p>
-                                </Card>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.4 }}
-                        className="mt-12 text-center"
-                    >
-                        <Button
-                            variant="secondary"
-                            size="lg"
-                            rightIcon={<ArrowRight className="w-4 h-4" />}
-                        >
-                            Explore All Features
-                        </Button>
-                    </motion.div>
-                </div>
-            </section >
-
             {/* Popular Courses/Tracks */}
             <section className="py-6 lg:py-10 bg-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -724,16 +554,10 @@ export function LandingPage() {
                             variants={fadeInUp}
                             className="mt-4 text-3xl lg:text-4xl font-display font-bold text-neutral-900"
                         >
-                            Popular
-                            <span className="text-gradient"> Tools Tracks</span>
+                            Tool Centric Tracks
+
                         </motion.h2>
-                        <motion.p
-                            variants={fadeInUp}
-                            className="mt-4 text-lg text-neutral-500 max-w-2xl mx-auto"
-                        >
-                            Master in-demand skills with our comprehensive learning paths
-                            designed by industry experts.
-                        </motion.p>
+
                     </motion.div>
 
                     <motion.div
@@ -834,15 +658,10 @@ export function LandingPage() {
                             variants={fadeInUp}
                             className="mt-4 text-3xl lg:text-4xl font-display font-bold text-neutral-900"
                         >
-                            Full Stack
-                            <span className="text-gradient"> Learning Paths</span>
+                            Full stack learning paths
+
                         </motion.h2>
-                        <motion.p
-                            variants={fadeInUp}
-                            className="mt-4 text-lg text-neutral-500 max-w-2xl mx-auto"
-                        >
-                            Master complete technology stacks from frontend to backend. Choose your path and become a full-stack developer.
-                        </motion.p>
+
                     </motion.div>
 
                     <motion.div
@@ -974,10 +793,10 @@ export function LandingPage() {
                             </motion.div>
 
                             <motion.div variants={fadeInUp} className="mt-8">
-                                <Link to="/learner/portfolio">
+                                <Link to="/login?redirect=/learner/portfolio">
                                     <Button
                                         size="lg"
-                                        className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white shadow-lg shadow-violet-500/30"
+                                        className="bg-gradient-to-r from-violet-400 to-purple-400 hover:from-violet-500 hover:to-purple-500 text-white shadow-lg shadow-violet-500/20"
                                         rightIcon={<ArrowRight className="w-5 h-5" />}
                                     >
                                         Build Your Portfolio
@@ -1128,10 +947,10 @@ export function LandingPage() {
                             </motion.div>
 
                             <motion.div variants={fadeInUp} className="mt-8">
-                                <Link to="/learner/resume">
+                                <Link to="/login?redirect=/learner/resume">
                                     <Button
                                         size="lg"
-                                        className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-lg shadow-blue-500/30"
+                                        className="bg-gradient-to-r from-blue-400 to-cyan-400 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg shadow-blue-500/20"
                                         rightIcon={<ArrowRight className="w-5 h-5" />}
                                     >
                                         Create Your Resume
@@ -1233,9 +1052,9 @@ export function LandingPage() {
                             variants={fadeInUp}
                             className="mt-6 text-3xl lg:text-5xl font-display font-bold text-neutral-900"
                         >
-                            Ready to Transform
+                            Your Legacy Starts Today.
                             <span className="block mt-2 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text text-transparent">
-                                Your Career?
+                                Are You Ready?
                             </span>
                         </motion.h2>
 
@@ -1258,13 +1077,7 @@ export function LandingPage() {
                             >
                                 Create Free Account
                             </Button>
-                            <Button
-                                variant="outline"
-                                size="xl"
-                                className="border-neutral-300 text-neutral-700 hover:bg-neutral-50"
-                            >
-                                Talk to Sales
-                            </Button>
+
                         </motion.div>
                     </motion.div>
                 </div>
