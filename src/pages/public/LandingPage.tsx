@@ -274,7 +274,7 @@ export function LandingPage() {
 
                         {/* Headline */}
                         <motion.div variants={fadeInUp}>
-                            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-display font-black text-neutral-700 tracking-tight leading-[0.95]">
+                            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-display font-black text-neutral-700 tracking-tight leading-[0.95]">
                                 Learn skills that move
                                 <br />
                                 <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">
@@ -310,7 +310,7 @@ export function LandingPage() {
                                 <Button
                                     variant="secondary"
                                     size="lg"
-                                    className="w-72 whitespace-nowrap bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50"
+                                    className="w-full sm:w-72 whitespace-nowrap bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50"
                                 >
                                     Explore Tracks
                                 </Button>
@@ -548,7 +548,7 @@ export function LandingPage() {
                                         <Button
                                             variant="outline"
                                             size="lg"
-                                            className="w-72 whitespace-nowrap rounded-full bg-transparent border-neutral-300 text-neutral-700 hover:bg-blue-500 hover:text-white hover:border-blue-500 group"
+                                            className="w-full sm:w-72 whitespace-nowrap rounded-full bg-transparent border-neutral-300 text-neutral-700 hover:bg-blue-500 hover:text-white hover:border-blue-500 group"
                                             rightIcon={<ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
                                         >
                                             Start Now
@@ -651,7 +651,7 @@ export function LandingPage() {
                             <Button
                                 variant="secondary"
                                 size="lg"
-                                className="w-72 whitespace-nowrap bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50"
+                                className="w-full sm:w-72 whitespace-nowrap bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50"
                                 rightIcon={<ArrowRight className="w-4 h-4" />}
                             >
                                 Browse All Courses
@@ -748,7 +748,7 @@ export function LandingPage() {
                             <Button
                                 variant="secondary"
                                 size="lg"
-                                className="w-72 whitespace-nowrap bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50"
+                                className="w-full sm:w-72 whitespace-nowrap bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50"
                                 rightIcon={<ArrowRight className="w-4 h-4" />}
                             >
                                 View All Learning Paths
@@ -806,10 +806,10 @@ export function LandingPage() {
                                 <Link to="/login?redirect=/learner/portfolio">
                                     <Button
                                         size="lg"
-                                        className="w-72 whitespace-nowrap bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
+                                        className="w-full sm:w-72 whitespace-nowrap bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
                                         rightIcon={<ArrowRight className="w-5 h-5" />}
                                     >
-                                        Build Your Portfolio
+                                        Start Learning Today
                                     </Button>
                                 </Link>
                             </motion.div>
@@ -900,7 +900,7 @@ export function LandingPage() {
                                 <Link to="/login?redirect=/learner/resume">
                                     <Button
                                         size="lg"
-                                        className="w-72 whitespace-nowrap bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
+                                        className="w-full sm:w-72 whitespace-nowrap bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
                                         rightIcon={<ArrowRight className="w-5 h-5" />}
                                     >
                                         Create Your Resume
@@ -1019,7 +1019,7 @@ export function LandingPage() {
                             <Link to="/register">
                                 <Button
                                     size="lg"
-                                    className="w-72 whitespace-nowrap bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
+                                    className="w-full sm:w-72 whitespace-nowrap bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
                                     rightIcon={<ArrowRight className="w-5 h-5" />}
                                 >
                                     Start Your Journey

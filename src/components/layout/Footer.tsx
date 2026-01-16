@@ -40,11 +40,8 @@ export function Footer() {
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-16">
                     {/* Brand Section */}
                     <div className="col-span-2 lg:col-span-2">
-                        <Link to="/" className="flex items-center gap-2 mb-6">
-                            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                                <span className="text-white font-bold text-xl">W</span>
-                            </div>
-                            <span className="font-display font-bold text-xl text-white">
+                        <Link to="/" className="flex items-center mb-6">
+                            <span className="font-display font-bold text-2xl text-white">
                                 Work<span className="text-blue-500">Grad</span>
                             </span>
                         </Link>
