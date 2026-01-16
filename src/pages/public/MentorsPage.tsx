@@ -7,7 +7,8 @@ import {
     CheckCircle2,
     DollarSign,
     Clock,
-    Globe
+    Globe,
+    ArrowRight
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button, Card } from '@/components/ui'
@@ -113,7 +114,11 @@ export default function MentorsPage() {
                             variants={fadeInUp}
                             className="flex flex-col sm:flex-row items-center justify-center gap-4"
                         >
-                            <Button size="xl" className="w-full sm:w-auto px-10">
+                            <Button
+                                size="lg"
+                                className="w-full sm:w-auto px-10 bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
+                                rightIcon={<ArrowRight className="w-5 h-5" />}
+                            >
                                 Apply as a Mentor
                             </Button>
                         </motion.div>
@@ -197,7 +202,11 @@ export default function MentorsPage() {
                             </p>
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                                 <Link to="/register?role=mentor">
-                                    <Button size="xl" className="px-12 py-5 text-lg bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white border-none shadow-lg shadow-blue-500/25">
+                                    <Button
+                                        size="lg"
+                                        className="px-12 bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
+                                        rightIcon={<ArrowRight className="w-5 h-5" />}
+                                    >
                                         Join as a Mentor
                                     </Button>
                                 </Link>

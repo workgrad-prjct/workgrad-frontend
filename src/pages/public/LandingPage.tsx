@@ -5,10 +5,7 @@ import {
     ArrowRight,
     FileText,
     Briefcase,
-    BookOpen,
-    Target,
     Trophy,
-    Zap,
     Code2,
     Palette,
     BarChart3,
@@ -50,71 +47,71 @@ const popularTracks = [
         description: 'Master coding languages for software development',
         Icon: Code2,
         iconBg: 'bg-blue-50',
-        iconColor: 'text-blue-600',
+        iconColor: 'text-blue-500',
         tools: ['Python', 'JavaScript', 'R'],
         students: 12500,
         rating: 4.8,
-        color: 'bg-blue-50 text-blue-700 border border-blue-100',
+        color: 'bg-neutral-50 text-neutral-600 border border-neutral-100',
     },
     {
         title: 'Design',
         slug: 'ui-ux-designer',
         description: 'Create stunning visual designs and interfaces',
         Icon: Palette,
-        iconBg: 'bg-pink-50',
-        iconColor: 'text-pink-600',
+        iconBg: 'bg-blue-50',
+        iconColor: 'text-blue-500',
         tools: ['Figma', 'Adobe Photoshop', 'Sketch'],
         students: 6800,
         rating: 4.8,
-        color: 'bg-pink-50 text-pink-700 border border-pink-100',
+        color: 'bg-neutral-50 text-neutral-600 border border-neutral-100',
     },
     {
         title: 'Analytics',
         slug: 'data-professional',
         description: 'Transform data into actionable insights',
         Icon: BarChart3,
-        iconBg: 'bg-emerald-50',
-        iconColor: 'text-emerald-600',
+        iconBg: 'bg-blue-50',
+        iconColor: 'text-blue-500',
         tools: ['SQL', 'Power BI', 'Tableau'],
         students: 8900,
         rating: 4.9,
-        color: 'bg-emerald-50 text-emerald-700 border border-emerald-100',
+        color: 'bg-neutral-50 text-neutral-600 border border-neutral-100',
     },
     {
         title: 'Marketing',
         slug: 'digital-marketer',
         description: 'Drive growth with digital marketing strategies',
         Icon: Megaphone,
-        iconBg: 'bg-orange-50',
-        iconColor: 'text-orange-600',
+        iconBg: 'bg-blue-50',
+        iconColor: 'text-blue-500',
         tools: ['SEO', 'Google Ads', 'Google Tag Manager'],
         students: 7200,
         rating: 4.7,
-        color: 'bg-orange-50 text-orange-700 border border-orange-100',
+        color: 'bg-neutral-50 text-neutral-600 border border-neutral-100',
     },
     {
         title: 'HR & Operations',
         slug: 'hr-operations',
         description: 'Streamline operations and manage teams effectively',
         Icon: UserCog,
-        iconBg: 'bg-purple-50',
-        iconColor: 'text-purple-600',
+        iconBg: 'bg-blue-50',
+        iconColor: 'text-blue-500',
         tools: ['Salesforce', 'Zoho CRM', 'BambooHR'],
         students: 5400,
         rating: 4.6,
-        color: 'bg-purple-50 text-purple-700 border border-purple-100',
+        color: 'bg-neutral-50 text-neutral-600 border border-neutral-100',
     },
     {
         title: 'Full Stack',
         slug: 'programming-tools',
         description: 'Build complete applications from front to back',
         Icon: Layers,
-        iconBg: 'bg-cyan-50',
-        iconColor: 'text-cyan-600',
+        iconBg: 'bg-blue-50',
+        iconColor: 'text-blue-500',
         tools: ['React', 'Node.js', 'Docker'],
         students: 15000,
         rating: 4.9,
-        color: 'bg-cyan-50 text-cyan-700 border border-cyan-100',
+        color: 'bg-neutral-50 text-neutral-600 border border-neutral-100',
     },
 ]
 
@@ -125,33 +122,33 @@ const fullStackPaths = [
         title: 'MERN Stack',
         description: 'MongoDB, Express, React & Node.js development',
         Icon: Database,
-        iconBg: 'bg-green-50',
-        iconColor: 'text-green-600',
+        iconBg: 'bg-blue-50',
+        iconColor: 'text-blue-500',
         topics: ['HTML/CSS', 'JavaScript', 'React', 'Node.js', 'MongoDB'],
         students: '15K+',
-        color: 'bg-green-50 text-green-700 border border-green-100',
+        color: 'bg-neutral-50 text-neutral-600 border border-neutral-100',
     },
     {
         slug: 'mean-stack',
         title: 'MEAN Stack',
         description: 'MongoDB, Express, Angular & Node.js development',
         Icon: Server,
-        iconBg: 'bg-red-50',
-        iconColor: 'text-red-600',
+        iconBg: 'bg-blue-50',
+        iconColor: 'text-blue-500',
         topics: ['TypeScript', 'Angular', 'Node.js', 'MongoDB'],
         students: '8.5K+',
-        color: 'bg-red-50 text-red-700 border border-red-100',
+        color: 'bg-neutral-50 text-neutral-600 border border-neutral-100',
     },
     {
         slug: 'python-fullstack',
         title: 'Python Full Stack',
         description: 'Python, Django, React & PostgreSQL development',
         Icon: Code2,
-        iconBg: 'bg-yellow-50',
-        iconColor: 'text-yellow-600',
+        iconBg: 'bg-blue-50',
+        iconColor: 'text-blue-500',
         topics: ['Python', 'Django', 'React', 'PostgreSQL'],
         students: '12K+',
-        color: 'bg-yellow-50 text-yellow-700 border border-yellow-100',
+        color: 'bg-neutral-50 text-neutral-600 border border-neutral-100',
     },
 ]
 
@@ -244,15 +241,23 @@ export function LandingPage() {
                             className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4"
                         >
                             <Link to="/register">
-                                <button className="group flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white text-lg font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all">
+                                <Button
+                                    size="lg"
+                                    className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
+                                    rightIcon={<ArrowRight className="w-5 h-5" />}
+                                >
                                     Start Learning Today
-                                    <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-                                </button>
+                                </Button>
                             </Link>
-                            <Link to="/courses/categories">
-                                <button className="flex items-center gap-2 px-8 py-4 bg-white hover:bg-neutral-50 text-neutral-700 text-lg font-semibold rounded-xl border border-neutral-200 shadow-sm transition-all focus:ring-2 focus:ring-blue-500/20">
-                                    Explore Courses
-                                </button>
+
+                            <Link to="/login">
+                                <Button
+                                    variant="secondary"
+                                    size="lg"
+                                    className="bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50 px-8"
+                                >
+                                    Explore Tracks
+                                </Button>
                             </Link>
                         </motion.div>
                     </motion.div>
@@ -279,9 +284,7 @@ export function LandingPage() {
                         viewport={{ once: true }}
                         className="text-center mb-10"
                     >
-                        <p className="text-sm font-semibold tracking-wider text-primary-600 uppercase mb-2">
-                            Explore Platform
-                        </p>
+
                         <h2 className="text-2xl lg:text-3xl font-display font-bold text-neutral-900">
                             The Architecture of Success
                         </h2>
@@ -300,21 +303,23 @@ export function LandingPage() {
                             <Link to="/courses/categories">
                                 <div className="group h-full">
                                     <div className="h-full bg-white rounded-2xl p-6 border border-neutral-100 group-hover:border-neutral-200 transition-all duration-300 group-hover:shadow-lg">
-                                        {/* Icon */}
-                                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-50 to-cyan-50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                                            <Code2 className="w-7 h-7 text-blue-600" />
-                                        </div>
+                                        <div className="flex items-center gap-4 mb-4">
+                                            {/* Icon */}
+                                            <div className="w-12 h-12 rounded-xl bg-neutral-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0 border border-neutral-100/50">
+                                                <Code2 className="w-6 h-6 text-neutral-500" />
+                                            </div>
 
-                                        {/* Content */}
-                                        <h3 className="text-lg font-bold text-neutral-900 mb-1 group-hover:text-blue-600 transition-colors">
-                                            Tool Tracks
-                                        </h3>
+                                            {/* Content */}
+                                            <h3 className="text-lg font-bold text-neutral-900 group-hover:text-neutral-900 transition-colors">
+                                                Tool Tracks
+                                            </h3>
+                                        </div>
                                         <p className="text-sm text-neutral-500 mb-4 line-clamp-2">
                                             Master in-demand tools & technologies
                                         </p>
 
                                         {/* Arrow indicator */}
-                                        <div className="flex items-center text-blue-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
+                                        <div className="flex items-center text-neutral-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
                                             <span>Explore</span>
                                             <ArrowRight className="w-4 h-4 ml-1" />
                                         </div>
@@ -328,21 +333,23 @@ export function LandingPage() {
                             <Link to="/fullstack">
                                 <div className="group h-full">
                                     <div className="h-full bg-white rounded-2xl p-6 border border-neutral-100 group-hover:border-neutral-200 transition-all duration-300 group-hover:shadow-lg">
-                                        {/* Icon */}
-                                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                                            <Layers className="w-7 h-7 text-emerald-600" />
-                                        </div>
+                                        <div className="flex items-center gap-4 mb-4">
+                                            {/* Icon */}
+                                            <div className="w-12 h-12 rounded-xl bg-neutral-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0 border border-neutral-100/50">
+                                                <Layers className="w-6 h-6 text-neutral-500" />
+                                            </div>
 
-                                        {/* Content */}
-                                        <h3 className="text-lg font-bold text-neutral-900 mb-1 group-hover:text-emerald-600 transition-colors">
-                                            Domain Tracks
-                                        </h3>
+                                            {/* Content */}
+                                            <h3 className="text-lg font-bold text-neutral-900 group-hover:text-neutral-900 transition-colors">
+                                                Domain Tracks
+                                            </h3>
+                                        </div>
                                         <p className="text-sm text-neutral-500 mb-4 line-clamp-2">
                                             Full stack learning paths
                                         </p>
 
                                         {/* Arrow indicator */}
-                                        <div className="flex items-center text-emerald-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
+                                        <div className="flex items-center text-neutral-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
                                             <span>Explore</span>
                                             <ArrowRight className="w-4 h-4 ml-1" />
                                         </div>
@@ -356,21 +363,23 @@ export function LandingPage() {
                             <Link to="/login?redirect=/learner/resume">
                                 <div className="group h-full">
                                     <div className="h-full bg-white rounded-2xl p-6 border border-neutral-100 group-hover:border-neutral-200 transition-all duration-300 group-hover:shadow-lg">
-                                        {/* Icon */}
-                                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                                            <FileText className="w-7 h-7 text-violet-600" />
-                                        </div>
+                                        <div className="flex items-center gap-4 mb-4">
+                                            {/* Icon */}
+                                            <div className="w-12 h-12 rounded-xl bg-neutral-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0 border border-neutral-100/50">
+                                                <FileText className="w-6 h-6 text-neutral-500" />
+                                            </div>
 
-                                        {/* Content */}
-                                        <h3 className="text-lg font-bold text-neutral-900 mb-1 group-hover:text-violet-600 transition-colors">
-                                            Resume Builder
-                                        </h3>
+                                            {/* Content */}
+                                            <h3 className="text-lg font-bold text-neutral-900 group-hover:text-neutral-900 transition-colors">
+                                                Resume Builder
+                                            </h3>
+                                        </div>
                                         <p className="text-sm text-neutral-500 mb-4 line-clamp-2">
                                             ATS-optimized professional resumes
                                         </p>
 
                                         {/* Arrow indicator */}
-                                        <div className="flex items-center text-violet-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
+                                        <div className="flex items-center text-neutral-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
                                             <span>Create</span>
                                             <ArrowRight className="w-4 h-4 ml-1" />
                                         </div>
@@ -384,21 +393,23 @@ export function LandingPage() {
                             <Link to="/login?redirect=/learner/portfolio">
                                 <div className="group h-full">
                                     <div className="h-full bg-white rounded-2xl p-6 border border-neutral-100 group-hover:border-neutral-200 transition-all duration-300 group-hover:shadow-lg">
-                                        {/* Icon */}
-                                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                                            <Briefcase className="w-7 h-7 text-orange-600" />
-                                        </div>
+                                        <div className="flex items-center gap-4 mb-4">
+                                            {/* Icon */}
+                                            <div className="w-12 h-12 rounded-xl bg-neutral-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0 border border-neutral-100/50">
+                                                <Briefcase className="w-6 h-6 text-neutral-500" />
+                                            </div>
 
-                                        {/* Content */}
-                                        <h3 className="text-lg font-bold text-neutral-900 mb-1 group-hover:text-orange-600 transition-colors">
-                                            Portfolio
-                                        </h3>
+                                            {/* Content */}
+                                            <h3 className="text-lg font-bold text-neutral-900 group-hover:text-neutral-900 transition-colors">
+                                                Portfolio
+                                            </h3>
+                                        </div>
                                         <p className="text-sm text-neutral-500 mb-4 line-clamp-2">
                                             Showcase your work beautifully
                                         </p>
 
                                         {/* Arrow indicator */}
-                                        <div className="flex items-center text-orange-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
+                                        <div className="flex items-center text-neutral-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-1">
                                             <span>Build</span>
                                             <ArrowRight className="w-4 h-4 ml-1" />
                                         </div>
@@ -542,22 +553,14 @@ export function LandingPage() {
                         whileInView="visible"
                         viewport={{ once: true, margin: '-100px' }}
                         variants={staggerContainer}
-                        className="text-center mb-8"
+                        className="text-center mb-12"
                     >
-                        <motion.div variants={fadeInUp}>
-                            <Badge variant="primary" size="lg">
-                                <BookOpen className="w-4 h-4 mr-1" />
-                                Skill Development
-                            </Badge>
-                        </motion.div>
                         <motion.h2
                             variants={fadeInUp}
-                            className="mt-4 text-3xl lg:text-4xl font-display font-bold text-neutral-900"
+                            className="text-3xl lg:text-4xl font-display font-bold text-neutral-900"
                         >
                             Tool Centric Tracks
-
                         </motion.h2>
-
                     </motion.div>
 
                     <motion.div
@@ -646,22 +649,14 @@ export function LandingPage() {
                         whileInView="visible"
                         viewport={{ once: true, margin: '-100px' }}
                         variants={staggerContainer}
-                        className="text-center mb-8"
+                        className="text-center mb-12"
                     >
-                        <motion.div variants={fadeInUp}>
-                            <Badge variant="primary" size="lg">
-                                <Target className="w-4 h-4 mr-1" />
-                                Full Stack Mastery
-                            </Badge>
-                        </motion.div>
                         <motion.h2
                             variants={fadeInUp}
-                            className="mt-4 text-3xl lg:text-4xl font-display font-bold text-neutral-900"
+                            className="text-3xl lg:text-4xl font-display font-bold text-neutral-900"
                         >
-                            Full stack learning paths
-
+                            Full Stack Learning Paths
                         </motion.h2>
-
                     </motion.div>
 
                     <motion.div
@@ -753,18 +748,12 @@ export function LandingPage() {
                             viewport={{ once: true, margin: '-100px' }}
                             variants={staggerContainer}
                         >
-                            <motion.div variants={fadeInUp}>
-                                <Badge variant="primary" size="lg" className="bg-violet-100 text-violet-600 border-violet-200">
-                                    <Layers className="w-4 h-4 mr-1" />
-                                    Portfolio Builder
-                                </Badge>
-                            </motion.div>
+
                             <motion.h2
                                 variants={fadeInUp}
                                 className="mt-4 text-3xl lg:text-4xl font-display font-bold text-neutral-900"
                             >
-                                Showcase Your Work with a
-                                <span className="bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent"> Stunning Portfolio</span>
+                                Showcase Your Work with a Stunning Portfolio
                             </motion.h2>
                             <motion.p
                                 variants={fadeInUp}
@@ -782,8 +771,8 @@ export function LandingPage() {
                                     'Multiple beautiful templates'
                                 ].map((feature, idx) => (
                                     <div key={idx} className="flex items-center gap-3">
-                                        <div className="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center">
-                                            <svg className="w-4 h-4 text-violet-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <div className="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center">
+                                            <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                             </svg>
                                         </div>
@@ -796,7 +785,7 @@ export function LandingPage() {
                                 <Link to="/login?redirect=/learner/portfolio">
                                     <Button
                                         size="lg"
-                                        className="bg-gradient-to-r from-violet-400 to-purple-400 hover:from-violet-500 hover:to-purple-500 text-white shadow-lg shadow-violet-500/20"
+                                        className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
                                         rightIcon={<ArrowRight className="w-5 h-5" />}
                                     >
                                         Build Your Portfolio
@@ -813,26 +802,26 @@ export function LandingPage() {
                             transition={{ duration: 0.6 }}
                             className="relative"
                         >
-                            <div className="bg-white rounded-2xl shadow-2xl shadow-violet-500/10 border border-violet-100 p-6 lg:p-8">
+                            <div className="bg-white rounded-2xl shadow-2xl shadow-blue-500/10 border border-blue-100 p-6 lg:p-8">
                                 <div className="flex items-center gap-3 mb-6">
-                                    <div className="w-12 h-12 rounded-xl bg-violet-100 animate-pulse" />
+                                    <div className="w-12 h-12 rounded-xl bg-blue-50 animate-pulse" />
                                     <div className="space-y-2">
                                         <div className="h-4 w-24 bg-neutral-100 rounded animate-pulse" />
                                         <div className="h-3 w-32 bg-neutral-100 rounded animate-pulse" />
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4 mb-6">
-                                    <div className="bg-violet-50 rounded-xl p-4 text-center">
-                                        <div className="h-8 w-12 bg-violet-200/50 rounded mx-auto mb-2 animate-pulse" />
-                                        <div className="h-3 w-16 bg-violet-100 rounded mx-auto animate-pulse" />
+                                    <div className="bg-blue-50 rounded-xl p-4 text-center">
+                                        <div className="h-8 w-12 bg-blue-100/50 rounded mx-auto mb-2 animate-pulse" />
+                                        <div className="h-3 w-16 bg-blue-50 rounded mx-auto animate-pulse" />
                                     </div>
-                                    <div className="bg-purple-50 rounded-xl p-4 text-center">
-                                        <div className="h-8 w-16 bg-purple-200/50 rounded mx-auto mb-2 animate-pulse" />
-                                        <div className="h-3 w-12 bg-purple-100 rounded mx-auto animate-pulse" />
+                                    <div className="bg-cyan-50 rounded-xl p-4 text-center">
+                                        <div className="h-8 w-16 bg-cyan-100/50 rounded mx-auto mb-2 animate-pulse" />
+                                        <div className="h-3 w-12 bg-cyan-50 rounded mx-auto animate-pulse" />
                                     </div>
                                 </div>
                                 <div className="space-y-4">
-                                    <div className="h-32 bg-gradient-to-br from-violet-50 to-purple-50 rounded-lg border border-violet-100/50 flex flex-col p-4">
+                                    <div className="h-32 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg border border-blue-100/50 flex flex-col p-4">
                                         <div className="h-4 w-1/3 bg-white rounded-md shadow-sm mb-3 animate-pulse" />
                                         <div className="space-y-2">
                                             <div className="h-2 w-full bg-white/60 rounded animate-pulse" />
@@ -841,15 +830,15 @@ export function LandingPage() {
                                         </div>
                                     </div>
                                     <div className="flex gap-2">
-                                        <div className="h-6 w-16 bg-violet-50 rounded-full animate-pulse" />
-                                        <div className="h-6 w-20 bg-purple-50 rounded-full animate-pulse" />
-                                        <div className="h-6 w-18 bg-fuchsia-50 rounded-full animate-pulse" />
+                                        <div className="h-6 w-16 bg-blue-50 rounded-full animate-pulse" />
+                                        <div className="h-6 w-20 bg-cyan-50 rounded-full animate-pulse" />
+                                        <div className="h-6 w-18 bg-sky-50 rounded-full animate-pulse" />
                                     </div>
                                 </div>
                             </div>
                             {/* Decorative elements */}
-                            <div className="absolute -top-4 -right-4 w-24 h-24 bg-violet-200/50 rounded-full blur-2xl" />
-                            <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-purple-200/50 rounded-full blur-2xl" />
+                            <div className="absolute -top-4 -right-4 w-24 h-24 bg-blue-200/50 rounded-full blur-2xl" />
+                            <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-cyan-200/50 rounded-full blur-2xl" />
                         </motion.div>
                     </div>
                 </div>
@@ -907,18 +896,12 @@ export function LandingPage() {
                             variants={staggerContainer}
                             className="order-1 lg:order-2"
                         >
-                            <motion.div variants={fadeInUp}>
-                                <Badge variant="primary" size="lg" className="bg-blue-100 text-blue-600 border-blue-200">
-                                    <FileText className="w-4 h-4 mr-1" />
-                                    Resume Builder
-                                </Badge>
-                            </motion.div>
+
                             <motion.h2
                                 variants={fadeInUp}
                                 className="mt-4 text-3xl lg:text-4xl font-display font-bold text-neutral-900"
                             >
-                                Create an ATS-Friendly
-                                <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent"> Resume</span>
+                                Create an ATS-Friendly Resume
                             </motion.h2>
                             <motion.p
                                 variants={fadeInUp}
@@ -936,8 +919,8 @@ export function LandingPage() {
                                     'Keyword optimization tips'
                                 ].map((feature, idx) => (
                                     <div key={idx} className="flex items-center gap-3">
-                                        <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center">
-                                            <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <div className="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center">
+                                            <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                             </svg>
                                         </div>
@@ -950,7 +933,7 @@ export function LandingPage() {
                                 <Link to="/login?redirect=/learner/resume">
                                     <Button
                                         size="lg"
-                                        className="bg-gradient-to-r from-blue-400 to-cyan-400 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg shadow-blue-500/20"
+                                        className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-lg shadow-blue-500/20"
                                         rightIcon={<ArrowRight className="w-5 h-5" />}
                                     >
                                         Create Your Resume
@@ -1041,22 +1024,18 @@ export function LandingPage() {
                         viewport={{ once: true }}
                         variants={staggerContainer}
                     >
-                        <motion.div variants={fadeInUp}>
-                            <Badge variant="primary" size="lg">
-                                <Zap className="w-4 h-4 mr-1" />
-                                Start Today
-                            </Badge>
-                        </motion.div>
+
 
                         <motion.h2
                             variants={fadeInUp}
                             className="mt-6 text-3xl lg:text-5xl font-display font-bold text-neutral-900"
                         >
                             Your Legacy Starts Today.
-                            <span className="block mt-2 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 bg-clip-text text-transparent">
-                                Are You Ready?
-                            </span>
+                            <br />
+                            Are You Ready?
+
                         </motion.h2>
+
 
                         <motion.p
                             variants={fadeInUp}
@@ -1071,8 +1050,8 @@ export function LandingPage() {
                             className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
                         >
                             <Button
-                                size="xl"
-                                className="shadow-glow-lg"
+                                size="lg"
+                                className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white shadow-glow-lg px-12"
                                 rightIcon={<ArrowRight className="w-5 h-5" />}
                             >
                                 Create Free Account
