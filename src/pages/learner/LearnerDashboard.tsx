@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Routes, Route, Navigate, Link, useParams } from 'react-router-dom'
 import { DashboardLayout } from '@/components/layout'
 import { DashboardStats } from './components'
@@ -10,6 +10,7 @@ import {
     ChevronLeft, ChevronRight, CheckCircle, Pause, Volume2,
     Settings, Maximize, X, Send, ArrowRight, Briefcase
 } from 'lucide-react'
+import { learnerService } from '@/services/learnerService'
 
 // Course data for learner
 const learnerCourses = [
@@ -40,13 +41,80 @@ const learnerCourses = [
     { id: 'system-design', title: 'System Design Interview', instructor: 'Alex Kumar', duration: '10 hours', rating: 4.7, students: 2100, progress: 20, lessons: [], resources: [] },
 ]
 
-// Placeholder for Applications
-const Applications = () => (
-    <div className="text-center py-12">
-        <h2 className="text-xl font-bold text-neutral-900">My Applications</h2>
-        <p className="text-neutral-500 mt-2">Coming Soon</p>
-    </div>
-)
+// Applications Component
+const Applications = () => {
+    const [applications, setApplications] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchApplications = async () => {
+            try {
+                const response = await learnerService.getApplications()
+                if (response.data.success) {
+                    setApplications(response.data.data)
+                }
+            } catch (error) {
+                console.error('Failed to fetch applications', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchApplications()
+    }, [])
+
+    if (loading) return <div className="p-8 text-center">Loading applications...</div>
+
+    return (
+        <div className="space-y-6">
+            <div>
+                <h2 className="text-2xl font-bold text-neutral-900">My Applications</h2>
+                <p className="text-neutral-500 mt-1">Track the status of your job applications.</p>
+            </div>
+
+            <div className="space-y-4">
+                {applications.length === 0 ? (
+                    <div className="text-center py-12 bg-neutral-50 rounded-lg">
+                        <p className="text-neutral-500">No applications yet. Start exploring jobs!</p>
+                        <Button className="mt-4" onClick={() => window.location.href = '/dashboard/jobs'}>Browse Jobs</Button>
+                    </div>
+                ) : (
+                    applications.map((app) => (
+                        <Card key={app._id} className="hover:shadow-md transition-shadow">
+                            <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+                                <div className="flex items-start gap-4">
+                                    <div className="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center">
+                                        <Briefcase className="w-6 h-6 text-neutral-600" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-neutral-900">{app.jobId?.title || 'Unknown Job'}</h3>
+                                        <p className="text-sm text-neutral-500">{app.jobId?.company?.name || 'Unknown Company'} • {app.jobId?.location}</p>
+                                        <div className="flex items-center gap-2 mt-2 text-xs text-neutral-400">
+                                            <span>Applied: {new Date(app.appliedAt).toLocaleDateString()}</span>
+                                            <span>•</span>
+                                            <span>Type: {app.jobId?.type}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <Badge
+                                        className={
+                                            app.status === 'offered' ? 'bg-success-100 text-success-700' :
+                                                app.status === 'rejected' ? 'bg-error-100 text-error-700' :
+                                                    app.status === 'interview' ? 'bg-warning-100 text-warning-700' :
+                                                        'bg-blue-100 text-blue-700'
+                                        }
+                                    >
+                                        {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
+                                    </Badge>
+                                </div>
+                            </div>
+                        </Card>
+                    ))
+                )}
+            </div>
+        </div>
+    )
+}
 
 // Premium Course Player Component
 function CoursePlayer() {
@@ -389,6 +457,9 @@ function CoursePlayer() {
 
 // Courses/Training Modules Component with clickable cards
 function Courses() {
+    const [courses, setCourses] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
+
     const colorSchemes = [
         { bg: 'from-orange-500 to-rose-500', light: 'bg-orange-100', border: 'border-l-orange-500' },
         { bg: 'from-sky-500 to-blue-600', light: 'bg-sky-100', border: 'border-l-sky-500' },
@@ -396,6 +467,24 @@ function Courses() {
         { bg: 'from-purple-500 to-violet-600', light: 'bg-purple-100', border: 'border-l-purple-500' },
     ]
     const icons = ['⚛️', '🚀', '📘', '🔧']
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const response = await learnerService.getMyCourses()
+                if (response.data.success) {
+                    setCourses(response.data.data)
+                }
+            } catch (error) {
+                console.error('Failed to fetch courses', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchCourses()
+    }, [])
+
+    if (loading) return <div className="p-8 text-center">Loading courses...</div>
 
     return (
         <div className="space-y-8">
@@ -405,81 +494,88 @@ function Courses() {
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                {learnerCourses.map((course, index) => {
-                    const colors = colorSchemes[index % colorSchemes.length]
-                    const icon = icons[index % icons.length]
+                {courses.length === 0 ? (
+                    <div className="col-span-4 text-center p-12 bg-neutral-50 rounded-lg">
+                        <p className="text-neutral-500">You haven't enrolled in any courses yet.</p>
+                        <Button className="mt-4" onClick={() => window.location.href = '/courses'}>Explore Courses</Button>
+                    </div>
+                ) : (
+                    courses.map((course, index) => {
+                        const colors = colorSchemes[index % colorSchemes.length]
+                        const icon = icons[index % icons.length]
 
-                    return (
-                        <div key={course.id} className={`group bg-white rounded-2xl border border-neutral-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border-l-4 ${colors.border}`}>
-                            {/* Header with Icon and Title */}
-                            <div className="p-5 pb-4">
-                                <div className="flex items-start gap-4 mb-3">
-                                    {/* Icon Badge */}
-                                    <div className={`w-12 h-12 rounded-xl ${colors.light} flex items-center justify-center text-2xl flex-shrink-0`}>
-                                        {icon}
-                                    </div>
-
-                                    {/* Title */}
-                                    <div className="flex-1 min-w-0">
-                                        <h3 className="font-bold text-neutral-900 text-base leading-tight mb-1 group-hover:text-primary-600 transition-colors">
-                                            {course.title}
-                                        </h3>
-                                    </div>
-                                </div>
-
-                                {/* Description */}
-                                <p className="text-sm text-neutral-500 mb-3 line-clamp-2">
-                                    {course.instructor} • {course.duration}
-                                </p>
-
-                                {/* Stats */}
-                                <div className="flex items-center gap-4 text-xs text-neutral-400 mb-3">
-                                    <span className="flex items-center gap-1">
-                                        <span>⭐</span> {course.rating}
-                                    </span>
-                                    <span className="flex items-center gap-1">
-                                        <span>👥</span> {course.students.toLocaleString()}
-                                    </span>
-                                </div>
-
-                                {/* Progress Bar (if in progress) */}
-                                {course.progress > 0 && course.progress < 100 && (
-                                    <div className="mb-3">
-                                        <div className="flex justify-between text-xs text-neutral-400 mb-1">
-                                            <span>Progress</span>
-                                            <span>{course.progress}%</span>
+                        return (
+                            <div key={course._id} className={`group bg-white rounded-2xl border border-neutral-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border-l-4 ${colors.border}`}>
+                                {/* Header with Icon and Title */}
+                                <div className="p-5 pb-4">
+                                    <div className="flex items-start gap-4 mb-3">
+                                        {/* Icon Badge */}
+                                        <div className={`w-12 h-12 rounded-xl ${colors.light} flex items-center justify-center text-2xl flex-shrink-0`}>
+                                            {icon}
                                         </div>
-                                        <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
-                                            <div
-                                                className={`h-full bg-gradient-to-r ${colors.bg} rounded-full transition-all`}
-                                                style={{ width: `${course.progress}%` }}
-                                            />
+
+                                        {/* Title */}
+                                        <div className="flex-1 min-w-0">
+                                            <h3 className="font-bold text-neutral-900 text-base leading-tight mb-1 group-hover:text-primary-600 transition-colors">
+                                                {course.title}
+                                            </h3>
                                         </div>
                                     </div>
-                                )}
 
-                                {/* Status Badge */}
-                                <span className={`inline-block px-2.5 py-1 rounded-md text-xs font-medium ${course.progress === 100 ? 'bg-emerald-100 text-emerald-700' :
-                                    course.progress > 0 ? 'bg-amber-100 text-amber-700' :
-                                        'bg-blue-100 text-blue-700'
-                                    }`}>
-                                    {course.progress === 100 ? 'Completed' : course.progress > 0 ? 'In Progress' : 'Not Started'}
-                                </span>
-                            </div>
+                                    {/* Description */}
+                                    <p className="text-sm text-neutral-500 mb-3 line-clamp-2">
+                                        {course.subtitle || 'Learn essential skills'}
+                                    </p>
 
-                            {/* Action Button */}
-                            <div className="px-5 pb-5">
-                                <Link
-                                    to={`/dashboard/courses/${course.id}/lesson/1`}
-                                    className={`w-full py-2.5 bg-gradient-to-r ${colors.bg} text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity text-center flex items-center justify-center gap-2`}
-                                >
-                                    {course.progress === 100 ? 'Review Course' : course.progress > 0 ? 'Continue' : 'Start Learning'}
-                                    <span>→</span>
-                                </Link>
+                                    {/* Stats */}
+                                    <div className="flex items-center gap-4 text-xs text-neutral-400 mb-3">
+                                        <span className="flex items-center gap-1">
+                                            <span>⭐</span> {course.rating || 5.0}
+                                        </span>
+                                        <span className="flex items-center gap-1">
+                                            <span>⏱️</span> {course.duration || '10h'}
+                                        </span>
+                                    </div>
+
+                                    {/* Progress Bar (if in progress) */}
+                                    {course.progress > 0 && course.progress < 100 && (
+                                        <div className="mb-3">
+                                            <div className="flex justify-between text-xs text-neutral-400 mb-1">
+                                                <span>Progress</span>
+                                                <span>{course.progress}%</span>
+                                            </div>
+                                            <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                                                <div
+                                                    className={`h-full bg-gradient-to-r ${colors.bg} rounded-full transition-all`}
+                                                    style={{ width: `${course.progress}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Status Badge */}
+                                    <span className={`inline-block px-2.5 py-1 rounded-md text-xs font-medium ${course.progress === 100 ? 'bg-emerald-100 text-emerald-700' :
+                                        course.progress > 0 ? 'bg-amber-100 text-amber-700' :
+                                            'bg-blue-100 text-blue-700'
+                                        }`}>
+                                        {course.progress === 100 ? 'Completed' : course.progress > 0 ? 'In Progress' : 'Not Started'}
+                                    </span>
+                                </div>
+
+                                {/* Action Button */}
+                                <div className="px-5 pb-5">
+                                    <Link
+                                        to={`/dashboard/courses/${course._id}/lesson/1`}
+                                        className={`w-full py-2.5 bg-gradient-to-r ${colors.bg} text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity text-center flex items-center justify-center gap-2`}
+                                    >
+                                        {course.progress === 100 ? 'Review Course' : course.progress > 0 ? 'Continue' : 'Start Learning'}
+                                        <span>→</span>
+                                    </Link>
+                                </div>
                             </div>
-                        </div>
-                    )
-                })}
+                        )
+                    })
+                )}
             </div>
         </div>
     )
@@ -487,6 +583,28 @@ function Courses() {
 
 function DashboardHome() {
     const { user } = useAuth()
+    const [stats, setStats] = useState<any>(null)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const response = await learnerService.getDashboardStats()
+                if (response.data.success) {
+                    setStats(response.data.data)
+                }
+            } catch (error) {
+                console.error('Failed to fetch dashboard stats', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchStats()
+    }, [])
+
+    if (loading) return <div className="p-8 text-center">Loading dashboard...</div>
+
+    const profileCompleteness = stats?.profileCompleteness || 0
 
     return (
         <div className="space-y-8">
@@ -504,7 +622,7 @@ function DashboardHome() {
             </div>
 
             {/* Stats */}
-            <DashboardStats />
+            <DashboardStats stats={stats} />
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Recommended Jobs */}
@@ -548,10 +666,10 @@ function DashboardHome() {
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
                                 <span className="font-medium">Intermediate</span>
-                                <span className="font-bold">65%</span>
+                                <span className="font-bold">{profileCompleteness}%</span>
                             </div>
                             <div className="h-2 bg-white/20 rounded-full overflow-hidden">
-                                <div className="h-full bg-white w-[65%]" />
+                                <div className="h-full bg-white transition-all duration-500" style={{ width: `${profileCompleteness}%` }} />
                             </div>
                             <p className="text-sm text-white/80">
                                 Complete your profile to get 3x more job invites.
@@ -560,6 +678,7 @@ function DashboardHome() {
                                 variant="secondary"
                                 size="sm"
                                 className="w-full bg-white text-primary-600 hover:bg-neutral-50"
+                                onClick={() => window.location.href = '/dashboard/resume'}
                             >
                                 Complete Profile
                             </Button>

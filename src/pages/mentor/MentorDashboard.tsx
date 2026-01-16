@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { DashboardLayout } from '@/components/layout'
@@ -7,25 +7,50 @@ import { useAuth } from '@/context'
 import {
     BookOpen, Users, DollarSign, Star, TrendingUp, Plus, Edit2, Trash2,
     Play, GraduationCap, Eye, Video, ChevronRight,
-    Upload, FileText, Layers, CheckCircle, Settings, Search
+    Upload, FileText, Layers, CheckCircle, Search
 } from 'lucide-react'
 import { cn } from '@/utils'
 
-// Mock data
-const stats = [
-    { label: 'Total Students', value: '1,234', change: '+89', icon: Users, color: 'text-primary-600' },
-    { label: 'Total Earnings', value: '$12,450', change: '+$2,100', icon: DollarSign, color: 'text-success-600' },
-    { label: 'Course Rating', value: '4.8', change: '+0.2', icon: Star, color: 'text-warning-600' },
-    { label: 'Course Views', value: '8.5K', change: '+15%', icon: Eye, color: 'text-secondary-600' },
-]
-
-const courses = [
-    { id: 1, title: 'React Masterclass 2024', students: 456, rating: 4.9, earnings: 5600, status: 'published', thumbnail: '' },
-    { id: 2, title: 'Node.js Backend Development', students: 328, rating: 4.7, earnings: 3800, status: 'published', thumbnail: '' },
-    { id: 3, title: 'TypeScript Deep Dive', students: 0, rating: 0, earnings: 0, status: 'draft', thumbnail: '' },
-]
+import { courseService } from '@/services/courseService'
+import { toast } from 'react-hot-toast'
 
 function MentorHome() {
+    const [courses, setCourses] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const response = await courseService.getMyCourses()
+                if (response.data.success) {
+                    setCourses(response.data.data)
+                }
+            } catch (error) {
+                console.error('Failed to fetch courses', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchCourses()
+    }, [])
+
+    // Calculate stats
+    const totalStudents = courses.reduce((acc, course) => acc + (course.studentsCount || 0), 0)
+    // const totalEarnings = courses.reduce((acc, course) => acc + (course.earnings || 0), 0) // Backend field needed
+    const publishedCourses = courses.filter(c => c.status === 'published').length
+    const totalViews = courses.reduce((acc, course) => acc + (course.views || 0), 0)
+
+    const stats = [
+        { label: 'Total Students', value: totalStudents.toString(), change: 'Total', icon: Users, color: 'text-primary-600' },
+        { label: 'Courses Created', value: courses.length.toString(), change: `${publishedCourses} Published`, icon: BookOpen, color: 'text-success-600' },
+        { label: 'Average Rating', value: '4.8', change: 'All time', icon: Star, color: 'text-warning-600' }, // Needs backend support
+        { label: 'Course Views', value: totalViews.toString(), change: 'All time', icon: Eye, color: 'text-secondary-600' },
+    ]
+
+    const recentCourses = courses.slice(0, 3)
+
+    if (loading) return <div className="p-8 text-center">Loading dashboard...</div>
+
     return (
         <div className="space-y-8">
             {/* Header */}
@@ -51,7 +76,7 @@ function MentorHome() {
                                 <div>
                                     <p className="text-sm text-neutral-500">{stat.label}</p>
                                     <p className="text-3xl font-bold mt-1">{stat.value}</p>
-                                    <p className="text-sm text-success-600 mt-1">{stat.change} this month</p>
+                                    <p className="text-sm text-success-600 mt-1">{stat.change}</p>
                                 </div>
                                 <div className={cn("p-3 rounded-xl bg-neutral-100", stat.color)}>
                                     <stat.icon className="w-6 h-6" />
@@ -65,60 +90,51 @@ function MentorHome() {
             {/* Courses */}
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-bold text-neutral-900">My Courses</h2>
+                    <h2 className="text-lg font-bold text-neutral-900">Recent Courses</h2>
                     <Button variant="outline" size="sm" rightIcon={<ChevronRight className="w-4 h-4" />}>
                         View All
                     </Button>
                 </div>
 
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {courses.map((course) => (
-                        <Card key={course.id} className="overflow-hidden hover:shadow-lg transition-all group">
-                            <div className="aspect-video bg-gradient-to-br from-primary-100 to-secondary-100 relative">
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <BookOpen className="w-12 h-12 text-primary-300" />
+                    {recentCourses.length === 0 ? (
+                        <div className="col-span-3 text-center p-8 text-neutral-500 bg-neutral-50 rounded-lg">No courses created yet.</div>
+                    ) : (
+                        recentCourses.map((course) => (
+                            <Card key={course._id} className="overflow-hidden hover:shadow-lg transition-all group">
+                                <div className="aspect-video bg-gradient-to-br from-primary-100 to-secondary-100 relative">
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <BookOpen className="w-12 h-12 text-primary-300" />
+                                    </div>
+                                    <Badge
+                                        className={cn(
+                                            "absolute top-3 right-3",
+                                            course.status === 'published' ? 'bg-success-500' : 'bg-neutral-500'
+                                        )}
+                                    >
+                                        {course.status}
+                                    </Badge>
                                 </div>
-                                <Badge
-                                    className={cn(
-                                        "absolute top-3 right-3",
-                                        course.status === 'published' ? 'bg-success-500' : 'bg-neutral-500'
-                                    )}
-                                >
-                                    {course.status}
-                                </Badge>
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                                    <button className="p-2 bg-white rounded-full hover:bg-neutral-100">
-                                        <Edit2 className="w-4 h-4" />
-                                    </button>
-                                    <button className="p-2 bg-white rounded-full hover:bg-neutral-100">
-                                        <Eye className="w-4 h-4" />
-                                    </button>
-                                    <button className="p-2 bg-white rounded-full hover:bg-neutral-100">
-                                        <Settings className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="p-4 space-y-3">
-                                <h3 className="font-bold text-neutral-900">{course.title}</h3>
-                                <div className="flex items-center gap-4 text-sm text-neutral-500">
-                                    <span className="flex items-center gap-1">
-                                        <Users className="w-4 h-4" /> {course.students}
-                                    </span>
-                                    {course.rating > 0 && (
+                                <div className="p-4 space-y-3">
+                                    <h3 className="font-bold text-neutral-900">{course.title}</h3>
+                                    <div className="flex items-center gap-4 text-sm text-neutral-500">
                                         <span className="flex items-center gap-1">
-                                            <Star className="w-4 h-4 text-warning-500" /> {course.rating}
+                                            <Users className="w-4 h-4" /> {course.studentsCount || 0}
                                         </span>
-                                    )}
-                                    <span className="flex items-center gap-1">
-                                        <DollarSign className="w-4 h-4" /> ${course.earnings.toLocaleString()}
-                                    </span>
+                                        <span className="flex items-center gap-1">
+                                            <Star className="w-4 h-4 text-warning-500" /> {course.rating || 0}
+                                        </span>
+                                        <span className="flex items-center gap-1">
+                                            <DollarSign className="w-4 h-4" /> ${course.price}
+                                        </span>
+                                    </div>
+                                    <Button className="w-full" variant="outline">
+                                        Manage Course
+                                    </Button>
                                 </div>
-                                <Button className="w-full" variant="outline">
-                                    {course.status === 'draft' ? 'Continue Editing' : 'Manage Course'}
-                                </Button>
-                            </div>
-                        </Card>
-                    ))}
+                            </Card>
+                        ))
+                    )}
                 </div>
             </div>
         </div>
@@ -127,6 +143,7 @@ function MentorHome() {
 
 function CreateCourse() {
     const [currentStep, setCurrentStep] = useState(1)
+    const [loading, setLoading] = useState(false)
     const [courseType, setCourseType] = useState<'single' | 'fullstack' | null>(null)
     const [courseData, setCourseData] = useState({
         title: '',
@@ -138,6 +155,81 @@ function CreateCourse() {
         domain: '',
         topic: '',
     })
+
+    const [curriculum, setCurriculum] = useState<{ title: string; lectures: { title: string; type: string; duration: number }[] }[]>([
+        { title: 'Introduction', lectures: [] }
+    ])
+
+    const handleAddSection = () => {
+        setCurriculum([...curriculum, { title: 'New Section', lectures: [] }])
+    }
+
+    const handleAddLecture = (sectionIndex: number) => {
+        const newCurriculum = [...curriculum]
+        newCurriculum[sectionIndex].lectures.push({ title: 'New Lecture', type: 'video', duration: 10 })
+        setCurriculum(newCurriculum)
+    }
+
+    const handleUpdateSection = (index: number, title: string) => {
+        const newCurriculum = [...curriculum]
+        newCurriculum[index].title = title
+        setCurriculum(newCurriculum)
+    }
+
+    const handleUpdateLecture = (sectionIndex: number, lectureIndex: number, field: string, value: any) => {
+        const newCurriculum = [...curriculum]
+        // @ts-ignore
+        newCurriculum[sectionIndex].lectures[lectureIndex][field] = value
+        setCurriculum(newCurriculum)
+    }
+
+    const handleRemoveSection = (index: number) => {
+        const newCurriculum = [...curriculum]
+        newCurriculum.splice(index, 1)
+        setCurriculum(newCurriculum)
+    }
+
+    const handleRemoveLecture = (sectionIndex: number, lectureIndex: number) => {
+        const newCurriculum = [...curriculum]
+        newCurriculum[sectionIndex].lectures.splice(lectureIndex, 1)
+        setCurriculum(newCurriculum)
+    }
+
+    const handlePublish = async () => {
+        setLoading(true)
+        try {
+            const finalData = {
+                ...courseData,
+                type: courseType,
+                price: parseFloat(courseData.price) || 0,
+                requirements: courseData.requirements.filter(Boolean),
+                chapters: curriculum.map(section => ({
+                    title: section.title,
+                    lectures: section.lectures.map(lecture => ({
+                        title: lecture.title,
+                        type: lecture.type,
+                        duration: lecture.duration,
+                        isPreview: false
+                    }))
+                })),
+                thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085', // Placeholder
+                status: 'published'
+            }
+
+            const response = await courseService.createCourse(finalData)
+            if (response.data.success) {
+                toast.success('Course created successfully!')
+                // Reset or redirect?
+                // For now, reload window or reset state significantly
+                window.location.reload()
+            }
+        } catch (error: any) {
+            console.error('Create course error:', error)
+            toast.error(error.response?.data?.message || 'Failed to create course')
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const fullStackDomains = [
         { slug: 'mern-stack', title: 'MERN Stack', topics: ['HTML & CSS', 'JavaScript', 'Git & GitHub', 'React.js', 'Node.js & Express', 'MongoDB'] },
@@ -415,38 +507,61 @@ function CreateCourse() {
                         <div className="space-y-6">
                             <div className="flex items-center justify-between">
                                 <h3 className="text-lg font-bold">Course Curriculum</h3>
-                                <Button variant="outline" size="sm" leftIcon={<Plus className="w-4 h-4" />}>
+                                <Button variant="outline" size="sm" leftIcon={<Plus className="w-4 h-4" />} onClick={handleAddSection}>
                                     Add Section
                                 </Button>
                             </div>
 
                             <div className="space-y-4">
-                                <Card className="p-4 border-2 border-dashed">
-                                    <div className="flex items-center justify-between mb-4">
-                                        <input
-                                            type="text"
-                                            placeholder="Section Title (e.g. Getting Started)"
-                                            className="text-lg font-semibold bg-transparent outline-none flex-1"
-                                        />
-                                        <Button variant="ghost" size="sm" leftIcon={<Plus className="w-4 h-4" />}>
-                                            Add Lecture
-                                        </Button>
-                                    </div>
-                                    <div className="space-y-2 ml-4">
-                                        <div className="flex items-center gap-3 p-3 bg-neutral-50 rounded-lg">
-                                            <Video className="w-4 h-4 text-neutral-400" />
+                                {curriculum.map((section, sIndex) => (
+                                    <Card key={sIndex} className="p-4 border-2 border-dashed">
+                                        <div className="flex items-center justify-between mb-4">
                                             <input
                                                 type="text"
-                                                placeholder="Lecture Title"
-                                                className="flex-1 bg-transparent outline-none text-sm"
+                                                placeholder="Section Title"
+                                                className="text-lg font-semibold bg-transparent outline-none flex-1"
+                                                value={section.title}
+                                                onChange={(e) => handleUpdateSection(sIndex, e.target.value)}
                                             />
-                                            <span className="text-xs text-neutral-400">10:30</span>
-                                            <button className="text-neutral-400 hover:text-error-500">
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
+                                            <div className="flex items-center gap-2">
+                                                <Button variant="ghost" size="sm" leftIcon={<Plus className="w-4 h-4" />} onClick={() => handleAddLecture(sIndex)}>
+                                                    Add Lecture
+                                                </Button>
+                                                <button onClick={() => handleRemoveSection(sIndex)} className="text-neutral-400 hover:text-error-500">
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Card>
+                                        <div className="space-y-2 ml-4">
+                                            {section.lectures.map((lecture, lIndex) => (
+                                                <div key={lIndex} className="flex items-center gap-3 p-3 bg-neutral-50 rounded-lg">
+                                                    <Video className="w-4 h-4 text-neutral-400" />
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Lecture Title"
+                                                        className="flex-1 bg-transparent outline-none text-sm"
+                                                        value={lecture.title}
+                                                        onChange={(e) => handleUpdateLecture(sIndex, lIndex, 'title', e.target.value)}
+                                                    />
+                                                    <input
+                                                        type="number"
+                                                        placeholder="Mins"
+                                                        className="w-16 bg-transparent outline-none text-sm text-right"
+                                                        value={lecture.duration}
+                                                        onChange={(e) => handleUpdateLecture(sIndex, lIndex, 'duration', parseInt(e.target.value))}
+                                                    />
+                                                    <span className="text-xs text-neutral-400">min</span>
+                                                    <button onClick={() => handleRemoveLecture(sIndex, lIndex)} className="text-neutral-400 hover:text-error-500">
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            {section.lectures.length === 0 && (
+                                                <p className="text-sm text-neutral-400 italic">No lectures in this section yet.</p>
+                                            )}
+                                        </div>
+                                    </Card>
+                                ))}
                             </div>
                         </div>
                     )
@@ -491,7 +606,13 @@ function CreateCourse() {
                             </p>
                             <div className="flex items-center justify-center gap-3 pt-4">
                                 <Button variant="outline">Save as Draft</Button>
-                                <Button leftIcon={<CheckCircle className="w-4 h-4" />}>Publish Course</Button>
+                                <Button
+                                    leftIcon={<CheckCircle className="w-4 h-4" />}
+                                    onClick={handlePublish}
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Publishing...' : 'Publish Course'}
+                                </Button>
                             </div>
                         </div>
                     )
@@ -571,12 +692,26 @@ function Earnings() {
 }
 
 function MyCourses() {
-    const myCourses = [
-        { id: 1, title: 'React Masterclass 2024', students: 456, rating: 4.9, earnings: 5600, status: 'published', lectures: 42 },
-        { id: 2, title: 'Node.js Backend Development', students: 328, rating: 4.7, earnings: 3800, status: 'published', lectures: 28 },
-        { id: 3, title: 'TypeScript Deep Dive', students: 0, rating: 0, earnings: 0, status: 'draft', lectures: 15 },
-        { id: 4, title: 'React Native Mobile Apps', students: 189, rating: 4.6, earnings: 2100, status: 'published', lectures: 35 },
-    ]
+    const [courses, setCourses] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const response = await courseService.getMyCourses()
+                if (response.data.success) {
+                    setCourses(response.data.data)
+                }
+            } catch (error) {
+                console.error('Failed to fetch courses', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchCourses()
+    }, [])
+
+    if (loading) return <div className="p-8 text-center">Loading courses...</div>
 
     return (
         <div className="space-y-8">
@@ -589,59 +724,102 @@ function MyCourses() {
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {myCourses.map((course) => (
-                    <Card key={course.id} className="overflow-hidden hover:shadow-lg transition-all group">
-                        <div className="aspect-video bg-gradient-to-br from-primary-100 to-secondary-100 relative">
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <BookOpen className="w-12 h-12 text-primary-300" />
+                {courses.length === 0 ? (
+                    <div className="col-span-3 text-center p-8 text-neutral-500 bg-neutral-50 rounded-lg">No courses created yet.</div>
+                ) : (
+                    courses.map((course) => (
+                        <Card key={course._id} className="overflow-hidden hover:shadow-lg transition-all group">
+                            <div className="aspect-video bg-gradient-to-br from-primary-100 to-secondary-100 relative">
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <BookOpen className="w-12 h-12 text-primary-300" />
+                                </div>
+                                <Badge
+                                    className={cn(
+                                        "absolute top-3 right-3",
+                                        course.status === 'published' ? 'bg-success-500' : 'bg-neutral-500'
+                                    )}
+                                >
+                                    {course.status}
+                                </Badge>
                             </div>
-                            <Badge
-                                className={cn(
-                                    "absolute top-3 right-3",
-                                    course.status === 'published' ? 'bg-success-500' : 'bg-neutral-500'
-                                )}
-                            >
-                                {course.status}
-                            </Badge>
-                        </div>
-                        <div className="p-4 space-y-3">
-                            <h3 className="font-bold text-neutral-900">{course.title}</h3>
-                            <div className="flex items-center gap-4 text-sm text-neutral-500">
-                                <span className="flex items-center gap-1">
-                                    <Users className="w-4 h-4" /> {course.students}
-                                </span>
-                                {course.rating > 0 && (
+                            <div className="p-4 space-y-3">
+                                <h3 className="font-bold text-neutral-900">{course.title}</h3>
+                                <div className="flex items-center gap-4 text-sm text-neutral-500">
                                     <span className="flex items-center gap-1">
-                                        <Star className="w-4 h-4 text-warning-500" /> {course.rating}
+                                        <Users className="w-4 h-4" /> {course.studentsCount || 0}
                                     </span>
-                                )}
-                                <span className="flex items-center gap-1">
-                                    <Play className="w-4 h-4" /> {course.lectures}
-                                </span>
+                                    <span className="flex items-center gap-1">
+                                        <Star className="w-4 h-4 text-warning-500" /> {course.rating || 0}
+                                    </span>
+                                    <span className="flex items-center gap-1">
+                                        <Play className="w-4 h-4" /> 0
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between mt-2 pt-2 border-t">
+                                    <span className="font-bold text-success-600">${course.price}</span>
+                                    <Button size="sm" variant="outline">
+                                        Manage
+                                    </Button>
+                                </div>
                             </div>
-                            <div className="flex items-center justify-between mt-2 pt-2 border-t">
-                                <span className="font-bold text-success-600">${course.earnings.toLocaleString()}</span>
-                                <Button size="sm" variant="outline">
-                                    {course.status === 'draft' ? 'Edit' : 'Manage'}
-                                </Button>
-                            </div>
-                        </div>
-                    </Card>
-                ))}
+                        </Card>
+                    ))
+                )}
             </div>
         </div>
     )
 }
 
 function Students() {
+    const [students, setStudents] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
     const [searchQuery, setSearchQuery] = useState('')
-    const students = [
-        { id: 1, name: 'Sarah Wilson', email: 'sarah@example.com', courses: 2, enrolled: 'Dec 15, 2024', progress: 75, avatar: '' },
-        { id: 2, name: 'Mike Chen', email: 'mike@example.com', courses: 1, enrolled: 'Dec 10, 2024', progress: 45, avatar: '' },
-        { id: 3, name: 'Emily Brown', email: 'emily@example.com', courses: 3, enrolled: 'Nov 28, 2024', progress: 100, avatar: '' },
-        { id: 4, name: 'Alex Kumar', email: 'alex@example.com', courses: 1, enrolled: 'Dec 20, 2024', progress: 10, avatar: '' },
-    ]
 
+    useEffect(() => {
+        const fetchStudents = async () => {
+            try {
+                const coursesRes = await courseService.getMyCourses()
+                if (coursesRes.data.success) {
+                    const courses = coursesRes.data.data
+                    // For demo purposes, we might not have a getCourseStudents for all courses efficiently
+                    // But let's try to fetch for each course
+                    const allStudents: any[] = []
+
+                    // Mock data for now if API is not fully ready for aggregation, or real fetch
+                    // Using real fetch loop:
+                    for (const course of courses) {
+                        try {
+                            const studentsRes = await courseService.getCourseStudents(course._id)
+                            if (studentsRes.data.success) {
+                                studentsRes.data.data.forEach((s: any) => {
+                                    allStudents.push({
+                                        ...s,
+                                        coursesCount: 1, // simplified
+                                        averageProgress: s.progress || 0
+                                    })
+                                })
+                            }
+                        } catch (e) {
+                            console.error(`Failed to fetch students for course ${course._id}`)
+                        }
+                    }
+                    setStudents(allStudents)
+                }
+            } catch (error) {
+                console.error('Failed to fetch students', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchStudents()
+    }, [])
+
+    const filteredStudents = students.filter(student =>
+        student.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        student.email?.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+
+    if (loading) return <div className="p-8 text-center">Loading students...</div>
     return (
         <div className="space-y-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -663,10 +841,10 @@ function Students() {
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
-                    { label: 'Total Students', value: '1,234', icon: Users, color: 'text-primary-600' },
-                    { label: 'Active Learners', value: '892', icon: TrendingUp, color: 'text-success-600' },
-                    { label: 'Completions', value: '456', icon: CheckCircle, color: 'text-warning-600' },
-                    { label: 'Avg Progress', value: '68%', icon: GraduationCap, color: 'text-secondary-600' },
+                    { label: 'Total Students', value: students.length.toString(), icon: Users, color: 'text-primary-600' },
+                    { label: 'Active Learners', value: students.filter(s => s.averageProgress > 0 && s.averageProgress < 100).length.toString(), icon: TrendingUp, color: 'text-success-600' },
+                    { label: 'Completions', value: students.filter(s => s.averageProgress === 100).length.toString(), icon: CheckCircle, color: 'text-warning-600' },
+                    { label: 'Avg Progress', value: `${Math.round(students.reduce((acc, s) => acc + (s.averageProgress || 0), 0) / (students.length || 1))}%`, icon: GraduationCap, color: 'text-secondary-600' },
                 ].map((stat) => (
                     <Card key={stat.label}>
                         <div className="flex items-start justify-between">
@@ -695,45 +873,53 @@ function Students() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-neutral-100">
-                            {students.map((student) => (
-                                <tr key={student.id} className="hover:bg-neutral-50">
-                                    <td className="px-4 py-3">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center font-bold text-primary-600">
-                                                {student.name.charAt(0)}
-                                            </div>
-                                            <div>
-                                                <p className="font-medium text-neutral-900">{student.name}</p>
-                                                <p className="text-sm text-neutral-500">{student.email}</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <Badge variant="outline">{student.courses} courses</Badge>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-20 h-2 bg-neutral-200 rounded-full overflow-hidden">
-                                                <div
-                                                    className={cn(
-                                                        "h-full rounded-full",
-                                                        student.progress === 100 ? 'bg-success-500' : 'bg-primary-500'
-                                                    )}
-                                                    style={{ width: `${student.progress}%` }}
-                                                />
-                                            </div>
-                                            <span className="text-sm text-neutral-600">{student.progress}%</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-3 text-sm text-neutral-500">{student.enrolled}</td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex items-center justify-end gap-2">
-                                            <Button variant="ghost" size="sm">View</Button>
-                                            <Button variant="ghost" size="sm">Message</Button>
-                                        </div>
+                            {filteredStudents.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5} className="px-4 py-8 text-center text-neutral-500">
+                                        {searchQuery ? 'No students match your search.' : 'No students enrolled yet.'}
                                     </td>
                                 </tr>
-                            ))}
+                            ) : (
+                                filteredStudents.map((student) => (
+                                    <tr key={student.id} className="hover:bg-neutral-50">
+                                        <td className="px-4 py-3">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center font-bold text-primary-600">
+                                                    {student.name.charAt(0)}
+                                                </div>
+                                                <div>
+                                                    <p className="font-medium text-neutral-900">{student.name}</p>
+                                                    <p className="text-sm text-neutral-500">{student.email}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <Badge variant="outline">{student.coursesCount} courses</Badge>
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-20 h-2 bg-neutral-200 rounded-full overflow-hidden">
+                                                    <div
+                                                        className={cn(
+                                                            "h-full rounded-full",
+                                                            student.averageProgress === 100 ? 'bg-success-500' : 'bg-primary-500'
+                                                        )}
+                                                        style={{ width: `${student.averageProgress}%` }}
+                                                    />
+                                                </div>
+                                                <span className="text-sm text-neutral-600">{student.averageProgress}%</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-3 text-sm text-neutral-500">{new Date(student.enrolledAt).toLocaleDateString()}</td>
+                                        <td className="px-4 py-3">
+                                            <div className="flex items-center justify-end gap-2">
+                                                <Button variant="ghost" size="sm">View</Button>
+                                                <Button variant="ghost" size="sm">Message</Button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>
@@ -822,6 +1008,22 @@ function Reviews() {
 function CreateQuiz() {
     const [quizTitle, setQuizTitle] = useState('')
     const [selectedCourse, setSelectedCourse] = useState('')
+    const [courses, setCourses] = useState<any[]>([])
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const response = await courseService.getMyCourses()
+                if (response.data.success) {
+                    setCourses(response.data.data)
+                }
+            } catch (error) {
+                console.error('Failed to fetch courses', error)
+            }
+        }
+        fetchCourses()
+    }, [])
+
     const [questions, setQuestions] = useState([
         { id: 1, question: '', options: ['', '', '', ''], correctAnswer: 0 }
     ])
@@ -936,15 +1138,29 @@ function CreateQuiz() {
     )
 }
 
-// Manage Resources Component  
 function ManageResources() {
     const [selectedCourse, setSelectedCourse] = useState('')
+    const [courses, setCourses] = useState<any[]>([])
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const response = await courseService.getMyCourses()
+                if (response.data.success) {
+                    setCourses(response.data.data)
+                }
+            } catch (error) {
+                console.error('Failed to fetch courses', error)
+            }
+        }
+        fetchCourses()
+    }, [])
+
     const [resources] = useState([
         { id: 1, name: 'React Cheat Sheet.pdf', size: '2.4 MB', type: 'pdf', downloads: 234, course: 'React Masterclass 2024' },
         { id: 2, name: 'Node.js Best Practices.pdf', size: '1.8 MB', type: 'pdf', downloads: 189, course: 'Node.js Backend Development' },
         { id: 3, name: 'Project Starter Files.zip', size: '15.2 MB', type: 'zip', downloads: 445, course: 'React Masterclass 2024' },
     ])
-
     return (
         <div className="space-y-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

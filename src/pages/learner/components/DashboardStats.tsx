@@ -39,32 +39,34 @@ function StatCard({ title, value, change, icon: Icon, variant = 'neutral' }: Sta
     )
 }
 
-export function DashboardStats() {
+export function DashboardStats({ stats }: { stats: any }) {
+    const applications = stats?.applications || { total: 0, interview: 0, pending: 0, offered: 0 }
+
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <StatCard
                 title="Jobs Applied"
-                value="12"
+                value={applications.total}
                 change="+2"
                 icon={Briefcase}
                 variant="primary"
             />
             <StatCard
                 title="Interviews"
-                value="3"
+                value={applications.interview}
                 icon={CheckCircle}
                 variant="secondary"
             />
             <StatCard
-                title="Profile Views"
-                value="45"
-                change="+12%"
+                title="Offers"
+                value={applications.offered}
+                change={applications.offered > 0 ? "Great job!" : ""}
                 icon={TrendingUp}
                 variant="accent"
             />
             <StatCard
-                title="Saved Jobs"
-                value="8"
+                title="Pending"
+                value={applications.pending}
                 icon={Clock}
                 variant="neutral"
             />

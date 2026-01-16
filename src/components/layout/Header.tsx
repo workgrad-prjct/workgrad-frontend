@@ -17,9 +17,7 @@ import { cn } from '@/utils'
 
 const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Jobs', href: '/jobs' },
     { name: 'Courses', href: '/courses' },
-    { name: 'For Employers', href: '/employers' },
     { name: 'For Mentors', href: '/mentors' },
 ]
 
@@ -134,14 +132,6 @@ export function Header() {
                             </div>
                         ) : (
                             <>
-                                <Button
-                                    variant="ghost"
-                                    onClick={() => navigate('/login')}
-                                    leftIcon={<LogIn className="w-4 h-4" />}
-                                >
-                                    Sign In
-                                </Button>
-
                                 {/* Register Dropdown */}
                                 <div className="relative">
                                     <Button
@@ -274,14 +264,7 @@ export function Header() {
                                     </div>
                                 ) : (
                                     <>
-                                        <Button
-                                            variant="secondary"
-                                            fullWidth
-                                            onClick={() => navigate('/login')}
-                                            leftIcon={<LogIn className="w-4 h-4" />}
-                                        >
-                                            Sign In
-                                        </Button>
+
                                         <Button
                                             variant="primary"
                                             fullWidth

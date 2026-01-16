@@ -63,72 +63,7 @@ export function LoginPage() {
 
     return (
         <div className="min-h-screen bg-neutral-50 flex">
-            {/* Left Side - Branding (Hidden on mobile) */}
-            <div className="hidden lg:flex lg:w-1/2 bg-gradient-dark relative overflow-hidden">
-                {/* Animated Background */}
-                <div className="absolute inset-0">
-                    <div className="absolute top-20 left-20 w-72 h-72 bg-primary-500/20 rounded-full blur-[100px] animate-blob" />
-                    <div className="absolute bottom-20 right-20 w-96 h-96 bg-secondary-500/15 rounded-full blur-[120px] animate-blob animate-blob-delay-2000" />
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-accent-500/10 rounded-full blur-[100px] animate-blob animate-blob-delay-4000" />
-                </div>
-
-                {/* Content */}
-                <div className="relative flex items-center justify-center w-full p-12">
-                    <div className="max-w-lg">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6 }}
-                        >
-                            {/* Logo */}
-                            <div className="flex items-center gap-3 mb-12">
-                                <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl flex items-center justify-center shadow-glow">
-                                    <span className="text-white font-bold text-2xl">W</span>
-                                </div>
-                                <span className="font-display font-bold text-2xl text-white">
-                                    Work<span className="text-primary-400">Grad</span>
-                                </span>
-                            </div>
-
-                            {/* Heading */}
-                            <h1 className="text-4xl lg:text-5xl font-display font-bold text-white mb-6">
-                                Welcome back to
-                                <span className="block mt-2 bg-gradient-to-r from-primary-400 via-secondary-400 to-accent-400 bg-clip-text text-transparent">
-                                    WorkGrad
-                                </span>
-                            </h1>
-
-                            <p className="text-lg text-neutral-300 mb-8">
-                                Your journey to career success continues here.
-                                Sign in to access your personalized dashboard.
-                            </p>
-
-                            {/* Features List */}
-                            <div className="space-y-4">
-                                {[
-                                    'Track your job applications',
-                                    'Access your courses & progress',
-                                    'View personalized recommendations',
-                                    'Connect with mentors & employers',
-                                ].map((feature, index) => (
-                                    <motion.div
-                                        key={feature}
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: 0.3 + index * 0.1 }}
-                                        className="flex items-center gap-3"
-                                    >
-                                        <div className="w-2 h-2 bg-primary-400 rounded-full" />
-                                        <span className="text-neutral-300">{feature}</span>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Right Side - Login Form */}
+            {/* Login Form - Centered */}
             <div className="flex-1 flex items-center justify-center p-8">
                 <motion.div
                     initial="hidden"

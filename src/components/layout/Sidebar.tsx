@@ -18,6 +18,7 @@ import {
     Search,
     FileQuestion,
     FolderOpen,
+    Layers,
 } from 'lucide-react'
 import { cn } from '@/utils'
 import { Avatar, Badge } from '@/components/ui'
@@ -71,6 +72,7 @@ const navigationByRole: Record<UserRole, NavigationItem[]> = {
         { name: 'Users', href: '/admin/users', icon: Users },
         { name: 'Jobs', href: '/admin/jobs', icon: Briefcase },
         { name: 'Courses', href: '/admin/courses', icon: BookOpen, badge: '3 Pending' },
+        { name: 'Categories', href: '/admin/categories', icon: Layers },
         { name: 'Reports', href: '/admin/reports', icon: FileText },
         { name: 'Settings', href: '/admin/settings', icon: Settings },
     ],

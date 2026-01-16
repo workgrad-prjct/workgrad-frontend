@@ -337,55 +337,6 @@ export function RegisterPage() {
                     </motion.div>
                 </motion.div>
             </div>
-
-            {/* Right Side - Features (Hidden on mobile) */}
-            <div className="hidden lg:flex lg:w-1/2 bg-gradient-dark relative overflow-hidden">
-                {/* Background decorations */}
-                <div className="absolute top-20 right-20 w-64 h-64 bg-primary-500/20 rounded-full blur-[80px]" />
-                <div className="absolute bottom-20 left-20 w-64 h-64 bg-secondary-500/20 rounded-full blur-[80px]" />
-
-                <div className="relative flex items-center justify-center p-12 w-full">
-                    <div className="max-w-md">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
-                        >
-                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full border border-white/20 mb-6">
-                                <currentRoleInfo.icon className="w-5 h-5 text-primary-400" />
-                                <span className="text-white font-medium">{currentRoleInfo.title}</span>
-                            </div>
-
-                            <h2 className="text-3xl font-display font-bold text-white mb-4">
-                                {selectedRole === 'learner' && 'Launch Your Dream Career'}
-                                {selectedRole === 'employer' && 'Hire Top Talent Fast'}
-                                {selectedRole === 'mentor' && 'Share Your Expertise'}
-                            </h2>
-
-                            <p className="text-neutral-300 mb-8">
-                                {currentRoleInfo.description}
-                            </p>
-
-                            <ul className="space-y-4">
-                                {currentFeatures.map((feature, index) => (
-                                    <motion.li
-                                        key={feature}
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: 0.4 + index * 0.1 }}
-                                        className="flex items-center gap-3 text-white"
-                                    >
-                                        <div className="w-6 h-6 bg-success-500/20 rounded-full flex items-center justify-center">
-                                            <CheckCircle className="w-4 h-4 text-success-400" />
-                                        </div>
-                                        {feature}
-                                    </motion.li>
-                                ))}
-                            </ul>
-                        </motion.div>
-                    </div>
-                </div>
-            </div>
         </div>
     )
 }

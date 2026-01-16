@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { DashboardLayout } from '@/components/layout'
 import { Card, Button, Badge, Input } from '@/components/ui'
 import { useAuth } from '@/context'
+import { jobService } from '@/services/jobService'
+import { toast } from 'react-hot-toast'
 import {
     Briefcase, Users, TrendingUp, Eye, Plus, Search, Filter,
     MapPin, Clock, DollarSign, Building2, ChevronRight,
@@ -11,28 +13,49 @@ import {
 } from 'lucide-react'
 import { cn } from '@/utils'
 
-// Mock data
-const stats = [
-    { label: 'Total Jobs Posted', value: '12', change: '+3', icon: Briefcase, color: 'text-primary-600' },
-    { label: 'Total Applications', value: '248', change: '+45', icon: Users, color: 'text-success-600' },
-    { label: 'Interviews Scheduled', value: '18', change: '+8', icon: Calendar, color: 'text-warning-600' },
-    { label: 'Job Views', value: '3.2K', change: '+12%', icon: Eye, color: 'text-secondary-600' },
-]
 
-const recentApplications = [
-    { id: 1, name: 'John Doe', position: 'Senior React Developer', status: 'pending', avatar: '', appliedAt: '2 hours ago', match: 92 },
-    { id: 2, name: 'Sarah Wilson', position: 'Product Designer', status: 'shortlisted', avatar: '', appliedAt: '5 hours ago', match: 88 },
-    { id: 3, name: 'Mike Chen', position: 'Backend Engineer', status: 'rejected', avatar: '', appliedAt: '1 day ago', match: 65 },
-    { id: 4, name: 'Emily Brown', position: 'Senior React Developer', status: 'interview', avatar: '', appliedAt: '2 days ago', match: 95 },
-]
-
-const activeJobs = [
-    { id: 1, title: 'Senior React Developer', location: 'Remote', type: 'Full-time', salary: '$120K - $150K', applications: 45, views: 320, posted: '5 days ago', status: 'active' },
-    { id: 2, title: 'Product Designer', location: 'New York, NY', type: 'Full-time', salary: '$90K - $120K', applications: 32, views: 280, posted: '1 week ago', status: 'active' },
-    { id: 3, title: 'Backend Engineer', location: 'San Francisco, CA', type: 'Contract', salary: '$80/hr', applications: 28, views: 190, posted: '2 weeks ago', status: 'paused' },
-]
 
 function EmployerHome() {
+    const [jobs, setJobs] = useState<any[]>([])
+    const [applications, setApplications] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [jobsRes, appsRes] = await Promise.all([
+                    jobService.getMyJobs(),
+                    jobService.getAllApplications()
+                ])
+                if (jobsRes.data.success) setJobs(jobsRes.data.data)
+                if (appsRes.data.success) setApplications(appsRes.data.data)
+            } catch (error) {
+                console.error('Failed to fetch dashboard data', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchData()
+    }, [])
+
+    // Calculate stats
+    const totalJobs = jobs.length
+    const totalApplications = applications.length
+    const activeJobsCount = jobs.filter(j => j.status === 'active').length
+    const totalViews = jobs.reduce((acc, job) => acc + (job.views || 0), 0)
+
+    const stats = [
+        { label: 'Total Jobs Posted', value: totalJobs.toString(), change: 'Total', icon: Briefcase, color: 'text-primary-600' },
+        { label: 'Total Applications', value: totalApplications.toString(), change: 'All time', icon: Users, color: 'text-success-600' },
+        { label: 'Active Jobs', value: activeJobsCount.toString(), change: 'Current', icon: CheckCircle2, color: 'text-warning-600' },
+        { label: 'Total Views', value: totalViews.toString(), change: 'All time', icon: Eye, color: 'text-secondary-600' },
+    ]
+
+    const recentJobs = jobs.slice(0, 3)
+    const recentApps = applications.slice(0, 4)
+
+    if (loading) return <div className="p-8 text-center">Loading dashboard...</div>
+
     return (
         <div className="space-y-8">
             {/* Stats Grid */}
@@ -49,7 +72,7 @@ function EmployerHome() {
                                 <div>
                                     <p className="text-sm text-neutral-500">{stat.label}</p>
                                     <p className="text-3xl font-bold mt-1">{stat.value}</p>
-                                    <p className="text-sm text-success-600 mt-1">{stat.change} this week</p>
+                                    <p className="text-sm text-success-600 mt-1">{stat.change}</p>
                                 </div>
                                 <div className={cn("p-3 rounded-xl bg-neutral-100", stat.color)}>
                                     <stat.icon className="w-6 h-6" />
@@ -64,50 +87,54 @@ function EmployerHome() {
                 {/* Active Jobs */}
                 <div className="lg:col-span-2 space-y-6">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-lg font-bold text-neutral-900">Active Job Postings</h2>
+                        <h2 className="text-lg font-bold text-neutral-900">Recent Job Postings</h2>
                         <Button variant="outline" size="sm" rightIcon={<ChevronRight className="w-4 h-4" />}>
                             View All
                         </Button>
                     </div>
 
                     <div className="space-y-4">
-                        {activeJobs.map((job) => (
-                            <Card key={job.id} className="hover:shadow-md transition-shadow">
-                                <div className="flex items-start justify-between">
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-3">
-                                            <h3 className="font-semibold text-neutral-900">{job.title}</h3>
-                                            <Badge variant={job.status === 'active' ? 'success' : 'secondary'}>
-                                                {job.status}
-                                            </Badge>
-                                        </div>
-                                        <div className="flex items-center gap-4 mt-2 text-sm text-neutral-500">
-                                            <span className="flex items-center gap-1">
-                                                <MapPin className="w-4 h-4" /> {job.location}
-                                            </span>
-                                            <span className="flex items-center gap-1">
-                                                <DollarSign className="w-4 h-4" /> {job.salary}
-                                            </span>
-                                            <span className="flex items-center gap-1">
-                                                <Clock className="w-4 h-4" /> {job.posted}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="text-right">
-                                        <div className="flex items-center gap-4">
-                                            <div className="text-center">
-                                                <p className="text-lg font-bold text-primary-600">{job.applications}</p>
-                                                <p className="text-xs text-neutral-500">Applications</p>
+                        {recentJobs.length === 0 ? (
+                            <div className="text-center p-8 text-neutral-500 bg-neutral-50 rounded-lg">No jobs posted yet.</div>
+                        ) : (
+                            recentJobs.map((job) => (
+                                <Card key={job._id} className="hover:shadow-md transition-shadow">
+                                    <div className="flex items-start justify-between">
+                                        <div className="flex-1">
+                                            <div className="flex items-center gap-3">
+                                                <h3 className="font-semibold text-neutral-900">{job.title}</h3>
+                                                <Badge variant={job.status === 'active' ? 'success' : 'secondary'}>
+                                                    {job.status}
+                                                </Badge>
                                             </div>
-                                            <div className="text-center">
-                                                <p className="text-lg font-bold text-neutral-600">{job.views}</p>
-                                                <p className="text-xs text-neutral-500">Views</p>
+                                            <div className="flex items-center gap-4 mt-2 text-sm text-neutral-500">
+                                                <span className="flex items-center gap-1">
+                                                    <MapPin className="w-4 h-4" /> {job.location}
+                                                </span>
+                                                <span className="flex items-center gap-1">
+                                                    <DollarSign className="w-4 h-4" /> {job.salary?.min ? `${job.salary.min / 1000}k - ${job.salary.max / 1000}k` : 'Not specified'}
+                                                </span>
+                                                <span className="flex items-center gap-1">
+                                                    <Clock className="w-4 h-4" /> {new Date(job.createdAt).toLocaleDateString()}
+                                                </span>
                                             </div>
                                         </div>
+                                        <div className="text-right">
+                                            <div className="flex items-center gap-4">
+                                                <div className="text-center">
+                                                    <p className="text-lg font-bold text-primary-600">{job.applicationsCount || 0}</p>
+                                                    <p className="text-xs text-neutral-500">Applications</p>
+                                                </div>
+                                                <div className="text-center">
+                                                    <p className="text-lg font-bold text-neutral-600">{job.views || 0}</p>
+                                                    <p className="text-xs text-neutral-500">Views</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </Card>
-                        ))}
+                                </Card>
+                            ))
+                        )}
                     </div>
                 </div>
 
@@ -119,30 +146,34 @@ function EmployerHome() {
                     </div>
 
                     <div className="space-y-3">
-                        {recentApplications.map((app) => (
-                            <Card key={app.id} className="p-4 hover:shadow-md transition-shadow cursor-pointer">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center font-bold text-primary-600">
-                                        {app.name.charAt(0)}
+                        {recentApps.length === 0 ? (
+                            <div className="text-center p-8 text-neutral-500 bg-neutral-50 rounded-lg">No applications yet.</div>
+                        ) : (
+                            recentApps.map((app) => (
+                                <Card key={app._id} className="p-4 hover:shadow-md transition-shadow cursor-pointer">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center font-bold text-primary-600">
+                                            {app.learnerId?.profile?.firstName?.charAt(0) || 'U'}
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="font-medium text-neutral-900">{app.learnerId?.profile?.firstName} {app.learnerId?.profile?.lastName}</p>
+                                            <p className="text-xs text-neutral-500">{app.jobId?.title}</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <Badge
+                                                variant={app.status === 'shortlisted' ? 'success' :
+                                                    app.status === 'interview' ? 'warning' :
+                                                        app.status === 'rejected' ? 'error' : 'secondary'}
+                                                size="sm"
+                                            >
+                                                {app.status}
+                                            </Badge>
+                                            <p className="text-xs text-neutral-400 mt-1">{new Date(app.appliedAt).toLocaleDateString()}</p>
+                                        </div>
                                     </div>
-                                    <div className="flex-1">
-                                        <p className="font-medium text-neutral-900">{app.name}</p>
-                                        <p className="text-xs text-neutral-500">{app.position}</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <Badge
-                                            variant={app.status === 'shortlisted' ? 'success' :
-                                                app.status === 'interview' ? 'warning' :
-                                                    app.status === 'rejected' ? 'error' : 'secondary'}
-                                            size="sm"
-                                        >
-                                            {app.status}
-                                        </Badge>
-                                        <p className="text-xs text-neutral-400 mt-1">{app.match}% match</p>
-                                    </div>
-                                </div>
-                            </Card>
-                        ))}
+                                </Card>
+                            ))
+                        )}
                     </div>
                 </div>
             </div>
@@ -151,16 +182,61 @@ function EmployerHome() {
 }
 
 function PostJob() {
+    const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
         title: '',
-        department: '',
+        category: '', // Changed from department for consistency with model
         location: '',
         type: 'full-time',
-        salary: '',
+        salaryMin: '',
+        salaryMax: '',
         description: '',
         requirements: '',
         benefits: '',
     })
+
+    const handleSubmit = async () => {
+        setLoading(true)
+        try {
+            // Transform data for API
+            const jobData = {
+                title: formData.title,
+                category: formData.category, // Map department/category
+                location: formData.location,
+                type: formData.type,
+                salary: {
+                    min: parseInt(formData.salaryMin) || 0,
+                    max: parseInt(formData.salaryMax) || 0,
+                    showSalary: true
+                },
+                description: formData.description,
+                requirements: formData.requirements.split('\n').filter(Boolean),
+                benefits: formData.benefits.split('\n').filter(Boolean),
+                status: 'active'
+            }
+
+            const response = await jobService.createJob(jobData)
+            if (response.data.success) {
+                toast.success('Job posted successfully!')
+                // Reset form
+                setFormData({
+                    title: '',
+                    category: '',
+                    location: '',
+                    type: 'full-time',
+                    salaryMin: '',
+                    salaryMax: '',
+                    description: '',
+                    requirements: '',
+                    benefits: '',
+                })
+            }
+        } catch (error: any) {
+            toast.error(error.response?.data?.message || 'Failed to post job')
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return (
         <div className="max-w-3xl mx-auto space-y-8">
@@ -179,10 +255,10 @@ function PostJob() {
                             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                         />
                         <Input
-                            label="Department"
-                            placeholder="e.g. Engineering"
-                            value={formData.department}
-                            onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                            label="Category"
+                            placeholder="e.g. Engineering, Design, Marketing"
+                            value={formData.category}
+                            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                         />
                     </div>
 
@@ -208,12 +284,22 @@ function PostJob() {
                         </div>
                     </div>
 
-                    <Input
-                        label="Salary Range"
-                        placeholder="e.g. $100K - $150K or $50/hr"
-                        value={formData.salary}
-                        onChange={(e) => setFormData({ ...formData, salary: e.target.value })}
-                    />
+                    <div className="grid sm:grid-cols-2 gap-4">
+                        <Input
+                            label="Min Salary"
+                            placeholder="e.g. 50000"
+                            type="number"
+                            value={formData.salaryMin}
+                            onChange={(e) => setFormData({ ...formData, salaryMin: e.target.value })}
+                        />
+                        <Input
+                            label="Max Salary"
+                            placeholder="e.g. 80000"
+                            type="number"
+                            value={formData.salaryMax}
+                            onChange={(e) => setFormData({ ...formData, salaryMax: e.target.value })}
+                        />
+                    </div>
 
                     <div>
                         <label className="block text-sm font-medium text-neutral-700 mb-1">Job Description</label>
@@ -226,7 +312,7 @@ function PostJob() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1">Requirements</label>
+                        <label className="block text-sm font-medium text-neutral-700 mb-1">Requirements (One per line)</label>
                         <textarea
                             className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none min-h-[100px]"
                             placeholder="List the required skills and qualifications..."
@@ -236,7 +322,7 @@ function PostJob() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1">Benefits</label>
+                        <label className="block text-sm font-medium text-neutral-700 mb-1">Benefits (One per line)</label>
                         <textarea
                             className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none min-h-[100px]"
                             placeholder="List the benefits and perks..."
@@ -247,7 +333,13 @@ function PostJob() {
 
                     <div className="flex items-center justify-end gap-3 pt-4 border-t">
                         <Button variant="outline">Save as Draft</Button>
-                        <Button leftIcon={<Plus className="w-4 h-4" />}>Publish Job</Button>
+                        <Button
+                            leftIcon={<Plus className="w-4 h-4" />}
+                            onClick={handleSubmit}
+                            disabled={loading}
+                        >
+                            {loading ? 'Publishing...' : 'Publish Job'}
+                        </Button>
                     </div>
                 </div>
             </Card>
@@ -257,13 +349,32 @@ function PostJob() {
 
 function Candidates() {
     const [searchQuery, setSearchQuery] = useState('')
+    const [applications, setApplications] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
 
-    const candidates = [
-        { id: 1, name: 'John Doe', title: 'Senior React Developer', location: 'San Francisco, CA', experience: '5 years', skills: ['React', 'TypeScript', 'Node.js'], match: 92, status: 'available' },
-        { id: 2, name: 'Sarah Wilson', title: 'Product Designer', location: 'New York, NY', experience: '4 years', skills: ['Figma', 'UI/UX', 'Prototyping'], match: 88, status: 'interviewing' },
-        { id: 3, name: 'Mike Chen', title: 'Backend Engineer', location: 'Austin, TX', experience: '6 years', skills: ['Python', 'Django', 'AWS'], match: 85, status: 'available' },
-        { id: 4, name: 'Emily Brown', title: 'Full Stack Developer', location: 'Remote', experience: '3 years', skills: ['React', 'Node.js', 'PostgreSQL'], match: 80, status: 'hired' },
-    ]
+    useEffect(() => {
+        const fetchApplications = async () => {
+            try {
+                const response = await jobService.getAllApplications()
+                if (response.data.success) {
+                    setApplications(response.data.data)
+                }
+            } catch (error) {
+                console.error('Failed to fetch applications', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchApplications()
+    }, [])
+
+    const filteredApplications = applications.filter(app =>
+        app.learnerId?.profile?.firstName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        app.learnerId?.profile?.lastName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        app.jobId?.title?.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+
+    if (loading) return <div className="p-8 text-center">Loading candidates...</div>
 
     return (
         <div className="space-y-8">
@@ -288,49 +399,46 @@ function Candidates() {
             </div>
 
             <div className="grid gap-4">
-                {candidates.map((candidate) => (
-                    <Card key={candidate.id} className="hover:shadow-md transition-shadow">
-                        <div className="flex items-start gap-4">
-                            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center font-bold text-xl text-primary-600">
-                                {candidate.name.charAt(0)}
-                            </div>
-                            <div className="flex-1">
-                                <div className="flex items-start justify-between">
-                                    <div>
-                                        <h3 className="font-semibold text-neutral-900">{candidate.name}</h3>
-                                        <p className="text-sm text-neutral-500">{candidate.title}</p>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <Badge variant={candidate.status === 'available' ? 'success' : candidate.status === 'interviewing' ? 'warning' : 'secondary'}>
-                                            {candidate.status}
-                                        </Badge>
-                                        <div className="text-right">
-                                            <p className="text-lg font-bold text-primary-600">{candidate.match}%</p>
-                                            <p className="text-xs text-neutral-500">Match</p>
+                {filteredApplications.length === 0 ? (
+                    <div className="p-8 text-center text-neutral-500 bg-neutral-50 rounded-lg">
+                        {searchQuery ? 'No candidates match your search.' : 'No candidates yet.'}
+                    </div>
+                ) : (
+                    filteredApplications.map((app) => (
+                        <Card key={app._id} className="hover:shadow-md transition-shadow">
+                            <div className="flex items-start gap-4">
+                                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center font-bold text-xl text-primary-600">
+                                    {app.learnerId?.profile?.firstName?.charAt(0) || 'U'}
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex items-start justify-between">
+                                        <div>
+                                            <h3 className="font-semibold text-neutral-900">{app.learnerId?.profile?.firstName} {app.learnerId?.profile?.lastName}</h3>
+                                            <p className="text-sm text-neutral-500">Applied for: {app.jobId?.title}</p>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <Badge variant={app.status === 'shortlisted' ? 'success' : app.status === 'interview' ? 'warning' : 'secondary'}>
+                                                {app.status}
+                                            </Badge>
                                         </div>
                                     </div>
+                                    <div className="flex items-center gap-4 mt-2 text-sm text-neutral-500">
+                                        <span className="flex items-center gap-1">
+                                            <Clock className="w-4 h-4" /> Applied {new Date(app.appliedAt).toLocaleDateString()}
+                                        </span>
+                                        <span className="flex items-center gap-1">
+                                            <MessageSquare className="w-4 h-4" /> {app.learnerId?.email}
+                                        </span>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-4 mt-2 text-sm text-neutral-500">
-                                    <span className="flex items-center gap-1">
-                                        <MapPin className="w-4 h-4" /> {candidate.location}
-                                    </span>
-                                    <span className="flex items-center gap-1">
-                                        <Briefcase className="w-4 h-4" /> {candidate.experience}
-                                    </span>
-                                </div>
-                                <div className="flex flex-wrap gap-2 mt-3">
-                                    {candidate.skills.map((skill) => (
-                                        <Badge key={skill} variant="outline" size="sm">{skill}</Badge>
-                                    ))}
+                                <div className="flex flex-col gap-2">
+                                    <Button size="sm" leftIcon={<MessageSquare className="w-4 h-4" />}>Message</Button>
+                                    <Button size="sm" variant="outline" onClick={() => window.open(app.resumeUrl || app.learnerId?.profile?.resume?.pdfUrl, '_blank')}>View Resume</Button>
                                 </div>
                             </div>
-                            <div className="flex flex-col gap-2">
-                                <Button size="sm" leftIcon={<MessageSquare className="w-4 h-4" />}>Message</Button>
-                                <Button size="sm" variant="outline">View Profile</Button>
-                            </div>
-                        </div>
-                    </Card>
-                ))}
+                        </Card>
+                    ))
+                )}
             </div>
         </div>
     )
@@ -385,12 +493,26 @@ function Analytics() {
 }
 
 function ManageJobs() {
-    const jobs = [
-        { id: 1, title: 'Senior React Developer', location: 'Remote', type: 'Full-time', salary: '$120K - $150K', applications: 45, views: 320, posted: '5 days ago', status: 'active' },
-        { id: 2, title: 'Product Designer', location: 'New York, NY', type: 'Full-time', salary: '$90K - $120K', applications: 32, views: 280, posted: '1 week ago', status: 'active' },
-        { id: 3, title: 'Backend Engineer', location: 'San Francisco, CA', type: 'Contract', salary: '$80/hr', applications: 28, views: 190, posted: '2 weeks ago', status: 'paused' },
-        { id: 4, title: 'DevOps Engineer', location: 'Remote', type: 'Full-time', salary: '$130K - $160K', applications: 18, views: 150, posted: '3 weeks ago', status: 'closed' },
-    ]
+    const [jobs, setJobs] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchJobs = async () => {
+            try {
+                const response = await jobService.getMyJobs()
+                if (response.data.success) {
+                    setJobs(response.data.data)
+                }
+            } catch (error) {
+                console.error('Failed to fetch jobs', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchJobs()
+    }, [])
+
+    if (loading) return <div className="p-8 text-center">Loading jobs...</div>
 
     return (
         <div className="space-y-8">
@@ -403,45 +525,49 @@ function ManageJobs() {
             </div>
 
             <div className="grid gap-4">
-                {jobs.map((job) => (
-                    <Card key={job.id} className="hover:shadow-md transition-shadow">
-                        <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                                <div className="flex items-center gap-3">
-                                    <h3 className="font-semibold text-neutral-900">{job.title}</h3>
-                                    <Badge variant={job.status === 'active' ? 'success' : job.status === 'paused' ? 'warning' : 'secondary'}>
-                                        {job.status}
-                                    </Badge>
+                {jobs.length === 0 ? (
+                    <div className="p-8 text-center text-neutral-500 bg-neutral-50 rounded-lg">No jobs found. Post your first job!</div>
+                ) : (
+                    jobs.map((job) => (
+                        <Card key={job._id} className="hover:shadow-md transition-shadow">
+                            <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                    <div className="flex items-center gap-3">
+                                        <h3 className="font-semibold text-neutral-900">{job.title}</h3>
+                                        <Badge variant={job.status === 'active' ? 'success' : job.status === 'paused' ? 'warning' : 'secondary'}>
+                                            {job.status}
+                                        </Badge>
+                                    </div>
+                                    <div className="flex items-center gap-4 mt-2 text-sm text-neutral-500">
+                                        <span className="flex items-center gap-1">
+                                            <MapPin className="w-4 h-4" /> {job.location}
+                                        </span>
+                                        <span className="flex items-center gap-1">
+                                            <DollarSign className="w-4 h-4" /> {job.salary?.min ? `${job.salary.min / 1000}k - ${job.salary.max / 1000}k` : 'N/A'}
+                                        </span>
+                                        <span className="flex items-center gap-1">
+                                            <Clock className="w-4 h-4" /> {new Date(job.createdAt).toLocaleDateString()}
+                                        </span>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-4 mt-2 text-sm text-neutral-500">
-                                    <span className="flex items-center gap-1">
-                                        <MapPin className="w-4 h-4" /> {job.location}
-                                    </span>
-                                    <span className="flex items-center gap-1">
-                                        <DollarSign className="w-4 h-4" /> {job.salary}
-                                    </span>
-                                    <span className="flex items-center gap-1">
-                                        <Clock className="w-4 h-4" /> {job.posted}
-                                    </span>
+                                <div className="flex items-center gap-6">
+                                    <div className="text-center">
+                                        <p className="text-lg font-bold text-primary-600">{job.applicationsCount || 0}</p>
+                                        <p className="text-xs text-neutral-500">Applications</p>
+                                    </div>
+                                    <div className="text-center">
+                                        <p className="text-lg font-bold text-neutral-600">{job.views || 0}</p>
+                                        <p className="text-xs text-neutral-500">Views</p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Button variant="outline" size="sm">Edit</Button>
+                                        <Button variant="outline" size="sm">View</Button>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-6">
-                                <div className="text-center">
-                                    <p className="text-lg font-bold text-primary-600">{job.applications}</p>
-                                    <p className="text-xs text-neutral-500">Applications</p>
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-lg font-bold text-neutral-600">{job.views}</p>
-                                    <p className="text-xs text-neutral-500">Views</p>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <Button variant="outline" size="sm">Edit</Button>
-                                    <Button variant="outline" size="sm">View</Button>
-                                </div>
-                            </div>
-                        </div>
-                    </Card>
-                ))}
+                        </Card>
+                    ))
+                )}
             </div>
         </div>
     )
