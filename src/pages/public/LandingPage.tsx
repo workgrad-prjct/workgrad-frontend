@@ -260,7 +260,7 @@ const featuredBanners = [
 export function LandingPage() {
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white overflow-x-hidden">
             {/* Hero Section */}
             <section className="relative min-h-screen flex items-center overflow-hidden bg-white">
 
@@ -274,7 +274,7 @@ export function LandingPage() {
 
                         {/* Headline */}
                         <motion.div variants={fadeInUp}>
-                            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-display font-black text-neutral-700 tracking-tight leading-[0.95]">
+                            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-display font-black text-neutral-700 tracking-tight leading-[1.1] sm:leading-[0.95]">
                                 Learn skills that move
                                 <br />
                                 <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">
@@ -286,7 +286,7 @@ export function LandingPage() {
                         {/* Description */}
                         <motion.p
                             variants={fadeInUp}
-                            className="text-lg sm:text-xl text-neutral-600 max-w-2xl mx-auto leading-relaxed"
+                            className="text-base sm:text-xl text-neutral-600 max-w-2xl mx-auto leading-relaxed px-4 sm:px-0"
                         >
                             Practical, industry-focused courses designed to help you gain real skills, build confidence, and grow professionally at your own pace.
                         </motion.p>
@@ -352,7 +352,7 @@ export function LandingPage() {
                         whileInView="visible"
                         viewport={{ once: true, margin: '-50px' }}
                         variants={staggerContainer}
-                        className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6"
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6"
                     >
                         {/* Tool Tracks Card */}
                         <motion.div variants={fadeInUp}>
@@ -529,19 +529,19 @@ export function LandingPage() {
                                 transition={{ duration: 0.5 }}
                             >
                                 <div className={cn(
-                                    "relative h-full rounded-[2.5rem] p-8 md:p-12 overflow-hidden bg-gradient-to-br flex flex-col md:flex-row items-center gap-8",
+                                    "relative h-full rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:p-12 overflow-hidden bg-gradient-to-br flex flex-col md:flex-row items-center gap-10 md:gap-8",
                                     banner.gradient
                                 )}>
                                     <div className="flex-1 space-y-6 text-center md:text-left">
                                         <div className="space-y-2">
-                                            <h3 className="text-3xl md:text-4xl font-black text-neutral-900 tracking-tight leading-none uppercase">
+                                            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-neutral-900 tracking-tight leading-none uppercase">
                                                 {banner.title.split(' ').map((word, i) => (
                                                     <span key={i} className={i === 0 && banner.id === 'coding-sprint' ? 'text-blue-600 mr-2' : i === 0 && banner.id === 'code-conquest' ? 'text-amber-500 mr-2' : 'mr-2'}>
                                                         {word}
                                                     </span>
                                                 ))}
                                             </h3>
-                                            <p className="text-neutral-600 text-lg font-medium max-w-xs mx-auto md:mx-0">
+                                            <p className="text-neutral-600 text-base sm:text-lg font-medium max-w-none md:max-w-xs mx-auto md:mx-0">
                                                 {banner.description}
                                             </p>
                                         </div>
@@ -554,7 +554,7 @@ export function LandingPage() {
                                             Start Now
                                         </Button>
                                     </div>
-                                    <div className="w-full md:w-1/2 aspect-square md:aspect-auto h-48 flex items-center justify-center">
+                                    <div className="w-full md:w-1/2 aspect-square md:aspect-auto h-40 sm:h-48 flex items-center justify-center transform scale-75 sm:scale-100 transition-transform">
                                         {banner.icon}
                                     </div>
                                 </div>
@@ -587,7 +587,7 @@ export function LandingPage() {
                         whileInView="visible"
                         viewport={{ once: true, margin: '-100px' }}
                         variants={staggerContainer}
-                        className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                     >
                         {popularTracks.map((track) => (
                             <motion.div key={track.title} variants={fadeInUp}>
@@ -684,7 +684,7 @@ export function LandingPage() {
                         whileInView="visible"
                         viewport={{ once: true, margin: '-100px' }}
                         variants={staggerContainer}
-                        className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                     >
                         {fullStackPaths.map((path) => (
                             <motion.div key={path.slug} variants={fadeInUp}>
@@ -772,7 +772,7 @@ export function LandingPage() {
 
                             <motion.h2
                                 variants={fadeInUp}
-                                className="mt-4 text-3xl lg:text-4xl font-display font-bold text-neutral-900"
+                                className="mt-4 text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-neutral-900"
                             >
                                 Showcase Your Work with a Stunning Portfolio
                             </motion.h2>
@@ -866,7 +866,7 @@ export function LandingPage() {
 
                             <motion.h2
                                 variants={fadeInUp}
-                                className="mt-4 text-3xl lg:text-4xl font-display font-bold text-neutral-900"
+                                className="mt-4 text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-neutral-900"
                             >
                                 Create an ATS-Friendly Resume
                             </motion.h2>
